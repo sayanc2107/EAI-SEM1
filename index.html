@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedCore AI — Smart Hospital Operations</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+</head>
+
+<body>
+
+    <!-- ============================================================
+     LOGIN SCREEN
+     ============================================================ -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="login-logo">
+                <i class="fas fa-heartbeat"></i>
+                <h1>MedCore <span>AI</span></h1>
+                <p class="login-subtitle">Smart Hospital &amp; Clinical Operations Management</p>
+            </div>
+            <div class="login-card">
+                <h2>Staff Login</h2>
+                <p class="login-hint">Enter your credentials to access the system</p>
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label><i class="fas fa-user"></i> Username</label>
+                        <input type="text" id="login-username" placeholder="Enter username" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-lock"></i> Password</label>
+                        <input type="password" id="login-password" placeholder="Enter password" required>
+                    </div>
+                    <div id="login-error" class="login-error hidden"></div>
+                    <button type="submit" class="btn btn-primary btn-full"><i class="fas fa-sign-in-alt"></i>
+                        Login</button>
+                </form>
+                <div class="demo-credentials">
+                    <p><strong>Click a Demo Account to Auto-fill:</strong></p>
+                    <table class="cred-table">
+                        <tr onclick="quickFillLogin('admin', 'admin123')" style="cursor:pointer">
+                            <td>admin</td>
+                            <td>admin123</td>
+                            <td><span class="role-tag admin">Admin</span></td>
+                        </tr>
+                        <tr onclick="quickFillLogin('dr.sharma', 'doc123')" style="cursor:pointer">
+                            <td>dr.sharma</td>
+                            <td>doc123</td>
+                            <td><span class="role-tag doctor">Doctor</span></td>
+                        </tr>
+                        <tr onclick="quickFillLogin('nurse.priya', 'nurse123')" style="cursor:pointer">
+                            <td>nurse.priya</td>
+                            <td>nurse123</td>
+                            <td><span class="role-tag nurse">Nurse</span></td>
+                        </tr>
+                        <tr onclick="quickFillLogin('ward.raj', 'ward123')" style="cursor:pointer">
+                            <td>ward.raj</td>
+                            <td>ward123</td>
+                            <td><span class="role-tag ward">Ward Staff</span></td>
+                        </tr>
+                        <tr onclick="quickFillLogin('pharm.kumar', 'pharm123')" style="cursor:pointer">
+                            <td>pharm.kumar</td>
+                            <td>pharm123</td>
+                            <td><span class="role-tag pharmacy">Pharmacy</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <p class="login-disclaimer">⚠ Prototype uses fictional sample data only. Not for real patient care.</p>
+        </div>
+    </div>
+
+    <!-- ============================================================
+     MAIN APP SHELL
+     ============================================================ -->
+    <div id="app" class="app hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-heartbeat"></i>
+                <h2>MedCore <span>AI</span></h2>
+            </div>
+            <nav class="sidebar-nav" id="sidebar-nav">
+                <!-- Populated dynamically by role -->
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar"><i class="fas fa-user"></i></div>
+                    <div>
+                        <p class="user-name" id="user-name-display"></p>
+                        <p class="user-label" id="user-role-label"></p>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()" title="Logout"><i
+                        class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <button class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+                <div class="topbar-title">
+                    <h1 id="section-title">Dashboard</h1>
+                </div>
+                <div class="topbar-actions">
+                    <span class="live-badge"><i class="fas fa-circle"></i> Demo Mode</span>
+                    <span class="time-display" id="time-display"></span>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+
+                <!-- ===== ADMIN DASHBOARD ===== -->
+                <section id="section-admin-dashboard" class="section">
+                    <div class="stats-grid">
+                        <div class="stat-card stat-triage">
+                            <div class="stat-icon"><i class="fas fa-ambulance"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-total-patients">0</h3>
+                                <p>Total Patients</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-beds">
+                            <div class="stat-icon"><i class="fas fa-bed"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-available-beds">0</h3>
+                                <p>Available Beds</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-shifts">
+                            <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-on-duty">0</h3>
+                                <p>Doctors On Duty</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-pharmacy">
+                            <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                            <div class="stat-info">
+                                <h3 id="stat-low-stock">0</h3>
+                                <p>Low Stock Alerts</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-grid">
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <h3><i class="fas fa-users"></i> Patients</h3>
+                            </div>
+                            <div class="dash-card-body" id="admin-patients-list"></div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <h3><i class="fas fa-bed"></i> Ward Occupancy</h3>
+                            </div>
+                            <div class="dash-card-body" id="admin-ward-overview"></div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <h3><i class="fas fa-user-md"></i> On-Duty Doctors</h3>
+                            </div>
+                            <div class="dash-card-body" id="admin-doctors-list"></div>
+                        </div>
+                        <div class="dash-card">
+                            <div class="dash-card-header">
+                                <h3><i class="fas fa-capsules"></i> Stock Alerts</h3>
+                            </div>
+                            <div class="dash-card-body" id="admin-stock-alerts"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== DOCTOR: MY DASHBOARD ===== -->
+                <section id="section-doctor-dashboard" class="section">
+                    <div class="role-banner doctor-banner">
+                        <div class="banner-icon"><i class="fas fa-user-md"></i></div>
+                        <div class="banner-info">
+                            <h2 id="doc-welcome"></h2>
+                            <p id="doc-specialization"></p>
+                        </div>
+                    </div>
+                    <div class="stats-grid stats-3">
+                        <div class="stat-card stat-shifts">
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-info">
+                                <h3 id="doc-current-shift">—</h3>
+                                <p>Current Shift</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-beds">
+                            <div class="stat-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="stat-info">
+                                <h3 id="doc-current-location">—</h3>
+                                <p>Current Location</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-triage">
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                            <div class="stat-info">
+                                <h3 id="doc-patient-count">0</h3>
+                                <p>My Patients</p>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="sub-heading">My Full Shift Schedule</h3>
+                    <div class="shifts-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Ward</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="doc-shifts-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ===== DOCTOR: MY PATIENTS ===== -->
+                <section id="section-doctor-patients" class="section">
+                    <div class="section-header">
+                        <h2>My Patients</h2>
+                        <button class="btn btn-primary" onclick="openAddPatientModal()"><i class="fas fa-plus"></i> Add
+                            Patient</button>
+                    </div>
+                    <div class="patients-grid" id="doc-patients-grid"></div>
+                </section>
+
+                <!-- ===== DOCTOR: SEND PRESCRIPTION ===== -->
+                <section id="section-doctor-prescriptions" class="section">
+                    <div class="section-header">
+                        <h2>Send Prescription to Pharmacy</h2>
+                        <button class="btn btn-primary" onclick="openPrescriptionModal()"><i
+                                class="fas fa-prescription"></i> New Prescription</button>
+                    </div>
+                    <div class="ai-disclaimer"><i class="fas fa-info-circle"></i> Prescriptions are sent to the pharmacy
+                        for preparation. The patient can collect and pay at the pharmacy counter.</div>
+                    <div class="shifts-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Rx ID</th>
+                                    <th>Patient</th>
+                                    <th>Medicines</th>
+                                    <th>Notes</th>
+                                    <th>Status</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="doc-rx-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ===== NURSE: MY DASHBOARD ===== -->
+                <section id="section-nurse-dashboard" class="section">
+                    <div class="role-banner nurse-banner">
+                        <div class="banner-icon"><i class="fas fa-user-nurse"></i></div>
+                        <div class="banner-info">
+                            <h2 id="nurse-welcome"></h2>
+                            <p id="nurse-ward-info"></p>
+                        </div>
+                    </div>
+                    <div class="stats-grid stats-3">
+                        <div class="stat-card stat-shifts">
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-info">
+                                <h3 id="nurse-current-shift">—</h3>
+                                <p>Current Shift</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-triage">
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
+                            <div class="stat-info">
+                                <h3 id="nurse-patient-count">0</h3>
+                                <p>My Patients</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-beds">
+                            <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+                            <div class="stat-info">
+                                <h3 id="nurse-doctor-count">0</h3>
+                                <p>My Doctors</p>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="sub-heading">My Full Shift Schedule</h3>
+                    <div class="shifts-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Ward</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="nurse-shifts-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ===== NURSE: DOCTOR STATUS ===== -->
+                <section id="section-nurse-doctors" class="section">
+                    <div class="section-header">
+                        <h2>Doctor Status — Who to Call</h2>
+                    </div>
+                    <div class="ai-disclaimer"><i class="fas fa-info-circle"></i> Shows all currently on-duty doctors,
+                        their locations, and when their shift ends.</div>
+                    <div class="doctors-status-grid" id="nurse-doctors-grid"></div>
+                </section>
+
+                <!-- ===== NURSE: MY PATIENTS ===== -->
+                <section id="section-nurse-patients" class="section">
+                    <div class="section-header">
+                        <h2>My Patients & Assigned Doctors</h2>
+                    </div>
+                    <div class="patients-grid" id="nurse-patients-grid"></div>
+                </section>
+
+                <!-- ===== NURSE: AI PREDICTOR ===== -->
+                <section id="section-nurse-ai" class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-robot"></i> AI Task Predictor</h2>
+                    </div>
+                    <div class="ai-disclaimer"><i class="fas fa-exclamation-circle"></i> <strong>AI suggestions are
+                            drafts only</strong> — they do not substitute clinical judgement. Staff must review and
+                        confirm all actions.</div>
+                    <div class="ai-predictions-panel" id="nurse-ai-panel"></div>
+                </section>
+
+                <!-- ===== WARD STAFF: MY DASHBOARD ===== -->
+                <section id="section-ward-dashboard" class="section">
+                    <div class="role-banner ward-banner">
+                        <div class="banner-icon"><i class="fas fa-hospital"></i></div>
+                        <div class="banner-info">
+                            <h2 id="ward-welcome"></h2>
+                            <p id="ward-info"></p>
+                        </div>
+                    </div>
+                    <div class="stats-grid stats-2">
+                        <div class="stat-card stat-shifts">
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-info">
+                                <h3 id="ward-current-shift">—</h3>
+                                <p>Current Shift</p>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-beds">
+                            <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+                            <div class="stat-info">
+                                <h3 id="ward-doctors-on-duty">0</h3>
+                                <p>Doctors On Duty</p>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="sub-heading">My Full Shift Schedule</h3>
+                    <div class="shifts-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Ward</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ward-shifts-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ===== WARD STAFF: DOCTOR LOCATIONS ===== -->
+                <section id="section-ward-doctors" class="section">
+                    <div class="section-header">
+                        <h2>Doctor Locations — Currently On Duty</h2>
+                    </div>
+                    <div class="doctors-status-grid" id="ward-doctors-grid"></div>
+                </section>
+
+                <!-- ===== WARD STAFF: AI PREDICTOR ===== -->
+                <section id="section-ward-ai" class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-robot"></i> AI Location Predictor</h2>
+                    </div>
+                    <div class="ai-disclaimer"><i class="fas fa-exclamation-circle"></i> <strong>AI predictions are
+                            suggestions only</strong> — based on patient acuity and upcoming shift changes. Use clinical
+                        judgement.</div>
+                    <div class="ai-predictions-panel" id="ward-ai-panel"></div>
+                </section>
+
+                <!-- ===== PHARMACY: STOCK ===== -->
+                <section id="section-pharmacy-stock" class="section">
+                    <div class="section-header">
+                        <h2>Stock Management</h2>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary"
+                                onclick="document.getElementById('excel-import').click()"><i
+                                    class="fas fa-file-excel"></i> Import from Excel</button>
+                            <input type="file" id="excel-import" accept=".xlsx,.xls,.csv" style="display:none"
+                                onchange="importStockExcel(event)">
+                            <button class="btn btn-primary" onclick="openAddStockModal()"><i class="fas fa-plus"></i>
+                                Add Stock</button>
+                        </div>
+                    </div>
+                    <div class="pharmacy-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Medicine</th>
+                                    <th>Category</th>
+                                    <th>Current Qty</th>
+                                    <th>Reorder At</th>
+                                    <th>Unit Price (₹)</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pharmacy-stock-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ===== PHARMACY: BILLING ===== -->
+                <section id="section-pharmacy-billing" class="section">
+                    <div class="section-header">
+                        <h2>Billing</h2>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary" onclick="exportSalesExcel()"><i
+                                    class="fas fa-download"></i> Export Sales (Excel)</button>
+                            <button class="btn btn-primary" onclick="openBillModal()"><i class="fas fa-receipt"></i> New
+                                Bill</button>
+                        </div>
+                    </div>
+                    <div class="shifts-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Bill ID</th>
+                                    <th>Patient</th>
+                                    <th>Items</th>
+                                    <th>Total (₹)</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bills-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ===== PHARMACY: PRESCRIPTIONS ===== -->
+                <section id="section-pharmacy-rx" class="section">
+                    <div class="section-header">
+                        <h2>Prescription Requests from Doctors</h2>
+                    </div>
+                    <div class="ai-disclaimer"><i class="fas fa-info-circle"></i> Doctors send prescriptions here.
+                        Prepare medicines, mark as ready, and bill the patient when they collect.</div>
+                    <div class="shifts-table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Rx ID</th>
+                                    <th>Doctor</th>
+                                    <th>Patient</th>
+                                    <th>Medicines</th>
+                                    <th>Notes</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pharmacy-rx-body"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ===== PHARMACY: AI INSIGHTS ===== -->
+                <section id="section-pharmacy-ai" class="section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-robot"></i> AI Stock Insights</h2>
+                    </div>
+                    <div class="ai-disclaimer"><i class="fas fa-exclamation-circle"></i> <strong>AI suggestions are
+                            based on sales data</strong> — verify with procurement before placing orders.</div>
+                    <div class="ai-predictions-panel" id="pharmacy-ai-panel"></div>
+                </section>
+
+            </div><!-- /content-wrapper -->
+        </main>
+    </div>
+
+    <!-- ============================================================
+     MODALS
+     ============================================================ -->
+
+    <!-- Add Patient Modal (Doctor) -->
+    <div class="modal-overlay" id="add-patient-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Add Patient</h3><button class="modal-close"
+                    onclick="closeModal('add-patient-modal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-patient-form" onsubmit="submitAddPatient(event)">
+                    <div class="form-row">
+                        <div class="form-group"><label>Patient Name</label><input type="text" id="ap-name" required>
+                        </div>
+                        <div class="form-group"><label>Age</label><input type="number" id="ap-age" min="0" max="120"
+                                required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Gender</label><select id="ap-gender" required>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                                <option value="O">Other</option>
+                            </select></div>
+                        <div class="form-group"><label>Ward</label><select id="ap-ward" required>
+                                <option>Emergency</option>
+                                <option>General</option>
+                                <option>ICU</option>
+                                <option>Pediatrics</option>
+                                <option>Maternity</option>
+                            </select></div>
+                    </div>
+                    <div class="form-group"><label>Main Concern</label><input type="text" id="ap-concern" required>
+                    </div>
+                    <div class="form-group"><label>Priority</label><select id="ap-priority" required>
+                            <option>Critical</option>
+                            <option>High</option>
+                            <option>Medium</option>
+                            <option>Low</option>
+                        </select></div>
+                    <div class="form-group"><label>Notes</label><textarea id="ap-notes" rows="2"></textarea></div>
+                    <div class="form-actions"><button type="button" class="btn btn-secondary"
+                            onclick="closeModal('add-patient-modal')">Cancel</button><button type="submit"
+                            class="btn btn-primary"><i class="fas fa-save"></i> Add Patient</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prescription Modal (Doctor) -->
+    <div class="modal-overlay" id="prescription-modal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-prescription"></i> Send Prescription</h3><button class="modal-close"
+                    onclick="closeModal('prescription-modal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="rx-form" onsubmit="submitPrescription(event)">
+                    <div class="form-group"><label>Patient</label><select id="rx-patient" required></select></div>
+                    <div id="rx-items-container">
+                        <label>Medicines</label>
+                        <div class="rx-item-row" id="rx-row-0">
+                            <select class="rx-medicine">
+                                <option value="">Select medicine…</option>
+                            </select>
+                            <input type="number" class="rx-qty" placeholder="Qty" min="1" value="1">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="addRxRow()"><i
+                                    class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top:12px"><label>Notes</label><textarea id="rx-notes"
+                            rows="2"></textarea></div>
+                    <div class="form-actions"><button type="button" class="btn btn-secondary"
+                            onclick="closeModal('prescription-modal')">Cancel</button><button type="submit"
+                            class="btn btn-primary"><i class="fas fa-paper-plane"></i> Send to Pharmacy</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Stock Modal (Pharmacy) -->
+    <div class="modal-overlay" id="add-stock-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-boxes"></i> Add / Update Stock</h3><button class="modal-close"
+                    onclick="closeModal('add-stock-modal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-stock-form" onsubmit="submitAddStock(event)">
+                    <div class="form-group"><label>Medicine</label><select id="as-medicine" required></select></div>
+                    <div class="form-group"><label>Add Quantity</label><input type="number" id="as-qty" min="1"
+                            required></div>
+                    <div class="form-actions"><button type="button" class="btn btn-secondary"
+                            onclick="closeModal('add-stock-modal')">Cancel</button><button type="submit"
+                            class="btn btn-primary"><i class="fas fa-save"></i> Add Stock</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Bill Modal (Pharmacy) -->
+    <div class="modal-overlay" id="bill-modal">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3><i class="fas fa-receipt"></i> Create Bill</h3><button class="modal-close"
+                    onclick="closeModal('bill-modal')"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="bill-form" onsubmit="submitBill(event)">
+                    <div class="form-row">
+                        <div class="form-group"><label>Patient ID</label><input type="text" id="bill-patient-id"
+                                placeholder="e.g. P-1001" required></div>
+                        <div class="form-group"><label>Patient Name</label><input type="text" id="bill-patient-name"
+                                placeholder="Name" required></div>
+                    </div>
+                    <div id="bill-items-container">
+                        <label>Items</label>
+                        <div class="bill-item-row" id="bill-row-0">
+                            <select class="bill-medicine">
+                                <option value="">Select…</option>
+                            </select>
+                            <input type="number" class="bill-qty" placeholder="Qty" min="1" value="1">
+                            <span class="bill-row-price">₹0</span>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="addBillRow()"><i
+                                    class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="bill-total-bar">Total: <strong id="bill-total-display">₹0</strong></div>
+                    <div class="form-actions"><button type="button" class="btn btn-secondary"
+                            onclick="closeModal('bill-modal')">Cancel</button><button type="submit"
+                            class="btn btn-primary"><i class="fas fa-receipt"></i> Generate Bill</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast-container"></div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
