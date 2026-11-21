@@ -25,15 +25,10 @@
                 <i class="fas fa-heartbeat"></i>
                 <h1>MedCore <span>AI</span></h1>
                 <p class="login-subtitle">Smart Hospital &amp; Emergency Operations Platform</p>
-                <div style="margin-top:10px;">
-                    <button type="button" class="btn btn-secondary btn-sm" onclick="openMongoConfigModal()" style="border-radius:20px; font-size:12px; padding:6px 16px; background:#0f172a; border:1px solid #334155; cursor:pointer;">
-                        <i class="fas fa-database" style="color:#10b981;"></i> <span>MongoDB Connection Settings</span>
-                    </button>
-                </div>
             </div>
             <div class="login-card">
                 <h2>Hospital Staff Sign In</h2>
-                <p class="login-hint">Sign in with your hospital Email ID &amp; Password or Google account. Your role,
+                <p class="login-hint">Sign in with your hospital Email ID &amp; Password. Your role,
                     shift permissions, and payroll profiles are fetched directly from the database.</p>
 
                 <form id="login-form" onsubmit="handleLogin(event)">
@@ -50,74 +45,6 @@
                     <button type="submit" class="btn btn-primary btn-full"><i class="fas fa-sign-in-alt"></i> Sign In
                         with ID &amp; Password</button>
                 </form>
-
-                <div
-                    style="text-align:center; margin:16px 0; color:#64748b; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px;">
-                    <span>— Or Quick Login Demo —</span>
-                </div>
-
-                <!-- Sample Credentials Quick-Use Panel -->
-                <div class="demo-credentials-box">
-                    <div class="demo-credentials-title">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Sample @medcore.org Staff Credentials</span>
-                    </div>
-                    <div class="cred-list">
-                        <div class="cred-item">
-                            <div class="cred-info">
-                                <span class="cred-name">Hospital Admin <span>(Hospital Administrator)</span></span>
-                                <span class="cred-email">admin@medcore.org • Admin@123</span>
-                            </div>
-                            <button class="btn-use-cred"
-                                onclick="quickFillLogin('admin@medcore.org', 'Admin@123')">Use</button>
-                        </div>
-
-                        <div class="cred-item">
-                            <div class="cred-info">
-                                <span class="cred-name">Doctor (Cardiology) <span>(Dr. Arjun Rao)</span></span>
-                                <span class="cred-email">doctor@medcore.org • Doctor@123</span>
-                            </div>
-                            <button class="btn-use-cred"
-                                onclick="quickFillLogin('doctor@medcore.org', 'Doctor@123')">Use</button>
-                        </div>
-
-                        <div class="cred-item">
-                            <div class="cred-info">
-                                <span class="cred-name">Hospital Accountant <span>(Sanjay Mehta, CPA)</span></span>
-                                <span class="cred-email">accountant@medcore.org • Account@123</span>
-                            </div>
-                            <button class="btn-use-cred"
-                                onclick="quickFillLogin('accountant@medcore.org', 'Account@123')">Use</button>
-                        </div>
-
-                        <div class="cred-item">
-                            <div class="cred-info">
-                                <span class="cred-name">Pharmacist <span>(Maya Lin)</span></span>
-                                <span class="cred-email">pharmacist@medcore.org • Pharma@123</span>
-                            </div>
-                            <button class="btn-use-cred"
-                                onclick="quickFillLogin('pharmacist@medcore.org', 'Pharma@123')">Use</button>
-                        </div>
-
-                        <div class="cred-item">
-                            <div class="cred-info">
-                                <span class="cred-name">Ward Staff <span>(Ravi Kumar)</span></span>
-                                <span class="cred-email">ward@medcore.org • Ward@123</span>
-                            </div>
-                            <button class="btn-use-cred"
-                                onclick="quickFillLogin('ward@medcore.org', 'Ward@123')">Use</button>
-                        </div>
-
-                        <div class="cred-item">
-                            <div class="cred-info">
-                                <span class="cred-name">Nurse (ICU / Cardiac) <span>(Kavya Menon, RN)</span></span>
-                                <span class="cred-email">nurse@medcore.org • Nurse@123</span>
-                            </div>
-                            <button class="btn-use-cred"
-                                onclick="quickFillLogin('nurse@medcore.org', 'Nurse@123')">Use</button>
-                        </div>
-                    </div>
-                </div>
             </div>
             <p class="login-disclaimer">⚠ Prototype uses fictional clinical data only. Not for real patient care.</p>
         </div>
