@@ -1,6 +1,6 @@
 /* ===================================================================
    MedCore AI — Comprehensive Data Store
-   Fictional / Demo Clinical, Financial, and Operational Data.
+   Fictional / Demo Clinical, Financial, Operational & HR Data.
    =================================================================== */
 
 const SampleData = {
@@ -15,7 +15,9 @@ const SampleData = {
             name: 'Hospital Administrator',
             title: 'Chief Operations Officer',
             employeeId: 'ADM-01',
-            department: 'Hospital Administration'
+            department: 'Hospital Administration',
+            phone: 'Ext. 100',
+            status: 'Active'
         },
         {
             email: 'doctor@medcore.org',
@@ -25,7 +27,9 @@ const SampleData = {
             name: 'Dr. Arjun Rao',
             title: 'Senior Cardiologist',
             employeeId: 'DOC-02',
-            department: 'Cardiology'
+            department: 'Cardiology',
+            phone: 'Ext. 202',
+            status: 'Active'
         },
         {
             email: 'meera.nair@medcore.org',
@@ -35,7 +39,9 @@ const SampleData = {
             name: 'Dr. Meera Nair',
             title: 'Emergency Physician',
             employeeId: 'DOC-01',
-            department: 'Emergency Medicine'
+            department: 'Emergency Medicine',
+            phone: 'Ext. 201',
+            status: 'Active'
         },
         {
             email: 'elena.varga@medcore.org',
@@ -45,7 +51,21 @@ const SampleData = {
             name: 'Dr. Elena Varga',
             title: 'Critical Care Specialist',
             employeeId: 'DOC-03',
-            department: 'Critical Care / ICU'
+            department: 'Critical Care / ICU',
+            phone: 'Ext. 203',
+            status: 'Active'
+        },
+        {
+            email: 'kenji.tanaka@medcore.org',
+            username: 'dr.tanaka',
+            password: 'Doctor@123',
+            role: 'doctor',
+            name: 'Dr. Kenji Tanaka',
+            title: 'Consultant Neurologist',
+            employeeId: 'DOC-04',
+            department: 'Neurology',
+            phone: 'Ext. 204',
+            status: 'Active'
         },
         {
             email: 'pharmacist@medcore.org',
@@ -55,7 +75,9 @@ const SampleData = {
             name: 'Maya Lin',
             title: 'Chief Clinical Pharmacist',
             employeeId: 'PH-01',
-            department: 'Central Pharmacy'
+            department: 'Central Pharmacy',
+            phone: 'Ext. 301',
+            status: 'Active'
         },
         {
             email: 'ward@medcore.org',
@@ -65,7 +87,9 @@ const SampleData = {
             name: 'Ravi Kumar',
             title: 'Ward Operations Supervisor',
             employeeId: 'WRD-01',
-            department: 'Ward & Bed Operations'
+            department: 'Ward & Bed Operations',
+            phone: 'Ext. 401',
+            status: 'Active'
         },
         {
             email: 'nurse@medcore.org',
@@ -75,7 +99,9 @@ const SampleData = {
             name: 'Kavya Menon, RN',
             title: 'ICU Senior Staff Nurse',
             employeeId: 'NRS-01',
-            department: 'ICU / Cardiac Care'
+            department: 'ICU / Cardiac Care',
+            phone: 'Ext. 501',
+            status: 'Active'
         },
         {
             email: 'accountant@medcore.org',
@@ -85,48 +111,85 @@ const SampleData = {
             name: 'Sanjay Mehta, CPA',
             title: 'Chief Financial Officer & Accountant',
             employeeId: 'ACC-01',
-            department: 'Finance & Accounts'
+            department: 'Finance & Accounts',
+            phone: 'Ext. 601',
+            status: 'Active'
         }
     ],
 
     // ── DOCTOR DIRECTORY ──
     doctors: [
-        { id: 'DOC-01', name: 'Dr. Meera Nair', specialization: 'Emergency Medicine', department: 'Emergency', room: 'ER Bay 1', onDuty: true, shiftEnd: '14:00' },
-        { id: 'DOC-02', name: 'Dr. Arjun Rao', specialization: 'Cardiology', department: 'Cardiology', room: 'CARD-03', onDuty: true, shiftEnd: '16:00' },
-        { id: 'DOC-03', name: 'Dr. Elena Varga', specialization: 'Critical Care / ICU', department: 'ICU', room: 'ICU-02', onDuty: true, shiftEnd: '18:00' },
-        { id: 'DOC-04', name: 'Dr. Kenji Tanaka', specialization: 'Neurology', department: 'Neurology', room: 'ER-01', onDuty: true, shiftEnd: '15:00' },
-        { id: 'DOC-05', name: 'Dr. Priya Deshmukh', specialization: 'Pulmonology', department: 'General', room: 'OPD-04', onDuty: false, shiftEnd: '—' },
-        { id: 'DOC-06', name: 'Dr. Samuel Okafor', specialization: 'General Surgery', department: 'Surgery', room: 'OT-02', onDuty: false, shiftEnd: '—' }
+        { id: 'DOC-01', name: 'Dr. Meera Nair', specialization: 'Emergency Medicine', department: 'Emergency', room: 'ER Bay 1', onDuty: true, shiftEnd: '14:00', phone: 'Ext. 201' },
+        { id: 'DOC-02', name: 'Dr. Arjun Rao', specialization: 'Cardiology', department: 'Cardiology', room: 'CARD-03', onDuty: true, shiftEnd: '16:00', phone: 'Ext. 202' },
+        { id: 'DOC-03', name: 'Dr. Elena Varga', specialization: 'Critical Care / ICU', department: 'ICU', room: 'ICU-02', onDuty: true, shiftEnd: '18:00', phone: 'Ext. 203' },
+        { id: 'DOC-04', name: 'Dr. Kenji Tanaka', specialization: 'Neurology', department: 'Neurology', room: 'ER-01', onDuty: true, shiftEnd: '15:00', phone: 'Ext. 204' },
+        { id: 'DOC-05', name: 'Dr. Priya Deshmukh', specialization: 'Pulmonology', department: 'General', room: 'OPD-04', onDuty: false, shiftEnd: '—', phone: 'Ext. 205' },
+        { id: 'DOC-06', name: 'Dr. Samuel Okafor', specialization: 'General Surgery', department: 'Surgery', room: 'OT-02', onDuty: false, shiftEnd: '—', phone: 'Ext. 206' }
     ],
 
     // ── NURSES DIRECTORY ──
     nurses: [
-        { id: 'NRS-01', name: 'Kavya Menon, RN', department: 'ICU / Cardiac Care', ward: 'ICU Ward', shift: '08:00 - 16:00', onDuty: true },
-        { id: 'NRS-02', name: 'Anjali Sharma, RN', department: 'Emergency Care', ward: 'Emergency Ward', shift: '06:00 - 14:00', onDuty: true },
-        { id: 'NRS-03', name: 'Sunil Rao, RN', department: 'General Care', ward: 'General Ward', shift: '14:00 - 22:00', onDuty: false }
+        { id: 'NRS-01', name: 'Kavya Menon, RN', department: 'ICU / Cardiac Care', ward: 'ICU Ward', shift: '08:00 - 16:00', onDuty: true, phone: 'Ext. 501' },
+        { id: 'NRS-02', name: 'Anjali Sharma, RN', department: 'Emergency Care', ward: 'Emergency Ward', shift: '06:00 - 14:00', onDuty: true, phone: 'Ext. 502' },
+        { id: 'NRS-03', name: 'Sunil Rao, RN', department: 'General Care', ward: 'General Ward', shift: '14:00 - 22:00', onDuty: false, phone: 'Ext. 503' }
     ],
 
     // ── WARD STAFF DIRECTORY ──
     wardStaff: [
-        { id: 'WRD-01', name: 'Ravi Kumar', department: 'Ward Operations', ward: 'Emergency & ICU', shift: '06:00 - 14:00', onDuty: true },
-        { id: 'WRD-02', name: 'Geeta Patel', department: 'Bed Sanitation', ward: 'Cardiology & General', shift: '14:00 - 22:00', onDuty: false }
+        { id: 'WRD-01', name: 'Ravi Kumar', department: 'Ward Operations', ward: 'Emergency & ICU', shift: '06:00 - 14:00', onDuty: true, phone: 'Ext. 401' },
+        { id: 'WRD-02', name: 'Geeta Patel', department: 'Bed Sanitation', ward: 'Cardiology & General', shift: '14:00 - 22:00', onDuty: false, phone: 'Ext. 402' }
     ],
 
-    // ── SHIFTS / DUTIES MASTER SCHEDULE ──
+    // ── NEXT 1 WEEK DOCTOR & STAFF SHIFTS SCHEDULE (Nov 22 - Nov 28) ──
     shifts: [
-        { id: 'SH-01', staffType: 'Doctor', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-21', start: '06:00', end: '14:00', ward: 'Emergency', location: 'ER Bay 1', status: 'Active' },
-        { id: 'SH-02', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-21', start: '08:00', end: '16:00', ward: 'Cardiology', location: 'CARD-03', status: 'Active' },
-        { id: 'SH-03', staffType: 'Doctor', staffId: 'DOC-03', staffName: 'Dr. Elena Varga', date: '2026-11-21', start: '10:00', end: '18:00', ward: 'ICU', location: 'ICU-02', status: 'Active' },
-        { id: 'SH-04', staffType: 'Doctor', staffId: 'DOC-04', staffName: 'Dr. Kenji Tanaka', date: '2026-11-21', start: '07:00', end: '15:00', ward: 'Neurology', location: 'ER-01', status: 'Active' },
-        { id: 'SH-05', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-22', start: '08:00', end: '16:00', ward: 'Cardiology', location: 'CARD-01', status: 'Scheduled' },
-        { id: 'SH-06', staffType: 'Nurse', staffId: 'NRS-01', staffName: 'Kavya Menon, RN', date: '2026-11-21', start: '08:00', end: '16:00', ward: 'ICU', location: 'ICU Station A', status: 'Active' },
-        { id: 'SH-07', staffType: 'Nurse', staffId: 'NRS-02', staffName: 'Anjali Sharma, RN', date: '2026-11-21', start: '06:00', end: '14:00', ward: 'Emergency', location: 'Triage Desk', status: 'Active' },
-        { id: 'SH-08', staffType: 'Nurse', staffId: 'NRS-01', staffName: 'Kavya Menon, RN', date: '2026-11-22', start: '08:00', end: '16:00', ward: 'ICU', location: 'ICU Station B', status: 'Scheduled' },
-        { id: 'SH-09', staffType: 'Ward Staff', staffId: 'WRD-01', staffName: 'Ravi Kumar', date: '2026-11-21', start: '06:00', end: '14:00', ward: 'Emergency', location: 'ER Floor', status: 'Active' },
-        { id: 'SH-10', staffType: 'Ward Staff', staffId: 'WRD-02', staffName: 'Geeta Patel', date: '2026-11-21', start: '14:00', end: '22:00', ward: 'Cardiology', location: 'Sanitation Bay', status: 'Scheduled' }
+        // Today Nov 22
+        { id: 'SH-01', staffType: 'Doctor', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-22', start: '06:00', end: '14:00', ward: 'Emergency', location: 'ER Bay 1', status: 'Active' },
+        { id: 'SH-02', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-22', start: '08:00', end: '16:00', ward: 'Cardiology', location: 'CARD-03', status: 'Active' },
+        { id: 'SH-03', staffType: 'Doctor', staffId: 'DOC-03', staffName: 'Dr. Elena Varga', date: '2026-11-22', start: '10:00', end: '18:00', ward: 'ICU', location: 'ICU-02', status: 'Active' },
+        { id: 'SH-04', staffType: 'Doctor', staffId: 'DOC-04', staffName: 'Dr. Kenji Tanaka', date: '2026-11-22', start: '07:00', end: '15:00', ward: 'Neurology', location: 'ER-01', status: 'Active' },
+        { id: 'SH-05', staffType: 'Nurse', staffId: 'NRS-01', staffName: 'Kavya Menon, RN', date: '2026-11-22', start: '08:00', end: '16:00', ward: 'ICU', location: 'ICU Station A', status: 'Active' },
+        { id: 'SH-06', staffType: 'Ward Staff', staffId: 'WRD-01', staffName: 'Ravi Kumar', date: '2026-11-22', start: '06:00', end: '14:00', ward: 'Emergency', location: 'ER Floor', status: 'Active' },
+        
+        // Day 2: Nov 23
+        { id: 'SH-07', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-23', start: '08:00', end: '16:00', ward: 'Cardiology', location: 'Cath Lab 1', status: 'Scheduled' },
+        { id: 'SH-08', staffType: 'Doctor', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-23', start: '14:00', end: '22:00', ward: 'Emergency', location: 'Trauma Bay', status: 'Scheduled' },
+        { id: 'SH-09', staffType: 'Doctor', staffId: 'DOC-05', staffName: 'Dr. Priya Deshmukh', date: '2026-11-23', start: '09:00', end: '17:00', ward: 'General', location: 'OPD Room 3', status: 'Scheduled' },
+        
+        // Day 3: Nov 24
+        { id: 'SH-10', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-24', start: '09:00', end: '17:00', ward: 'Cardiology', location: 'CARD-01', status: 'Scheduled' },
+        { id: 'SH-11', staffType: 'Doctor', staffId: 'DOC-03', staffName: 'Dr. Elena Varga', date: '2026-11-24', start: '08:00', end: '16:00', ward: 'ICU', location: 'ICU Bay 1', status: 'Scheduled' },
+        { id: 'SH-12', staffType: 'Doctor', staffId: 'DOC-06', staffName: 'Dr. Samuel Okafor', date: '2026-11-24', start: '08:00', end: '16:00', ward: 'Surgery', location: 'OT-1', status: 'Scheduled' },
+        
+        // Day 4: Nov 25
+        { id: 'SH-13', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-25', start: '08:00', end: '14:00', ward: 'Cardiology', location: 'OPD-02', status: 'Scheduled' },
+        { id: 'SH-14', staffType: 'Doctor', staffId: 'DOC-04', staffName: 'Dr. Kenji Tanaka', date: '2026-11-25', start: '12:00', end: '20:00', ward: 'Neurology', location: 'Neuro Clinic', status: 'Scheduled' },
+        
+        // Day 5: Nov 26
+        { id: 'SH-15', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-26', start: '10:00', end: '18:00', ward: 'Cardiology', location: 'CARD-03', status: 'Scheduled' },
+        { id: 'SH-16', staffType: 'Doctor', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-26', start: '06:00', end: '14:00', ward: 'Emergency', location: 'ER Bay 2', status: 'Scheduled' },
+        
+        // Day 6: Nov 27
+        { id: 'SH-17', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-27', start: '08:00', end: '16:00', ward: 'Cardiology', location: 'Inpatient Round', status: 'Scheduled' },
+        { id: 'SH-18', staffType: 'Doctor', staffId: 'DOC-03', staffName: 'Dr. Elena Varga', date: '2026-11-27', start: '14:00', end: '22:00', ward: 'ICU', location: 'ICU-03', status: 'Scheduled' },
+        
+        // Day 7: Nov 28
+        { id: 'SH-19', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-28', start: '08:00', end: '12:00', ward: 'Cardiology', location: 'Executive Health Check', status: 'Scheduled' },
+        { id: 'SH-20', staffType: 'Doctor', staffId: 'DOC-06', staffName: 'Dr. Samuel Okafor', date: '2026-11-28', start: '09:00', end: '17:00', ward: 'Surgery', location: 'OT-2', status: 'Scheduled' }
     ],
 
-    // ── PATIENTS WITH REAL-TIME & HISTORICAL VITALS ──
+    // ── ATTENDANCE & PUNCH-IN RECORDS ──
+    attendanceLogs: [
+        { id: 'ATT-101', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-22', clockIn: '07:55 AM', clockOut: 'Active', hours: 4.5, status: 'On Duty' },
+        { id: 'ATT-102', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-22', clockIn: '05:50 AM', clockOut: 'Active', hours: 6.5, status: 'On Duty' },
+        { id: 'ATT-103', staffId: 'NRS-01', staffName: 'Kavya Menon, RN', date: '2026-11-22', clockIn: '07:50 AM', clockOut: 'Active', hours: 4.6, status: 'On Duty' },
+        { id: 'ATT-104', staffId: 'WRD-01', staffName: 'Ravi Kumar', date: '2026-11-22', clockIn: '05:58 AM', clockOut: 'Active', hours: 6.4, status: 'On Duty' },
+        { id: 'ATT-105', staffId: 'PH-01', staffName: 'Maya Lin', date: '2026-11-22', clockIn: '08:00 AM', clockOut: 'Active', hours: 4.3, status: 'On Duty' },
+        { id: 'ATT-106', staffId: 'ACC-01', staffName: 'Sanjay Mehta', date: '2026-11-22', clockIn: '08:30 AM', clockOut: 'Active', hours: 3.8, status: 'On Duty' },
+        { id: 'ATT-107', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-21', clockIn: '08:00 AM', clockOut: '04:10 PM', hours: 8.2, status: 'Completed' },
+        { id: 'ATT-108', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-20', clockIn: '07:52 AM', clockOut: '04:05 PM', hours: 8.2, status: 'Completed' }
+    ],
+
+    // ── PATIENTS WITH CLINICAL VITALS ──
     patients: [
         {
             id: 'PT-4091',
@@ -269,7 +332,7 @@ const SampleData = {
             age: 22,
             gender: 'Male',
             department: 'Emergency Medicine',
-            concern: 'Right lower quadrant abdominal pain — suspect appendicitis',
+            concern: 'Right lower quadrant abdominal pain — appendicitis',
             severity: 'Moderate',
             bed: 'GEN-01',
             ward: 'General',
@@ -349,7 +412,7 @@ const SampleData = {
         }
     ],
 
-    // ── BEDS MATRIX (16 beds across 4 wards) ──
+    // ── BEDS ──
     beds: [
         { id: 'ICU-01', ward: 'ICU', status: 'Occupied', patient: 'Rohan Kulkarni', severity: 'Critical', spo2: '91%' },
         { id: 'ICU-02', ward: 'ICU', status: 'Occupied', patient: 'Ananya Chatterjee', severity: 'Critical', spo2: '89%' },
@@ -369,7 +432,7 @@ const SampleData = {
         { id: 'GEN-04', ward: 'General', status: 'Available', patient: 'Ready for intake', severity: 'Normal', spo2: '—' }
     ],
 
-    // ── DOCTOR PRESCRIPTION QUEUE (Doctor -> Pharmacy Pre-Pack) ──
+    // ── DOCTOR PRESCRIPTIONS ──
     prescriptions: [
         {
             id: 'RX-505',
@@ -424,7 +487,7 @@ const SampleData = {
         }
     ],
 
-    // ── PHARMACY INVENTORY & MEDICINES ──
+    // ── PHARMACY MEDICINES ──
     medicines: [
         { id: 'M-01', name: 'Atorvastatin 20mg Cardiac Tablets', category: 'Cardiology', quantity: 180, threshold: 70, unitPrice: 148 },
         { id: 'M-02', name: 'Pantoprazole 40mg Gastro-Resistant Tabs', category: 'Gastroenterology', quantity: 240, threshold: 80, unitPrice: 95 },
@@ -438,184 +501,327 @@ const SampleData = {
         { id: 'M-10', name: 'Amlodipine 5mg Tablets', category: 'Hypertension', quantity: 320, threshold: 100, unitPrice: 45 }
     ],
 
-    // ── MULTI-DEPARTMENT HOSPITAL FINANCIALS ──
-    // Tracks total sales from Pharmacy, OPD, ICU, Emergency, Surgery, and Diagnostics
-    departmentSalesSummary: {
-        totalHospitalRevenue: 2486750,
-        pharmacy: 342600,
-        opd: 485000,
-        icu: 792400,
-        emergency: 318250,
-        surgery: 428500,
-        diagnostics: 120000
-    },
-
+    // ── HOSPITAL SALES TRANSACTIONS (Multi-Column By Location: ICU, Pharmacy, OPD, Staff Salary, ER, Surgery) ──
     hospitalTransactions: [
-        { id: 'TXN-8801', date: '2026-11-21 10:30', department: 'Pharmacy', patientId: 'PT-4099', service: 'Cardiac Pre-pack Discharge Meds (Atorvastatin/Panto)', amount: 634, paymentMode: 'UPI / Digital', cashier: 'Maya Lin', status: 'Completed' },
-        { id: 'TXN-8802', date: '2026-11-21 10:15', department: 'ICU', patientId: 'PT-4091', service: 'Cardiac Critical Care Bed & Invasive Monitoring (Day 1)', amount: 38500, paymentMode: 'TPA Insurance', cashier: 'Sanjay Mehta', status: 'Completed' },
-        { id: 'TXN-8803', date: '2026-11-21 09:50', department: 'OPD', patientId: 'PT-4096', service: 'Cardiology Specialist Consultation & ECG (Dr. Arjun Rao)', amount: 2200, paymentMode: 'Credit Card', cashier: 'Front Desk', status: 'Completed' },
-        { id: 'TXN-8804', date: '2026-11-21 09:35', department: 'Emergency', patientId: 'PT-4094', service: 'Emergency Bronchodilator Resuscitation & High Flow O2', amount: 4800, paymentMode: 'Cash', cashier: 'ER Desk', status: 'Completed' },
-        { id: 'TXN-8805', date: '2026-11-21 09:10', department: 'Surgery', patientId: 'PT-4095', service: 'Emergency Chest Tube Insertion & Wound Debridement', amount: 28500, paymentMode: 'TPA Insurance', cashier: 'OT Desk', status: 'Completed' },
-        { id: 'TXN-8806', date: '2026-11-21 08:45', department: 'Diagnostics', patientId: 'PT-4093', service: 'Stat Brain CT Scan & Angiography Protocol', amount: 8900, paymentMode: 'UPI / Digital', cashier: 'Radiology Desk', status: 'Completed' },
-        { id: 'TXN-8807', date: '2026-11-20 18:20', department: 'Pharmacy', patientId: 'PT-4089', service: 'Antibiotic IV Course & Infusions (Bill #8812)', amount: 2450, paymentMode: 'Credit Card', cashier: 'Maya Lin', status: 'Completed' },
-        { id: 'TXN-8808', date: '2026-11-20 16:40', department: 'ICU', patientId: 'PT-4092', service: 'ICU Sepsis Resuscitation Bundle & Vasopressor Protocol', amount: 42000, paymentMode: 'TPA Insurance', cashier: 'Sanjay Mehta', status: 'Completed' }
+        { id: 'TXN-8801', date: '2026-11-22 10:30', department: 'Pharmacy', patientId: 'PT-4099', service: 'Cardiac Pre-pack Discharge Meds', icuAmount: 0, pharmacyAmount: 634, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 634, paymentMode: 'Split: UPI (₹400) + Cash (₹234)', cashier: 'Maya Lin', status: 'Completed' },
+        { id: 'TXN-8802', date: '2026-11-22 10:15', department: 'ICU', patientId: 'PT-4091', service: 'Cardiac Critical Care Bed & Telemetry (Day 2)', icuAmount: 38500, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 38500, paymentMode: 'TPA Insurance', cashier: 'Sanjay Mehta', status: 'Completed' },
+        { id: 'TXN-8803', date: '2026-11-22 09:50', department: 'OPD', patientId: 'PT-4096', service: 'Cardiology Specialist Consultation & ECG', icuAmount: 0, pharmacyAmount: 0, opdAmount: 2200, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 2200, paymentMode: 'Split: Cash (₹1000) + Card (₹1200)', cashier: 'Front Desk', status: 'Completed' },
+        { id: 'TXN-8804', date: '2026-11-22 09:35', department: 'Emergency', patientId: 'PT-4094', service: 'Emergency Resuscitation & High Flow O2', icuAmount: 0, pharmacyAmount: 0, opdAmount: 0, erAmount: 4800, salaryAmount: 0, surgeryAmount: 0, totalAmount: 4800, paymentMode: 'Cash', cashier: 'ER Desk', status: 'Completed' },
+        { id: 'TXN-8805', date: '2026-11-22 09:10', department: 'Surgery', patientId: 'PT-4095', service: 'Emergency Chest Tube Insertion & Splinting', icuAmount: 0, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 28500, totalAmount: 28500, paymentMode: 'TPA Insurance', cashier: 'OT Desk', status: 'Completed' },
+        { id: 'TXN-8806', date: '2026-11-21 16:00', department: 'Staff Salary', patientId: 'DOC-02', service: 'Special Incentive Bonus Disbursal', icuAmount: 0, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 25000, surgeryAmount: 0, totalAmount: 25000, paymentMode: 'NEFT Bank Transfer', cashier: 'Sanjay Mehta (CFO)', status: 'Completed' },
+        { id: 'TXN-8807', date: '2026-11-21 14:20', department: 'Pharmacy', patientId: 'PT-4089', service: 'Antibiotic IV Course & Syringes', icuAmount: 0, pharmacyAmount: 2450, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 2450, paymentMode: 'UPI / Digital', cashier: 'Maya Lin', status: 'Completed' },
+        { id: 'TXN-8808', date: '2026-11-21 11:40', department: 'ICU', patientId: 'PT-4092', service: 'ICU Sepsis Resuscitation & Vasopressors', icuAmount: 42000, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 42000, paymentMode: 'TPA Insurance', cashier: 'Sanjay Mehta', status: 'Completed' }
     ],
 
-    // ── FULL HOSPITAL PAYROLL SYSTEM (Doctors, Nurses, Ward Staff, Pharmacy, Accountant, Admin) ──
+    // ── FULL PAYROLL SYSTEM WITH MULTI-MONTH HISTORY (Payslips download in PDF) ──
     payroll: [
         {
-            id: 'PAY-101',
+            id: 'PAY-2026-11-DOC02',
             staffId: 'DOC-02',
             name: 'Dr. Arjun Rao',
             role: 'Doctor',
             department: 'Cardiology',
+            month: 'November 2026',
             baseSalary: 285000,
             allowances: 45000,
+            specialPayment: 25000,
+            specialPaymentReason: 'Cardiology On-Call Emergency Bonus',
+            deductions: 32000,
+            netSalary: 323000,
+            status: 'Paid',
+            paymentDate: '2026-11-21',
+            bankAccount: 'HDFC Bank (•••• 4921)',
+            taxPan: 'AAAAA1234F',
+            daysWorked: 26
+        },
+        {
+            id: 'PAY-2026-10-DOC02',
+            staffId: 'DOC-02',
+            name: 'Dr. Arjun Rao',
+            role: 'Doctor',
+            department: 'Cardiology',
+            month: 'October 2026',
+            baseSalary: 285000,
+            allowances: 45000,
+            specialPayment: 0,
+            specialPaymentReason: '—',
             deductions: 32000,
             netSalary: 298000,
             status: 'Paid',
-            paymentDate: '2026-11-01',
+            paymentDate: '2026-10-31',
             bankAccount: 'HDFC Bank (•••• 4921)',
-            taxPan: 'AAAAA1234F'
+            taxPan: 'AAAAA1234F',
+            daysWorked: 26
         },
         {
-            id: 'PAY-102',
+            id: 'PAY-2026-09-DOC02',
+            staffId: 'DOC-02',
+            name: 'Dr. Arjun Rao',
+            role: 'Doctor',
+            department: 'Cardiology',
+            month: 'September 2026',
+            baseSalary: 285000,
+            allowances: 45000,
+            specialPayment: 15000,
+            specialPaymentReason: 'Cath Lab Overtime Incentive',
+            deductions: 32000,
+            netSalary: 313000,
+            status: 'Paid',
+            paymentDate: '2026-09-30',
+            bankAccount: 'HDFC Bank (•••• 4921)',
+            taxPan: 'AAAAA1234F',
+            daysWorked: 25
+        },
+        {
+            id: 'PAY-2026-11-DOC01',
             staffId: 'DOC-01',
             name: 'Dr. Meera Nair',
             role: 'Doctor',
             department: 'Emergency Medicine',
+            month: 'November 2026',
             baseSalary: 250000,
             allowances: 40000,
+            specialPayment: 18000,
+            specialPaymentReason: 'Trauma Bay Night Shift Allowance',
             deductions: 28000,
-            netSalary: 262000,
+            netSalary: 280000,
             status: 'Pending',
             paymentDate: '—',
             bankAccount: 'ICICI Bank (•••• 8102)',
-            taxPan: 'BBBBB5678G'
+            taxPan: 'BBBBB5678G',
+            daysWorked: 26
         },
         {
-            id: 'PAY-103',
+            id: 'PAY-2026-11-DOC03',
             staffId: 'DOC-03',
             name: 'Dr. Elena Varga',
             role: 'Doctor',
             department: 'Critical Care / ICU',
+            month: 'November 2026',
             baseSalary: 275000,
             allowances: 42000,
+            specialPayment: 20000,
+            specialPaymentReason: 'ECMO Telemetry Specialist Allowance',
             deductions: 30000,
-            netSalary: 287000,
+            netSalary: 307000,
             status: 'Paid',
-            paymentDate: '2026-11-01',
+            paymentDate: '2026-11-20',
             bankAccount: 'Axis Bank (•••• 7721)',
-            taxPan: 'CCCCC9012H'
+            taxPan: 'CCCCC9012H',
+            daysWorked: 25
         },
         {
-            id: 'PAY-104',
+            id: 'PAY-2026-11-DOC04',
             staffId: 'DOC-04',
             name: 'Dr. Kenji Tanaka',
             role: 'Doctor',
             department: 'Neurology',
+            month: 'November 2026',
             baseSalary: 290000,
             allowances: 48000,
+            specialPayment: 0,
+            specialPaymentReason: '—',
             deductions: 34000,
             netSalary: 304000,
             status: 'Pending',
             paymentDate: '—',
             bankAccount: 'SBI (•••• 3319)',
-            taxPan: 'DDDDD3456J'
+            taxPan: 'DDDDD3456J',
+            daysWorked: 24
         },
         {
-            id: 'PAY-105',
+            id: 'PAY-2026-11-NRS01',
             staffId: 'NRS-01',
             name: 'Kavya Menon, RN',
             role: 'Nurse',
             department: 'ICU / Cardiac Care',
+            month: 'November 2026',
             baseSalary: 82000,
             allowances: 15000,
+            specialPayment: 8000,
+            specialPaymentReason: 'High Acuity Shift Differential',
             deductions: 7500,
-            netSalary: 89500,
+            netSalary: 97500,
             status: 'Paid',
-            paymentDate: '2026-11-01',
+            paymentDate: '2026-11-15',
             bankAccount: 'HDFC Bank (•••• 1102)',
-            taxPan: 'EEEEE7890K'
+            taxPan: 'EEEEE7890K',
+            daysWorked: 26
         },
         {
-            id: 'PAY-106',
-            staffId: 'NRS-02',
-            name: 'Anjali Sharma, RN',
-            role: 'Nurse',
-            department: 'Emergency Care',
-            baseSalary: 78000,
-            allowances: 14000,
-            deductions: 7000,
-            netSalary: 85000,
-            status: 'Pending',
-            paymentDate: '—',
-            bankAccount: 'PNB (•••• 9943)',
-            taxPan: 'FFFFF1234L'
-        },
-        {
-            id: 'PAY-107',
+            id: 'PAY-2026-11-WRD01',
             staffId: 'WRD-01',
             name: 'Ravi Kumar',
             role: 'Ward Staff',
             department: 'Ward & Bed Operations',
+            month: 'November 2026',
             baseSalary: 45000,
             allowances: 8000,
+            specialPayment: 5000,
+            specialPaymentReason: 'Emergency Sanitation Incentive',
             deductions: 3500,
-            netSalary: 49500,
+            netSalary: 54500,
             status: 'Paid',
-            paymentDate: '2026-11-01',
+            paymentDate: '2026-11-15',
             bankAccount: 'SBI (•••• 5520)',
-            taxPan: 'GGGGG5678M'
+            taxPan: 'GGGGG5678M',
+            daysWorked: 26
         },
         {
-            id: 'PAY-108',
+            id: 'PAY-2026-11-PH01',
             staffId: 'PH-01',
             name: 'Maya Lin',
             role: 'Pharmacist',
             department: 'Central Pharmacy',
+            month: 'November 2026',
             baseSalary: 98000,
             allowances: 16000,
+            specialPayment: 10000,
+            specialPaymentReason: 'Inventory Audit Accuracy Bonus',
             deductions: 9000,
-            netSalary: 105000,
+            netSalary: 115000,
             status: 'Paid',
-            paymentDate: '2026-11-01',
+            paymentDate: '2026-11-15',
             bankAccount: 'ICICI Bank (•••• 1890)',
-            taxPan: 'HHHHH9012N'
+            taxPan: 'HHHHH9012N',
+            daysWorked: 26
         },
         {
-            id: 'PAY-109',
+            id: 'PAY-2026-11-ACC01',
             staffId: 'ACC-01',
             name: 'Sanjay Mehta, CPA',
             role: 'Accountant',
             department: 'Finance & Accounts',
+            month: 'November 2026',
             baseSalary: 115000,
             allowances: 20000,
+            specialPayment: 12000,
+            specialPaymentReason: 'Quarterly TPA Reconciliation Bonus',
             deductions: 12000,
-            netSalary: 123000,
+            netSalary: 135000,
             status: 'Paid',
-            paymentDate: '2026-11-01',
+            paymentDate: '2026-11-15',
             bankAccount: 'HDFC Bank (•••• 9021)',
-            taxPan: 'JJJJJ3456P'
+            taxPan: 'JJJJJ3456P',
+            daysWorked: 26
         },
         {
-            id: 'PAY-110',
+            id: 'PAY-2026-11-ADM01',
             staffId: 'ADM-01',
             name: 'Hospital Administrator',
             role: 'Admin',
             department: 'Hospital Administration',
+            month: 'November 2026',
             baseSalary: 195000,
             allowances: 35000,
+            specialPayment: 25000,
+            specialPaymentReason: 'NABH Accreditation Leadership Award',
             deductions: 25000,
-            netSalary: 205000,
+            netSalary: 230000,
             status: 'Paid',
-            paymentDate: '2026-11-01',
+            paymentDate: '2026-11-15',
             bankAccount: 'CitiBank (•••• 4412)',
-            taxPan: 'KKKKK7890Q'
+            taxPan: 'KKKKK7890Q',
+            daysWorked: 26
         }
     ],
 
-    // ── DOCTOR MEDICAL CLINICAL LIBRARY & PROTOCOLS ──
+    // ── INTERNAL SECURE HOSPITAL MAIL SYSTEM WITH AI WRITER ──
+    internalMails: [
+        {
+            id: 'MAIL-001',
+            fromId: 'DOC-01',
+            fromName: 'Dr. Meera Nair',
+            fromEmail: 'meera.nair@medcore.org',
+            fromRole: 'Emergency Physician',
+            toId: 'DOC-02',
+            toName: 'Dr. Arjun Rao',
+            toEmail: 'doctor@medcore.org',
+            toRole: 'Senior Cardiologist',
+            subject: 'Urgent Cardiology Consult: Rohan Kulkarni (Bed ICU-01)',
+            body: 'Dear Dr. Rao,\n\nPatient Rohan Kulkarni (PT-4091) presented with acute STEMI and ongoing cardiogenic hypotension (BP 162/98 on admission, SpO2 91%). Please review the latest cardiac telemetry curve in ER Triage and advise if emergency cardiac catheterisation should be scheduled before noon.\n\nBest regards,\nDr. Meera Nair',
+            timestamp: '2026-11-22 09:15',
+            read: false,
+            priority: 'Urgent'
+        },
+        {
+            id: 'MAIL-002',
+            fromId: 'PH-01',
+            fromName: 'Maya Lin',
+            fromEmail: 'pharmacist@medcore.org',
+            fromRole: 'Chief Pharmacist',
+            toId: 'ACC-01',
+            toName: 'Sanjay Mehta, CPA',
+            toEmail: 'accountant@medcore.org',
+            toRole: 'CFO & Accountant',
+            subject: 'Emergency Purchase Order Approval: Epinephrine & Medical O2',
+            body: 'Hello Sanjay,\n\nStock levels for Epinephrine 1mg/mL Auto-Ampoules have dropped to 14 units (Safety threshold: 30) and Medical Oxygen cylinders to 9. We need an immediate financial approval for purchase order #PO-9921 for ₹84,500 to replenish both supplies before tonight\'s intake.\n\nThanks,\nMaya Lin',
+            timestamp: '2026-11-22 08:45',
+            read: true,
+            priority: 'High'
+        },
+        {
+            id: 'MAIL-003',
+            fromId: 'ADM-01',
+            fromName: 'Hospital Administrator',
+            fromEmail: 'admin@medcore.org',
+            fromRole: 'COO',
+            toId: 'ALL',
+            toName: 'All Hospital Personnel',
+            toEmail: 'all.staff@medcore.org',
+            toRole: 'Clinical & Ops Staff',
+            subject: 'Hospital Accreditation Audit Schedule: Nov 25-27',
+            body: 'Dear MedCore Team,\n\nThe Joint Commission hospital inspection begins this Wednesday. Please ensure all ER Triage telemetry curves, prescription records, and shift punch-in attendance logs are current.\n\nWarm regards,\nHospital Administration',
+            timestamp: '2026-11-21 16:30',
+            read: true,
+            priority: 'Normal'
+        }
+    ],
+
+    // ── ISSUE TICKETING & HELPDESK SYSTEM (Everybody can raise issues for Admin) ──
+    supportIssues: [
+        {
+            id: 'ISSUE-301',
+            raisedById: 'NRS-01',
+            raisedByName: 'Kavya Menon, RN',
+            raisedByRole: 'Nurse',
+            category: 'Biomedical Equipment',
+            priority: 'Critical',
+            subject: 'Telemetry Monitor lead disconnection in Bed ICU-02',
+            description: 'Channel 2 ECG leads on monitor M-02 are intermittently dropping cardiac rhythm tracing for patient Ananya Chatterjee. Requires urgent calibration.',
+            status: 'Open',
+            createdAt: '2026-11-22 08:30',
+            resolutionNotes: 'Assigned to Biomedical Engineering team. Tech dispatched.'
+        },
+        {
+            id: 'ISSUE-302',
+            raisedById: 'WRD-01',
+            raisedByName: 'Ravi Kumar',
+            raisedByRole: 'Ward Staff',
+            category: 'Facilities & Sanitation',
+            priority: 'Moderate',
+            subject: 'Hydraulic lift lever stuck on Bed CARD-02',
+            description: 'The height adjustment pedal on Bed CARD-02 is jammed during sanitation. Needs maintenance check before new patient transfer.',
+            status: 'In Progress',
+            createdAt: '2026-11-22 09:10',
+            resolutionNotes: 'Maintenance staff on site.'
+        },
+        {
+            id: 'ISSUE-303',
+            raisedById: 'PH-01',
+            raisedByName: 'Maya Lin',
+            raisedByRole: 'Pharmacist',
+            category: 'Supply Chain',
+            priority: 'High',
+            subject: 'Vendor delay on Sterile Normal Saline 500mL batch',
+            description: 'Supplier MedPharma flagged a 24-hour dispatch delay for our saline consignment. Need admin to coordinate secondary supplier backup.',
+            status: 'Open',
+            createdAt: '2026-11-21 18:00',
+            resolutionNotes: 'Admin reaching out to alternate vendor.'
+        }
+    ],
+
+    // ── DOCTOR MEDICAL CLINICAL GUIDELINES ──
     doctorLibrary: [
         {
             category: 'Emergency & Resuscitation',
