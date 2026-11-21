@@ -84,8 +84,8 @@ def init_db(uri=None, db_name="medcore_db"):
     global mongo_client, db, db_status, memory_store
     
     cfg = load_config()
-    target_uri = uri or cfg.get('mongo_uri', 'mongodb://localhost:27017/medcore_db')
-    target_db = db_name or cfg.get('db_name', 'medcore_db')
+    target_uri = os.environ.get('MONGO_URI') or uri or cfg.get('mongo_uri', 'mongodb://localhost:27017/medcore_db')
+    target_db = os.environ.get('DB_NAME') or db_name or cfg.get('db_name', 'medcore_db')
     
     masked_uri = target_uri
     if '@' in target_uri:
@@ -633,6 +633,6 @@ def punch_attendance():
 
 if __name__ == '__main__':
     cfg = load_config()
-    port = int(cfg.get('port', 8080))
+    port = int(os.environ.get('PORT', cfg.get('port', 8080)))
     logger.info(f"Starting MedCore AI Server on port {port}...")
     app.run(host='0.0.0.0', port=port, debug=False)
