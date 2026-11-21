@@ -96,7 +96,7 @@ def init_db(uri=None, db_name="medcore_db"):
     logger.info(f"Connecting to MongoDB at: {masked_uri}")
     
     try:
-        client = MongoClient(target_uri, serverSelectionTimeoutMS=2500)
+        client = MongoClient(target_uri, serverSelectionTimeoutMS=8000)
         # Test connection
         client.admin.command('ping')
         
