@@ -134,12 +134,24 @@ function quickFillLogin(identifier, password) {
 
 function handleLogin(e) {
     if (e) e.preventDefault();
-    const identifier = document.getElementById('login-username').value.trim().toLowerCase();
-    const password = document.getElementById('login-password').value;
+    const usernameInput = document.getElementById('login-username');
+    const passwordInput = document.getElementById('login-password');
+    const identifier = usernameInput ? usernameInput.value.trim().toLowerCase() : '';
+    const password = passwordInput ? passwordInput.value.trim() : '';
     const errorBox = document.getElementById('login-error');
 
-    errorBox.classList.add('hidden');
-    errorBox.textContent = '';
+    if (errorBox) {
+        errorBox.classList.add('hidden');
+        errorBox.textContent = '';
+    }
+
+    if (!identifier || !password) {
+        if (errorBox) {
+            errorBox.textContent = 'Please enter both your staff Email/ID and Password.';
+            errorBox.classList.remove('hidden');
+        }
+        return false;
+    }
 
     const user = users.find(u => {
         const emailMatch = u.email && u.email.toLowerCase() === identifier;
@@ -150,8 +162,10 @@ function handleLogin(e) {
     });
 
     if (!user) {
-        errorBox.textContent = 'Invalid credentials. Please verify your staff email or password.';
-        errorBox.classList.remove('hidden');
+        if (errorBox) {
+            errorBox.textContent = 'Invalid credentials. Please verify your staff email or password.';
+            errorBox.classList.remove('hidden');
+        }
         return false;
     }
 
@@ -240,7 +254,7 @@ function togglePasswordVisibility(inputId, btn) {
     if (!input) return;
     const isPassword = input.getAttribute('type') === 'password';
     input.setAttribute('type', isPassword ? 'text' : 'password');
-    const icon = btn.querySelector('i');
+    const icon = btn ? (btn.tagName === 'I' ? btn : btn.querySelector('i')) : null;
     if (icon) {
         if (isPassword) {
             icon.classList.remove('fa-eye');
@@ -1724,11 +1738,14 @@ function renderDoctorPrescriptions() {
 function renderDoctorLibrary() {
     const html = doctorLibrary.map(item => `
         <div class="library-card">
-            <span class="library-tag">${item.category} • ${item.code}</span>
+            <div class="library-card-header">
+                <span class="library-tag"><i class="fas fa-notes-medical"></i> ${item.category}</span>
+                <span class="library-code">${item.code}</span>
+            </div>
             <h4>${item.title}</h4>
             <p class="library-summary">${item.summary}</p>
             <div class="library-chips">
-                ${item.tags.map(t => `<span class="library-chip">${t}</span>`).join('')}
+                ${item.tags.map(t => `<span class="library-chip"><i class="fas fa-tag"></i> ${t}</span>`).join('')}
             </div>
         </div>
     `).join('');
@@ -2874,7 +2891,20 @@ window.addEventListener('DOMContentLoaded', () => {
 
 async function bootstrapFromMongo() {
     try {
-        const res = await fetch('/api/bootstrap');
+        if (window.location.protocol === 'file:') {
+            updateMongoStatusUI(false);
+            return;
+        }
+        const res = await fetch('api/bootstrap').catch(() => null);
+        if (!res || !res.ok) {
+            updateMongoStatusUI(false);
+            return;
+        }
+        const contentType = res.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+            updateMongoStatusUI(false);
+            return;
+        }
         const json = await res.json();
         if (json.success && json.data) {
             const d = json.data;
