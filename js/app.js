@@ -34,6 +34,21 @@ let doctorLibrary = JSON.parse(JSON.stringify(SampleData.doctorLibrary));
 
 // ── Role Menus Master Configuration ──
 const roleMenus = {
+    superadmin: {
+        label: 'Super Administrator Workspace',
+        items: [
+            { id: 'admin-overview', icon: 'fa-th-large', label: 'Command Overview' },
+            { id: 'triage-view', icon: 'fa-heartbeat', label: 'ER Triage & Vitals', badge: '3' },
+            { id: 'ward-matrix', icon: 'fa-bed', label: 'Wards & Bed Matrix' },
+            { id: 'admin-shifts', icon: 'fa-calendar-alt', label: 'Doctor Shifts & Duties' },
+            { id: 'hospital-financials', icon: 'fa-chart-pie', label: 'Hospital Financials' },
+            { id: 'payroll-system', icon: 'fa-money-check-alt', label: 'Staff Payroll System' },
+            { id: 'staff-directory', icon: 'fa-id-badge', label: 'Staff & Employee Directory' },
+            { id: 'internal-mail', icon: 'fa-envelope', label: 'Internal Mail & AI' },
+            { id: 'support-issues', icon: 'fa-exclamation-triangle', label: 'Helpdesk & Issues' },
+            { id: 'my-payroll', icon: 'fa-file-invoice-dollar', label: 'My Payslips & PDF' }
+        ]
+    },
     admin: {
         label: 'Hospital Admin Workspace',
         items: [
@@ -148,11 +163,11 @@ function handleLogin(e) {
     document.getElementById('user-name-display').textContent = user.name;
     document.getElementById('user-role-label').textContent = user.title || formatRole(user.role);
 
-    // Admin role switcher display
+    // Admin & Superadmin role switcher display
     const switcherBox = document.getElementById('admin-switcher-container');
-    if (user.role === 'admin') {
+    if (user.role === 'admin' || user.role === 'superadmin') {
         switcherBox.style.display = 'block';
-        document.getElementById('role-view-switcher').value = 'admin';
+        document.getElementById('role-view-switcher').value = user.role === 'superadmin' ? 'admin' : user.role;
     } else {
         switcherBox.style.display = 'none';
     }
@@ -208,6 +223,7 @@ function switchAdminView(targetRole) {
 
 function formatRole(role) {
     const map = {
+        superadmin: 'Super Administrator',
         admin: 'Hospital Administrator',
         doctor: 'Doctor / Physician',
         nurse: 'Registered Nurse',
@@ -216,6 +232,17 @@ function formatRole(role) {
         accountant: 'Chief Accountant'
     };
     return map[role] || role;
+}
+
+function togglePasswordVisibility(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const isPassword = input.type === 'password';
+    input.type = isPassword ? 'text' : 'password';
+    const icon = btn.querySelector('i');
+    if (icon) {
+        icon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+    }
 }
 
 // ===================================================================
@@ -1964,15 +1991,78 @@ function submitGenerateBill(e) {
 //  14. INTERNAL SECURE MAIL WITH AI DRAFTER (Mail ID Based)
 // ===================================================================
 
+let mailViewScope = 'my'; // 'my' or 'all' (for admin / superadmin)
+let currentFilteredMails = [];
+
+function setMailViewScope(scope) {
+    mailViewScope = scope;
+    const btnMy = document.getElementById('btn-mail-scope-my');
+    const btnAll = document.getElementById('btn-mail-scope-all');
+    if (btnMy) btnMy.classList.toggle('active', scope === 'my');
+    if (btnAll) btnAll.classList.toggle('active', scope === 'all');
+    renderInternalMail();
+}
+
 function renderInternalMail() {
-    const inbox = internalMails;
-    const html = inbox.map((m, idx) => `
+    const userEmail = (currentUser && currentUser.email ? currentUser.email.toLowerCase() : '');
+    const userRole = (currentUser && currentUser.role ? currentUser.role.toLowerCase() : 'doctor');
+    const isAdminOrSuper = ['admin', 'superadmin'].includes(userRole);
+
+    const adminScopeBox = document.getElementById('admin-mail-scope-container');
+    if (adminScopeBox) {
+        adminScopeBox.style.display = isAdminOrSuper ? 'flex' : 'none';
+    }
+
+    if (isAdminOrSuper && mailViewScope === 'all') {
+        currentFilteredMails = internalMails;
+        const titleSpan = document.getElementById('mail-sidebar-title');
+        if (titleSpan) titleSpan.innerHTML = '<i class="fas fa-layer-group"></i> All Hospital Mails';
+    } else {
+        currentFilteredMails = internalMails.filter(m => {
+            const toEmail = (m.toEmail || '').toLowerCase();
+            const fromEmail = (m.fromEmail || '').toLowerCase();
+            const toMatch = toEmail === userEmail;
+            const fromMatch = fromEmail === userEmail;
+
+            const ccList = Array.isArray(m.cc) ? m.cc : (m.cc ? String(m.cc).split(',').map(s => s.trim().toLowerCase()) : []);
+            const ccMatch = ccList.some(e => e.toLowerCase() === userEmail);
+
+            const bccList = Array.isArray(m.bcc) ? m.bcc : (m.bcc ? String(m.bcc).split(',').map(s => s.trim().toLowerCase()) : []);
+            const bccMatch = bccList.some(e => e.toLowerCase() === userEmail);
+
+            return toMatch || fromMatch || ccMatch || bccMatch;
+        });
+        const titleSpan = document.getElementById('mail-sidebar-title');
+        if (titleSpan) titleSpan.innerHTML = '<i class="fas fa-inbox"></i> My Mails & Direct';
+    }
+
+    const unreadCount = currentFilteredMails.filter(m => !m.read).length;
+    const badge = document.getElementById('mail-unread-count');
+    if (badge) badge.textContent = `${unreadCount} Unread`;
+
+    if (currentFilteredMails.length === 0) {
+        document.getElementById('mail-inbox-list').innerHTML = `
+            <div style="padding:28px 16px; text-align:center; color:#64748b; font-size:12.5px;">
+                <i class="fas fa-envelope-open" style="font-size:28px; margin-bottom:8px; opacity:0.5;"></i>
+                <p>No messages found in this view.</p>
+            </div>
+        `;
+        document.getElementById('mail-content-display').innerHTML = `
+            <div style="color:#64748b; text-align:center; margin-top:120px;">
+                <i class="fas fa-envelope-open-text" style="font-size:42px; margin-bottom:12px;"></i>
+                <p>Select a message from the list to view full correspondence.</p>
+            </div>
+        `;
+        return;
+    }
+
+    const html = currentFilteredMails.map((m, idx) => `
         <div class="mail-item ${idx === 0 ? 'active' : ''}" onclick="selectMailItem(${idx})">
             <div class="mail-sender">
                 <span>${m.fromName}</span>
                 <span style="font-size:10px; color:#94a3b8;">${m.timestamp ? m.timestamp.split(' ')[1] : ''}</span>
             </div>
-            <div style="font-size:11px; color:#38bdf8; font-family:monospace; margin-bottom:3px;">
+            <div style="font-size:11px; color:#38bdf8; font-family:monospace; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                 ${m.fromEmail || 'staff@medcore.org'} &rarr; ${m.toEmail || 'staff@medcore.org'}
             </div>
             <div class="mail-subject">${m.subject}</div>
@@ -1980,14 +2070,31 @@ function renderInternalMail() {
         </div>
     `).join('');
     document.getElementById('mail-inbox-list').innerHTML = html;
-    if (inbox.length > 0) selectMailItem(0);
+    selectMailItem(0);
 }
 
 function selectMailItem(idx) {
-    const m = internalMails[idx];
+    const m = currentFilteredMails[idx];
     if (!m) return;
 
     document.querySelectorAll('.mail-item').forEach((item, i) => item.classList.toggle('active', i === idx));
+
+    const userEmail = (currentUser && currentUser.email ? currentUser.email.toLowerCase() : '');
+    const userRole = (currentUser && currentUser.role ? currentUser.role.toLowerCase() : 'doctor');
+    const isAdminOrSuper = ['admin', 'superadmin'].includes(userRole);
+
+    const ccList = Array.isArray(m.cc) ? m.cc : (m.cc ? String(m.cc).split(',').map(s => s.trim()) : []);
+    const ccDisplay = ccList.length > 0 
+        ? `<div style="font-size:12px; color:#94a3b8; margin-top:3px;">CC: <span style="color:#cbd5e1;">${ccList.join(', ')}</span></div>` 
+        : '';
+
+    // BCC visibility: only sender, admin/superadmin, or if current user is that BCC recipient
+    let bccDisplay = '';
+    const bccList = Array.isArray(m.bcc) ? m.bcc : (m.bcc ? String(m.bcc).split(',').map(s => s.trim()) : []);
+    const canSeeBcc = isAdminOrSuper || ((m.fromEmail || '').toLowerCase() === userEmail) || bccList.some(e => e.toLowerCase() === userEmail);
+    if (canSeeBcc && bccList.length > 0) {
+        bccDisplay = `<div style="font-size:12px; color:#94a3b8; margin-top:3px;">BCC: <span style="color:#e2e8f0;">${bccList.join(', ')}</span></div>`;
+    }
 
     document.getElementById('mail-content-display').innerHTML = `
         <div style="border-bottom:1px solid var(--border); padding-bottom:14px; margin-bottom:18px;">
@@ -1995,10 +2102,12 @@ function selectMailItem(idx) {
                 <span class="severity-badge ${m.priority === 'Urgent' ? 'critical' : 'moderate'}">${m.priority} Priority</span>
                 <span style="font-size:12px; color:#94a3b8;"><i class="fas fa-clock"></i> ${m.timestamp}</span>
             </div>
-            <h3 style="color:#ffffff; font-size:17px; margin-bottom:6px;">${m.subject}</h3>
-            <div style="font-size:12.5px; color:#cbd5e1;">
-                From: <strong style="color:#fff;">${m.fromName}</strong> &lt;${m.fromEmail || 'staff@medcore.org'}&gt; &bull; 
-                To: <strong style="color:#fff;">${m.toName}</strong> &lt;${m.toEmail || 'staff@medcore.org'}&gt;
+            <h3 style="color:#ffffff; font-size:17px; margin-bottom:8px;">${m.subject}</h3>
+            <div style="font-size:12.5px; color:#cbd5e1; background:rgba(255,255,255,0.03); padding:10px 14px; border-radius:8px; border:1px solid var(--border);">
+                <div>From: <strong style="color:#fff;">${m.fromName}</strong> &lt;${m.fromEmail || 'staff@medcore.org'}&gt;</div>
+                <div style="margin-top:2px;">To: <strong style="color:#fff;">${m.toName}</strong> &lt;${m.toEmail || 'staff@medcore.org'}&gt;</div>
+                ${ccDisplay}
+                ${bccDisplay}
             </div>
         </div>
         <div style="font-size:13.5px; color:#e2e8f0; line-height:1.7; white-space:pre-wrap;">${m.body}</div>
@@ -2046,11 +2155,16 @@ function aiDraftMail(type) {
 function submitSendInternalMail(e) {
     e.preventDefault();
     const recipientEmail = document.getElementById('mail-recipient-email').value.trim();
+    const ccRaw = document.getElementById('mail-cc-email') ? document.getElementById('mail-cc-email').value.trim() : '';
+    const bccRaw = document.getElementById('mail-bcc-email') ? document.getElementById('mail-bcc-email').value.trim() : '';
     const priority = document.getElementById('mail-priority-select').value;
     const subject = document.getElementById('mail-subject-input').value.trim();
     const body = document.getElementById('mail-body-input').value.trim();
 
     if (!recipientEmail || !subject || !body) return;
+
+    const cc = ccRaw ? ccRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const bcc = bccRaw ? bccRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
 
     const matchedUser = users.find(u => u.email.toLowerCase() === recipientEmail.toLowerCase());
     const toName = matchedUser ? matchedUser.name : recipientEmail;
@@ -2059,12 +2173,14 @@ function submitSendInternalMail(e) {
     const newMail = {
         id: 'MAIL-' + String(internalMails.length + 1).padStart(3, '0'),
         fromId: (currentUser && currentUser.employeeId) || 'DOC-02',
-        fromName: (currentUser && currentUser.name) || 'Dr. Arjun Rao',
-        fromEmail: (currentUser && currentUser.email) || 'doctor@medcore.org',
+        fromName: (currentUser && currentUser.name) || 'Staff',
+        fromEmail: (currentUser && currentUser.email) || 'staff@medcore.org',
         fromRole: (currentUser && currentUser.title) || 'Attending Physician',
         toEmail: recipientEmail,
         toName: toName,
         toRole: toRole,
+        cc: cc,
+        bcc: bcc,
         subject: subject,
         body: body,
         timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
@@ -2083,6 +2199,7 @@ function submitSendInternalMail(e) {
     closeModal('compose-mail-modal');
     renderInternalMail();
     showToast(`Internal email dispatched to ${recipientEmail}!`, 'success');
+}
 }
 
 // ===================================================================

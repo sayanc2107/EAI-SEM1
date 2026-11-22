@@ -39,7 +39,15 @@
                     </div>
                     <div class="form-group">
                         <label><i class="fas fa-key"></i> Password</label>
-                        <input type="password" id="login-password" placeholder="Enter staff password" required>
+                        <div style="position:relative; display:flex; align-items:center;">
+                            <input type="password" id="login-password" placeholder="Enter staff password" required
+                                style="padding-right: 42px;">
+                            <button type="button" onclick="togglePasswordVisibility('login-password', this)"
+                                style="position:absolute; right:10px; background:none; border:none; color:#64748b; font-size:15px; cursor:pointer; padding:6px;"
+                                title="Show or Hide Password">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <div id="login-error" class="login-error hidden"></div>
                     <button type="submit" class="btn btn-primary btn-full"><i class="fas fa-sign-in-alt"></i> Sign In
@@ -122,10 +130,6 @@
                             Doctor</span>
                     </button>
 
-                    <span class="live-badge" id="mongo-status-pill" onclick="openMongoConfigModal()"
-                        style="cursor:pointer;" title="Click to view/change MongoDB database configuration">
-                        <i class="fas fa-database"></i> <span id="mongo-status-text">MongoDB Synced</span>
-                    </span>
                     <span class="time-display" id="time-display"></span>
                 </div>
             </header>
@@ -816,10 +820,15 @@
 
                     <div class="mail-container">
                         <div class="mail-sidebar">
+                            <!-- Admin / Superadmin View Scope Toggle -->
+                            <div id="admin-mail-scope-container" style="padding:10px 14px; border-bottom:1px solid var(--border); display:none; gap:6px; background:#0b1322;">
+                                <button type="button" id="btn-mail-scope-my" class="btn btn-secondary btn-sm active" onclick="setMailViewScope('my')" style="flex:1; font-size:11.5px; border-radius:6px; padding:6px 8px; justify-content:center;">My Mails</button>
+                                <button type="button" id="btn-mail-scope-all" class="btn btn-secondary btn-sm" onclick="setMailViewScope('all')" style="flex:1; font-size:11.5px; border-radius:6px; padding:6px 8px; justify-content:center;">All Hospital Mails</button>
+                            </div>
                             <div
-                                style="padding:14px 16px; border-bottom:1px solid var(--border); font-size:12.5px; font-weight:700; color:#38bdf8; display:flex; justify-content:space-between;">
-                                <span><i class="fas fa-inbox"></i> Hospital Inbox</span>
-                                <span id="mail-unread-count">1 Unread</span>
+                                style="padding:12px 16px; border-bottom:1px solid var(--border); font-size:12.5px; font-weight:700; color:#38bdf8; display:flex; justify-content:space-between; align-items:center;">
+                                <span id="mail-sidebar-title"><i class="fas fa-inbox"></i> Inbox &amp; Direct</span>
+                                <span id="mail-unread-count" style="font-size:11px; background:rgba(56,189,248,0.15); padding:2px 8px; border-radius:999px;">0 Messages</span>
                             </div>
                             <div class="mail-list" id="mail-inbox-list"></div>
                         </div>
@@ -1001,16 +1010,16 @@
                         <i class="fas fa-plus-circle" style="color:var(--success)"></i> Log New Vitals Measurement
                     </div>
                     <form id="log-vitals-form" onsubmit="submitNewVitals(event)">
-                        <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap:12px;">
-                            <div class="form-group" style="margin:0;"><label>Time</label><input type="text" id="nv-time"
+                        <div class="vitals-form-grid">
+                            <div class="form-group"><label>Time</label><input type="text" id="nv-time"
                                     placeholder="10:45" required></div>
-                            <div class="form-group" style="margin:0;"><label>Heart Rate (BPM)</label><input
+                            <div class="form-group"><label>Heart Rate (BPM)</label><input
                                     type="number" id="nv-hr" placeholder="112" min="30" max="250" required></div>
-                            <div class="form-group" style="margin:0;"><label>Systolic BP</label><input type="number"
+                            <div class="form-group"><label>Systolic BP</label><input type="number"
                                     id="nv-bpsys" placeholder="150" min="50" max="260" required></div>
-                            <div class="form-group" style="margin:0;"><label>Diastolic BP</label><input type="number"
+                            <div class="form-group"><label>Diastolic BP</label><input type="number"
                                     id="nv-bpdia" placeholder="90" min="30" max="180" required></div>
-                            <div class="form-group" style="margin:0;"><label>SpO2 (%)</label><input type="number"
+                            <div class="form-group"><label>SpO2 (%)</label><input type="number"
                                     id="nv-spo2" placeholder="95" min="50" max="100" required></div>
                         </div>
                         <div style="display:flex; justify-content:flex-end; margin-top:14px;">
@@ -1498,7 +1507,7 @@
                 <form id="compose-mail-form" onsubmit="submitSendInternalMail(event)">
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Recipient Staff Email ID</label>
+                            <label>Recipient Staff Email ID (To:)</label>
                             <input type="email" id="mail-recipient-email" list="staff-email-datalist"
                                 placeholder="e.g. doctor@medcore.org" required>
                             <datalist id="staff-email-datalist"></datalist>
@@ -1510,6 +1519,17 @@
                                 <option value="High">High</option>
                                 <option value="Urgent">Urgent STAT</option>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>CC (Carbon Copy) — <span style="color:#94a3b8; font-weight:400;">comma-separated</span></label>
+                            <input type="text" id="mail-cc-email" placeholder="e.g. nurse@medcore.org, ward@medcore.org">
+                        </div>
+                        <div class="form-group">
+                            <label>BCC (Blind Carbon Copy) — <span style="color:#94a3b8; font-weight:400;">comma-separated</span></label>
+                            <input type="text" id="mail-bcc-email" placeholder="e.g. admin@medcore.org">
                         </div>
                     </div>
 

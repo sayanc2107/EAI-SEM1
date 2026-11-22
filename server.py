@@ -526,6 +526,8 @@ def send_mail():
         "fromEmail": data.get('fromEmail', 'staff@medcore.org'),
         "toName": data.get('toName', 'Staff'),
         "toEmail": data.get('toEmail', 'staff@medcore.org'),
+        "cc": data.get('cc', []),
+        "bcc": data.get('bcc', []),
         "subject": data.get('subject', 'No Subject'),
         "body": data.get('body', ''),
         "priority": data.get('priority', 'Normal'),
