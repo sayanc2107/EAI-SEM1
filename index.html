@@ -57,8 +57,13 @@
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
-                <i class="fas fa-heartbeat"></i>
-                <h2>MedCore <span>AI</span></h2>
+                <div class="sidebar-brand">
+                    <i class="fas fa-heartbeat"></i>
+                    <h2>MedCore <span>AI</span></h2>
+                </div>
+                <button class="sidebar-close-btn" onclick="toggleSidebar()" aria-label="Close Navigation" title="Close Menu">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
 
             <div class="sidebar-workspace-label" id="workspace-label">Hospital Admin Workspace</div>
@@ -92,6 +97,7 @@
                         class="fas fa-sign-out-alt"></i></button>
             </div>
         </aside>
+        <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleSidebar()"></div>
 
         <!-- Main Content Area -->
         <main class="main-content">

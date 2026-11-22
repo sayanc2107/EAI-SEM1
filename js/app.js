@@ -332,12 +332,18 @@ function navigateTo(sectionId) {
     document.getElementById('breadcrumb-role').textContent = formatRole(currentRole || 'admin');
     document.getElementById('breadcrumb-section').textContent = activeItem ? activeItem.label : 'Operations';
 
-    document.getElementById('sidebar').classList.remove('open');
+    const sb = document.getElementById('sidebar');
+    if (sb) sb.classList.remove('open');
+    const bd = document.getElementById('sidebar-backdrop');
+    if (bd) bd.classList.remove('active');
     refreshCurrentView();
 }
 
 function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
+    const sb = document.getElementById('sidebar');
+    const bd = document.getElementById('sidebar-backdrop');
+    if (sb) sb.classList.toggle('open');
+    if (bd) bd.classList.toggle('active');
 }
 
 function startLiveClock() {
