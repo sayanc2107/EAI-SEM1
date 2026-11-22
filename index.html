@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MedCore AI — Smart Hospital Operations Platform</title>
-    <link rel="stylesheet" href="css/styles.css?v=2.2.0">
+    <link rel="stylesheet" href="css/styles.css?v=2.3.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -227,9 +227,9 @@
                     </div>
 
                     <!-- Filter Bar -->
-                    <div
+                    <div class="filter-bar-responsive"
                         style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:12px;">
-                        <div style="display:flex; gap:8px;">
+                        <div class="filter-pill-bar">
                             <button class="btn btn-secondary btn-sm triage-filter-btn active"
                                 onclick="filterTriageList('All')">All (10)</button>
                             <button class="btn btn-secondary btn-sm triage-filter-btn"
@@ -241,7 +241,7 @@
                             <button class="btn btn-secondary btn-sm triage-filter-btn"
                                 onclick="filterTriageList('Routine')">Routine (2)</button>
                         </div>
-                        <div>
+                        <div class="filter-search-box">
                             <input type="text" id="triage-search" placeholder="Search patient, bed, diagnosis..."
                                 oninput="searchTriageList(this.value)"
                                 style="padding:7px 12px; border-radius:6px; border:1px solid var(--border); background:#121c2e; color:#fff; font-size:12.5px; width:240px;">
@@ -275,7 +275,7 @@
                                 Click any bed to mark cleaning complete or assign ready intake.
                             </p>
                         </div>
-                        <div style="display:flex; gap:8px;">
+                        <div class="filter-pill-bar">
                             <button class="btn btn-secondary btn-sm ward-filter-btn active"
                                 onclick="filterBedsWard('All')">All Wards</button>
                             <button class="btn btn-secondary btn-sm ward-filter-btn"
@@ -313,7 +313,7 @@
                     </div>
 
                     <!-- Admin Doctor Filter Dropdown -->
-                    <div
+                    <div class="doctor-filter-box"
                         style="display:flex; align-items:center; gap:12px; margin-bottom:18px; background:#0c1422; padding:12px 18px; border-radius:8px; border:1px solid var(--border);">
                         <label style="color:#cbd5e1; font-size:13px; font-weight:700;"><i class="fas fa-user-md"
                                 style="color:var(--accent)"></i> Filter Shifts by Doctor:</label>
@@ -1881,9 +1881,9 @@
     <div id="toast-container"></div>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=2.2.0"></script>
-    <script src="js/recharts_chart.js?v=2.2.0"></script>
-    <script src="js/app.js?v=2.2.0"></script>
+    <script src="js/data.js?v=2.3.0"></script>
+    <script src="js/recharts_chart.js?v=2.3.0"></script>
+    <script src="js/app.js?v=2.3.0"></script>
 </body>
 
 </html>
