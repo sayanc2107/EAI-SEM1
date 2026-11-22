@@ -141,12 +141,13 @@ function handleLogin(e) {
     errorBox.classList.add('hidden');
     errorBox.textContent = '';
 
-    const user = users.find(u =>
-        (u.email.toLowerCase() === identifier ||
-         u.username.toLowerCase() === identifier ||
-         u.employeeId.toLowerCase() === identifier) &&
-        u.password === password
-    );
+    const user = users.find(u => {
+        const emailMatch = u.email && u.email.toLowerCase() === identifier;
+        const usernameMatch = u.username && u.username.toLowerCase() === identifier;
+        const empIdMatch = u.employeeId && u.employeeId.toLowerCase() === identifier;
+        const idMatch = u.id && u.id.toLowerCase() === identifier;
+        return (emailMatch || usernameMatch || empIdMatch || idMatch) && u.password === password;
+    });
 
     if (!user) {
         errorBox.textContent = 'Invalid credentials. Please verify your staff email or password.';
@@ -237,11 +238,19 @@ function formatRole(role) {
 function togglePasswordVisibility(inputId, btn) {
     const input = document.getElementById(inputId);
     if (!input) return;
-    const isPassword = input.type === 'password';
-    input.type = isPassword ? 'text' : 'password';
+    const isPassword = input.getAttribute('type') === 'password';
+    input.setAttribute('type', isPassword ? 'text' : 'password');
     const icon = btn.querySelector('i');
     if (icon) {
-        icon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+        if (isPassword) {
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+            icon.style.color = '#38bdf8';
+        } else {
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+            icon.style.color = '#64748b';
+        }
     }
 }
 
@@ -2199,7 +2208,6 @@ function submitSendInternalMail(e) {
     closeModal('compose-mail-modal');
     renderInternalMail();
     showToast(`Internal email dispatched to ${recipientEmail}!`, 'success');
-}
 }
 
 // ===================================================================
