@@ -366,6 +366,10 @@ function buildNavigation(role) {
 function navigateTo(sectionId) {
     currentSection = sectionId;
 
+    if (sectionId === 'internal-mail') {
+        backToMailList();
+    }
+
     document.querySelectorAll('#sidebar-nav .nav-link').forEach(link => {
         link.classList.toggle('active', link.dataset.section === sectionId);
     });
@@ -2020,12 +2024,20 @@ function submitGenerateBill(e) {
 let mailViewScope = 'my'; // 'my' or 'all' (for admin / superadmin)
 let currentFilteredMails = [];
 
+function backToMailList() {
+    const container = document.querySelector('.mail-container');
+    if (container) {
+        container.classList.remove('viewing-detail');
+    }
+}
+
 function setMailViewScope(scope) {
     mailViewScope = scope;
     const btnMy = document.getElementById('btn-mail-scope-my');
     const btnAll = document.getElementById('btn-mail-scope-all');
     if (btnMy) btnMy.classList.toggle('active', scope === 'my');
     if (btnAll) btnAll.classList.toggle('active', scope === 'all');
+    backToMailList();
     renderInternalMail();
 }
 
@@ -2083,10 +2095,10 @@ function renderInternalMail() {
     }
 
     const html = currentFilteredMails.map((m, idx) => `
-        <div class="mail-item ${idx === 0 ? 'active' : ''}" onclick="selectMailItem(${idx})">
+        <div class="mail-item ${idx === 0 ? 'active' : ''}" onclick="selectMailItem(${idx}, true)">
             <div class="mail-sender">
                 <span>${m.fromName}</span>
-                <span style="font-size:10px; color:#94a3b8;">${m.timestamp ? m.timestamp.split(' ')[1] : ''}</span>
+                <span style="font-size:10.5px; color:#94a3b8;">${m.timestamp ? m.timestamp.split(' ')[1] : ''}</span>
             </div>
             <div style="font-size:11px; color:#38bdf8; font-family:monospace; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
                 ${m.fromEmail || 'staff@medcore.org'} &rarr; ${m.toEmail || 'staff@medcore.org'}
@@ -2096,14 +2108,21 @@ function renderInternalMail() {
         </div>
     `).join('');
     document.getElementById('mail-inbox-list').innerHTML = html;
-    selectMailItem(0);
+    selectMailItem(0, false);
 }
 
-function selectMailItem(idx) {
+function selectMailItem(idx, isUserClick = false) {
     const m = currentFilteredMails[idx];
     if (!m) return;
 
     document.querySelectorAll('.mail-item').forEach((item, i) => item.classList.toggle('active', i === idx));
+
+    if (isUserClick) {
+        const mailContainer = document.querySelector('.mail-container');
+        if (mailContainer) {
+            mailContainer.classList.add('viewing-detail');
+        }
+    }
 
     const userEmail = (currentUser && currentUser.email ? currentUser.email.toLowerCase() : '');
     const userRole = (currentUser && currentUser.role ? currentUser.role.toLowerCase() : 'doctor');
@@ -2111,7 +2130,7 @@ function selectMailItem(idx) {
 
     const ccList = Array.isArray(m.cc) ? m.cc : (m.cc ? String(m.cc).split(',').map(s => s.trim()) : []);
     const ccDisplay = ccList.length > 0 
-        ? `<div style="font-size:12px; color:#94a3b8; margin-top:3px;">CC: <span style="color:#cbd5e1;">${ccList.join(', ')}</span></div>` 
+        ? `<div style="font-size:12px; color:#94a3b8; margin-top:4px;">CC: <span style="color:#cbd5e1;">${ccList.join(', ')}</span></div>` 
         : '';
 
     // BCC visibility: only sender, admin/superadmin, or if current user is that BCC recipient
@@ -2119,24 +2138,29 @@ function selectMailItem(idx) {
     const bccList = Array.isArray(m.bcc) ? m.bcc : (m.bcc ? String(m.bcc).split(',').map(s => s.trim()) : []);
     const canSeeBcc = isAdminOrSuper || ((m.fromEmail || '').toLowerCase() === userEmail) || bccList.some(e => e.toLowerCase() === userEmail);
     if (canSeeBcc && bccList.length > 0) {
-        bccDisplay = `<div style="font-size:12px; color:#94a3b8; margin-top:3px;">BCC: <span style="color:#e2e8f0;">${bccList.join(', ')}</span></div>`;
+        bccDisplay = `<div style="font-size:12px; color:#94a3b8; margin-top:4px;">BCC: <span style="color:#e2e8f0;">${bccList.join(', ')}</span></div>`;
     }
 
     document.getElementById('mail-content-display').innerHTML = `
-        <div style="border-bottom:1px solid var(--border); padding-bottom:14px; margin-bottom:18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div class="mail-mobile-back-bar">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="backToMailList()">
+                <i class="fas fa-arrow-left"></i> Back to Inbox
+            </button>
+        </div>
+        <div class="mail-detail-header">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px;">
                 <span class="severity-badge ${m.priority === 'Urgent' ? 'critical' : 'moderate'}">${m.priority} Priority</span>
-                <span style="font-size:12px; color:#94a3b8;"><i class="fas fa-clock"></i> ${m.timestamp}</span>
+                <span style="font-size:11.5px; color:#94a3b8;"><i class="fas fa-clock"></i> ${m.timestamp}</span>
             </div>
-            <h3 style="color:#ffffff; font-size:17px; margin-bottom:8px;">${m.subject}</h3>
-            <div style="font-size:12.5px; color:#cbd5e1; background:rgba(255,255,255,0.03); padding:10px 14px; border-radius:8px; border:1px solid var(--border);">
+            <h3 style="color:#ffffff; font-size:17px; margin-bottom:10px; line-height:1.35; word-break:break-word;">${m.subject}</h3>
+            <div class="mail-meta-box">
                 <div>From: <strong style="color:#fff;">${m.fromName}</strong> &lt;${m.fromEmail || 'staff@medcore.org'}&gt;</div>
-                <div style="margin-top:2px;">To: <strong style="color:#fff;">${m.toName}</strong> &lt;${m.toEmail || 'staff@medcore.org'}&gt;</div>
+                <div style="margin-top:3px;">To: <strong style="color:#fff;">${m.toName}</strong> &lt;${m.toEmail || 'staff@medcore.org'}&gt;</div>
                 ${ccDisplay}
                 ${bccDisplay}
             </div>
         </div>
-        <div style="font-size:13.5px; color:#e2e8f0; line-height:1.7; white-space:pre-wrap;">${m.body}</div>
+        <div class="mail-body-text">${m.body}</div>
         <div style="margin-top:24px; padding-top:14px; border-top:1px solid var(--border); display:flex; gap:10px;">
             <button class="btn btn-secondary btn-sm" onclick="openReplyMailModal('${m.fromEmail || 'doctor@medcore.org'}', '${m.fromName}', '${m.subject}')"><i class="fas fa-reply"></i> Reply</button>
         </div>
@@ -2223,6 +2247,7 @@ function submitSendInternalMail(e) {
 
     internalMails.unshift(newMail);
     closeModal('compose-mail-modal');
+    backToMailList();
     renderInternalMail();
     showToast(`Internal email dispatched to ${recipientEmail}!`, 'success');
 }
