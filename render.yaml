@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: eai-sem1
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn server:app
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: FRONTEND_ORIGIN
+        value: https://sayank2107.github.io
+      - key: DB_NAME
+        value: medcore_db
+      - key: PYTHON_VERSION
+        value: 3.11.9

@@ -1,3 +1,12 @@
+// API Base URL Resolver for Render backend / GitHub Pages deployment
+const getApiUrl = window.getApiUrl || function(endpoint) {
+    const base = (window.MedCoreConfig && window.MedCoreConfig.API_BASE_URL)
+        ? window.MedCoreConfig.API_BASE_URL.trim().replace(/\/+$/, '')
+        : '';
+    const path = endpoint.startsWith('/') ? endpoint : '/' + endpoint;
+    return base ? `${base}${path}` : path;
+};
+
 /* ===================================================================
    MedCore AI — Hospital Operations Master Controller
    Handles Role-Based Access, Recharts Line Charts, Duty Rosters,
@@ -183,7 +192,7 @@ async function handleLogin(e) {
     // 1. Attempt secure backend authentication if server API is reachable
     if (window.location.protocol !== 'file:') {
         try {
-            const resp = await fetch('/api/auth/login', {
+            const resp = await fetch(getApiUrl('/api/auth/login'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ identifier, password })
@@ -283,7 +292,7 @@ function applyRoleRestrictions(role) {
 function logout() {
     const token = sessionStorage.getItem('medcore_auth_token');
     if (token && window.location.protocol !== 'file:') {
-        fetch('/api/auth/logout', {
+        fetch(getApiUrl('/api/auth/logout'), {
             method: 'POST',
             headers: getAuthHeaders()
         }).catch(() => null);
@@ -364,7 +373,7 @@ function toggleStaffPunch() {
             status: 'On Duty'
         };
         attendanceLogs.unshift(punchLog);
-        fetch('/api/attendance/punch', {
+        fetch(getApiUrl('/api/attendance/punch'), {
             method: 'POST',
             headers: getAuthHeaders(),
             body: JSON.stringify(punchLog)
@@ -729,7 +738,7 @@ function submitNewVitals(e) {
     activeVitalsPatient.vitals = { hr, spo2, bp: `${bpSys}/${bpDia}`, bpSys, bpDia, temp: 98.6 };
 
     // Sync vitals to MongoDB
-    fetch('/api/patients/vitals', {
+    fetch(getApiUrl('/api/patients/vitals'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ patientId: activeVitalsPatient.id, vitals: newLog })
@@ -943,7 +952,7 @@ function submitAssignDuty(e) {
         };
         shifts.unshift(newShift);
         // Sync to MongoDB
-        fetch('/api/shifts/assign', {
+        fetch(getApiUrl('/api/shifts/assign'), {
             method: 'POST',
             headers: getAuthHeaders(),
             body: JSON.stringify(newShift)
@@ -1176,7 +1185,7 @@ function submitAddNewStaff(e) {
     });
 
     // Sync with MongoDB backend
-    fetch('/api/staff/new', {
+    fetch(getApiUrl('/api/staff/new'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ name, employeeId: id, role, department, email, password, salary, phone })
@@ -1271,7 +1280,7 @@ function submitDisburseSalary(e) {
     });
 
     // Sync with MongoDB backend
-    fetch('/api/payroll/disburse', {
+    fetch(getApiUrl('/api/payroll/disburse'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -1385,7 +1394,7 @@ function submitEditPaymentDetails(e) {
     });
 
     // Sync with MongoDB backend
-    fetch('/api/payroll/payment-details', {
+    fetch(getApiUrl('/api/payroll/payment-details'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ staffId, bankName, accountNo, ifsc, pan, baseSalary: base, hra, allowances: allow, deductions: ded })
@@ -1459,7 +1468,7 @@ function submitSpecialPayment(e) {
     });
 
     // Sync with MongoDB backend
-    fetch('/api/payroll/special-payment', {
+    fetch(getApiUrl('/api/payroll/special-payment'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ payeeName, category, accountNo, ifsc, amount, mode, approvedBy, remarks })
@@ -1898,7 +1907,7 @@ function submitAddStockForm(e) {
     const med = medicines.find(m => m.id === medId);
     if (med && qty > 0) {
         med.quantity += qty;
-        fetch('/api/medicines/restock', {
+        fetch(getApiUrl('/api/medicines/restock'), {
             method: 'POST',
             headers: getAuthHeaders(),
             body: JSON.stringify({ id: medId, quantity: qty })
@@ -1912,7 +1921,7 @@ function submitAddStockForm(e) {
 
 function quickRestockMedicine(idx) {
     medicines[idx].quantity += 50;
-    fetch('/api/medicines/restock', {
+    fetch(getApiUrl('/api/medicines/restock'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ id: medicines[idx].id, quantity: 50 })
@@ -2076,7 +2085,7 @@ function submitGenerateBill(e) {
     });
 
     // Sync with MongoDB backend
-    fetch('/api/pharmacy/bill', {
+    fetch(getApiUrl('/api/pharmacy/bill'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -2315,7 +2324,7 @@ function submitSendInternalMail(e) {
     };
 
     // Sync with MongoDB backend
-    fetch('/api/mail/send', {
+    fetch(getApiUrl('/api/mail/send'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(newMail)
@@ -2382,7 +2391,7 @@ function submitRaiseIssue(e) {
     };
 
     // Sync with MongoDB backend
-    fetch('/api/issues/create', {
+    fetch(getApiUrl('/api/issues/create'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(newIssue)
@@ -2565,7 +2574,7 @@ function submitAdmitPatient(e) {
     patients.unshift(newPatient);
 
     // Sync to MongoDB
-    fetch('/api/patients/admit', {
+    fetch(getApiUrl('/api/patients/admit'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(newPatient)
@@ -2656,7 +2665,7 @@ function submitDoctorPrescription(e) {
     prescriptions.unshift(newRx);
 
     // Sync to MongoDB
-    fetch('/api/prescriptions/new', {
+    fetch(getApiUrl('/api/prescriptions/new'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(newRx)
@@ -2996,7 +3005,7 @@ async function bootstrapFromMongo() {
             updateMongoStatusUI(false);
             return;
         }
-        const res = await fetch('/api/bootstrap', { headers: getAuthHeaders() }).catch(() => null);
+        const res = await fetch(getApiUrl('/api/bootstrap'), { headers: getAuthHeaders() }).catch(() => null);
         if (!res || !res.ok) {
             updateMongoStatusUI(false);
             return;
@@ -3055,7 +3064,7 @@ function updateMongoStatusUI(isConnected) {
 
 async function openMongoConfigModal() {
     try {
-        const res = await fetch('/api/status');
+        const res = await fetch(getApiUrl('/api/status'));
         const st = await res.json();
         
         const badge = document.getElementById('mongo-modal-badge');
@@ -3069,7 +3078,7 @@ async function openMongoConfigModal() {
         if (dbName) dbName.textContent = st.database || 'medcore_db';
         
         const uriDisplay = document.getElementById('mongo-uri-display');
-        if (uriDisplay) uriDisplay.textContent = st.mongo_uri || 'mongodb://localhost:27017';
+        if (uriDisplay) uriDisplay.textContent = st.connected ? 'Cluster Connected (MongoDB Atlas)' : 'In-Memory Fallback (Demo Simulation)';
         
         const count = st.collections ? Object.keys(st.collections).length : 15;
         const countDisplay = document.getElementById('mongo-collections-count');
@@ -3088,7 +3097,7 @@ async function submitMongoUriConfig(e) {
     showToast('Connecting to MongoDB cluster…', 'info');
 
     try {
-        const res = await fetch('/api/config/mongo-uri', {
+        const res = await fetch(getApiUrl('/api/config/mongo-uri'), {
             method: 'POST',
             headers: getAuthHeaders(),
             body: JSON.stringify({ mongo_uri: uri, db_name: dbName })
@@ -3385,7 +3394,7 @@ async function submitEmergencyAmbulanceRequest(e) {
     ambulanceRequests.unshift(newReq);
 
     // Call server endpoint
-    fetch('/api/ambulance/request', {
+    fetch(getApiUrl('/api/ambulance/request'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(newReq)
@@ -3438,7 +3447,7 @@ async function submitDispatchAmbulance(e) {
         amb.eta = eta;
 
         // Post to backend
-        fetch('/api/ambulance/dispatch', {
+        fetch(getApiUrl('/api/ambulance/dispatch'), {
             method: 'POST',
             headers: getAuthHeaders(),
             body: JSON.stringify({
@@ -3498,7 +3507,7 @@ function advanceAmbulanceFlow(ambId) {
         }
     }
 
-    fetch('/api/ambulance/status', {
+    fetch(getApiUrl('/api/ambulance/status'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({
@@ -3524,7 +3533,7 @@ function quickUpdateAmbulanceStatus(ambId, newStatus) {
         amb.eta = 'Immediate';
     }
 
-    fetch('/api/ambulance/status', {
+    fetch(getApiUrl('/api/ambulance/status'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify({ ambulanceId: amb.id, status: newStatus })
@@ -3784,7 +3793,7 @@ async function submitBookAppointment(e) {
 
     doctorAppointments.unshift(newApt);
 
-    fetch('/api/appointments/create', {
+    fetch(getApiUrl('/api/appointments/create'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(newApt)
@@ -3844,7 +3853,7 @@ async function submitConsultationDetails(e) {
     apt.followUpDate = document.getElementById('consult-followup-date').value;
     apt.status = document.getElementById('consult-status').value;
 
-    fetch('/api/appointments/update', {
+    fetch(getApiUrl('/api/appointments/update'), {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(apt)
@@ -3883,7 +3892,7 @@ function removeAppointment(aptId) {
     if (idx !== -1) {
         doctorAppointments[idx].status = 'Cancelled';
 
-        fetch('/api/appointments/delete', {
+        fetch(getApiUrl('/api/appointments/delete'), {
             method: 'POST',
             headers: getAuthHeaders(),
             body: JSON.stringify({ id: aptId })

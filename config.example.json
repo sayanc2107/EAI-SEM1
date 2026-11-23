@@ -1,8 +1,10 @@
 {
-  "mongo_uri": "mongodb://placeholder_user:placeholder_password@localhost:27017/medcore_db",
+  "mongo_uri": "mongodb+srv://sayan2008c_db_user:<YOUR_PASSWORD_HERE>@cluster0.njngnoe.mongodb.net/medcore_db?retryWrites=true&w=majority",
   "db_name": "medcore_db",
   "port": 8080,
+  "frontend_origin": "https://sayank2107.github.io",
   "allowed_origins": [
+    "https://sayank2107.github.io",
     "http://localhost:8080",
     "http://127.0.0.1:8080"
   ]

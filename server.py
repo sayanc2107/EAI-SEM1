@@ -4,6 +4,7 @@ import logging
 import time
 import secrets
 import hmac
+import re
 from datetime import datetime
 from functools import wraps
 from flask import Flask, request, jsonify, send_from_directory
@@ -76,18 +77,77 @@ def load_config():
         except Exception as e:
             logger.error(f"Error loading config: {e}")
     return {
-        "mongo_uri": "mongodb://placeholder_user:placeholder_password@localhost:27017/medcore_db",
+        "mongo_uri": "mongodb+srv://sayan2008c_db_user:<YOUR_PASSWORD_HERE>@cluster0.njngnoe.mongodb.net/medcore_db?retryWrites=true&w=majority",
         "db_name": "medcore_db",
         "port": 8080,
-        "allowed_origins": ["http://localhost:8080", "http://127.0.0.1:8080"]
+        "frontend_origin": "https://sayank2107.github.io",
+        "allowed_origins": [
+            "https://sayank2107.github.io",
+            "http://localhost:8080",
+            "http://127.0.0.1:8080",
+            "http://localhost:5000",
+            "http://127.0.0.1:5000",
+            "http://localhost:3000",
+            "http://127.0.0.1:3000"
+        ]
     }
 
 def get_allowed_origins():
+    origins = []
+    # 1. FRONTEND_ORIGIN env var (single origin or comma-separated)
+    env_frontend = os.environ.get('FRONTEND_ORIGIN')
+    if env_frontend:
+        for item in env_frontend.split(','):
+            cleaned = item.strip().rstrip('/')
+            if cleaned and cleaned not in origins:
+                origins.append(cleaned)
+
+    # 2. ALLOWED_ORIGINS env var
     env_origins = os.environ.get('ALLOWED_ORIGINS')
     if env_origins:
-        return [o.strip() for o in env_origins.split(',') if o.strip()]
+        for item in env_origins.split(','):
+            cleaned = item.strip().rstrip('/')
+            if cleaned and cleaned not in origins:
+                origins.append(cleaned)
+
+    # 3. Origins from config.json (if present)
     cfg = load_config()
-    return cfg.get('allowed_origins', ["http://localhost:8080", "http://127.0.0.1:8080"])
+    cfg_fo = cfg.get('frontend_origin', '')
+    if cfg_fo:
+        cleaned = cfg_fo.strip().rstrip('/')
+        if cleaned and cleaned not in origins:
+            origins.append(cleaned)
+    for item in cfg.get('allowed_origins', []):
+        cleaned = item.strip().rstrip('/')
+        if cleaned and cleaned not in origins:
+            origins.append(cleaned)
+
+    # 4. Standard development and default origins
+    defaults = [
+        "https://sayanc2107.github.io",
+        "https://sayank2107.github.io",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:5000",
+        "http://127.0.0.1:5000",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ]
+    for d in defaults:
+        if d not in origins:
+            origins.append(d)
+
+    return origins
+
+def is_origin_allowed(origin):
+    if not origin:
+        return False
+    norm = origin.strip().rstrip('/')
+    allowed = get_allowed_origins()
+    for o in allowed:
+        if o == '*' or norm == o.rstrip('/'):
+            return True
+    return False
 
 # ── Load Seed Data & Hash Passwords ──
 def load_seed_data():
@@ -123,15 +183,20 @@ def init_db(uri=None, db_name="medcore_db"):
     global mongo_client, db, db_status, memory_store
     
     cfg = load_config()
-    target_uri = os.environ.get('MONGO_URI') or uri or cfg.get('mongo_uri', '')
+    target_uri = os.environ.get('MONGO_URI') or uri
+    # Only fall back to config.json if not a placeholder
+    cfg_uri = cfg.get('mongo_uri', '')
+    if not target_uri and cfg_uri and '<YOUR_PASSWORD_HERE>' not in cfg_uri and 'placeholder' not in cfg_uri:
+        target_uri = cfg_uri
+
     target_db = os.environ.get('DB_NAME') or db_name or cfg.get('db_name', 'medcore_db')
     
     masked = mask_uri(target_uri)
     logger.info(f"Database connection target: {masked} [Database: {target_db}]")
     
-    # Check if target is a dummy placeholder
-    if not target_uri or 'placeholder' in target_uri:
-        logger.info("Using simulated in-memory store (placeholder or empty MONGO_URI configured).")
+    # Check if target is a dummy placeholder or empty
+    if not target_uri or '<YOUR_PASSWORD_HERE>' in target_uri or 'placeholder' in target_uri:
+        logger.info("Using simulated in-memory store (empty MONGO_URI or placeholder configured).")
         if not memory_store:
             memory_store = load_seed_data()
         counts = {k: len(v) if isinstance(v, list) else 1 for k, v in memory_store.items()}
@@ -174,7 +239,8 @@ def init_db(uri=None, db_name="medcore_db"):
         return True, "Connected to MongoDB successfully!"
         
     except (ConnectionFailure, ServerSelectionTimeoutError, Exception) as err:
-        logger.warning(f"Could not connect to MongoDB: {err}. Operating in memory fallback mode.")
+        safe_err_msg = re.sub(r'://([^:]+):([^@]+)@', r'://\1:***@', str(err))
+        logger.warning(f"Could not connect to MongoDB: {safe_err_msg}. Operating in memory fallback mode.")
         if not memory_store:
             memory_store = load_seed_data()
             
@@ -197,8 +263,7 @@ def handle_preflight():
     if request.method == 'OPTIONS':
         resp = app.make_default_options_response()
         origin = request.headers.get('Origin')
-        allowed = get_allowed_origins()
-        if origin and (origin in allowed or '*' in allowed):
+        if origin and is_origin_allowed(origin):
             resp.headers['Access-Control-Allow-Origin'] = origin
             resp.headers['Access-Control-Allow-Credentials'] = 'true'
         resp.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization,X-Auth-Token'
@@ -208,8 +273,7 @@ def handle_preflight():
 @app.after_request
 def add_cors_headers(response):
     origin = request.headers.get('Origin')
-    allowed = get_allowed_origins()
-    if origin and (origin in allowed or '*' in allowed):
+    if origin and is_origin_allowed(origin):
         response.headers['Access-Control-Allow-Origin'] = origin
         response.headers['Access-Control-Allow-Credentials'] = 'true'
     response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization,X-Auth-Token'
