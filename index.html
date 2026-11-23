@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MedCore AI — Smart Hospital Operations Platform</title>
-    <link rel="stylesheet" href="css/styles.css?v=2.5.4">
+    <link rel="stylesheet" href="css/styles.css?v=2.5.5">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -57,9 +57,35 @@
                         </div>
                     </div>
                     <div id="login-error" class="login-error hidden"></div>
-                    <button type="submit" class="btn btn-primary btn-full"><i class="fas fa-sign-in-alt"></i> Sign In
+                    <button type="submit" class="btn btn-primary btn-full" id="login-submit-btn"><i class="fas fa-sign-in-alt"></i> Sign In
                         with ID &amp; Password</button>
                 </form>
+
+                <div class="demo-credentials-box" style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.08);">
+                    <div style="font-size:12px; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:6px; margin-bottom:10px;">
+                        <i class="fas fa-bolt"></i> 1-Click Demo Sign In (Instant Access)
+                    </div>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:8px;">
+                        <button type="button" class="btn btn-secondary" style="font-size:11px; padding:7px 8px; display:flex; align-items:center; gap:5px; justify-content:center; background:#1e293b; border-color:#334155;" onclick="quickFillLogin('admin@medcore.org', 'Admin@123')">
+                            <i class="fas fa-shield-alt" style="color:#ef4444;"></i> Superadmin
+                        </button>
+                        <button type="button" class="btn btn-secondary" style="font-size:11px; padding:7px 8px; display:flex; align-items:center; gap:5px; justify-content:center; background:#1e293b; border-color:#334155;" onclick="quickFillLogin('doctor@medcore.org', 'Doctor@123')">
+                            <i class="fas fa-user-md" style="color:#38bdf8;"></i> Doctor
+                        </button>
+                        <button type="button" class="btn btn-secondary" style="font-size:11px; padding:7px 8px; display:flex; align-items:center; gap:5px; justify-content:center; background:#1e293b; border-color:#334155;" onclick="quickFillLogin('sarah.jenkins@medcore.org', 'Nurse@123')">
+                            <i class="fas fa-user-nurse" style="color:#10b981;"></i> Nurse
+                        </button>
+                        <button type="button" class="btn btn-secondary" style="font-size:11px; padding:7px 8px; display:flex; align-items:center; gap:5px; justify-content:center; background:#1e293b; border-color:#334155;" onclick="quickFillLogin('priya.sharma@medcore.org', 'Acc@123')">
+                            <i class="fas fa-file-invoice-dollar" style="color:#f59e0b;"></i> Accountant
+                        </button>
+                        <button type="button" class="btn btn-secondary" style="font-size:11px; padding:7px 8px; display:flex; align-items:center; gap:5px; justify-content:center; background:#1e293b; border-color:#334155;" onclick="quickFillLogin('rahul.verma@medcore.org', 'Pharm@123')">
+                            <i class="fas fa-pills" style="color:#a855f7;"></i> Pharmacist
+                        </button>
+                        <button type="button" class="btn btn-secondary" style="font-size:11px; padding:7px 8px; display:flex; align-items:center; gap:5px; justify-content:center; background:#1e293b; border-color:#334155;" onclick="quickFillLogin('sayan.chakraborty@medcore.org', 'sayan21')">
+                            <i class="fas fa-user-shield" style="color:#06b6d4;"></i> Sayan Admin
+                        </button>
+                    </div>
+                </div>
             </div>
             <p class="login-disclaimer">⚠ Prototype uses fictional clinical data only. Not for real patient care.</p>
             <div class="page-footer login-footer">
@@ -2480,10 +2506,10 @@ Tab. Paracetamol 650mg (1 SOS Q6H for fever)"></textarea>
     <div id="toast-container"></div>
 
     <!-- Scripts -->
-    <script src="js/config.js?v=2.5.4"></script>
-    <script src="js/data.js?v=2.5.4"></script>
-    <script src="js/recharts_chart.js?v=2.5.4"></script>
-    <script src="js/app.js?v=2.5.4"></script>
+    <script src="js/config.js?v=2.5.5"></script>
+    <script src="js/data.js?v=2.5.5"></script>
+    <script src="js/recharts_chart.js?v=2.5.5"></script>
+    <script src="js/app.js?v=2.5.5"></script>
 </body>
 
 </html>

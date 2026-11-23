@@ -172,6 +172,7 @@ async function handleLogin(e) {
     const identifier = usernameInput ? usernameInput.value.trim().toLowerCase() : '';
     const password = passwordInput ? passwordInput.value.trim() : '';
     const errorBox = document.getElementById('login-error');
+    const submitBtn = document.getElementById('login-submit-btn');
 
     if (errorBox) {
         errorBox.classList.add('hidden');
@@ -186,86 +187,106 @@ async function handleLogin(e) {
         return false;
     }
 
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In…';
+    }
+
     let authenticatedUser = null;
     let authToken = null;
 
-    // 1. Attempt secure backend authentication if server API is reachable
-    if (window.location.protocol !== 'file:') {
-        try {
-            const resp = await fetch(getApiUrl('/api/auth/login'), {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ identifier, password })
-            }).catch(() => null);
+    try {
+        // 1. Attempt secure backend authentication (with 3.5s timeout for Render cold-starts)
+        if (window.location.protocol !== 'file:') {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3500);
 
-            if (resp && resp.ok) {
-                const json = await resp.json();
-                if (json.success && json.user) {
-                    authenticatedUser = json.user;
-                    authToken = json.token;
-                    if (authToken) {
-                        sessionStorage.setItem('medcore_auth_token', authToken);
+                const resp = await fetch(getApiUrl('/api/auth/login'), {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ identifier, password }),
+                    signal: controller.signal
+                }).catch(() => null);
+
+                clearTimeout(timeoutId);
+
+                if (resp && resp.ok) {
+                    const json = await resp.json();
+                    if (json.success && json.user) {
+                        authenticatedUser = json.user;
+                        authToken = json.token;
+                        if (authToken) {
+                            sessionStorage.setItem('medcore_auth_token', authToken);
+                        }
                     }
                 }
+            } catch (err) {
+                console.warn('Backend login timed out or unreachable; switching to demo simulation mode:', err);
             }
-        } catch (err) {
-            console.warn('Backend login endpoint unavailable; running in demo simulation mode:', err);
         }
-    }
 
-    // 2. Client-side fallback for standalone static demo mode (e.g. GitHub Pages)
-    if (!authenticatedUser) {
-        const user = users.find(u => {
-            const emailMatch = u.email && u.email.toLowerCase() === identifier;
-            const usernameMatch = u.username && u.username.toLowerCase() === identifier;
-            const empIdMatch = u.employeeId && u.employeeId.toLowerCase() === identifier;
-            const idMatch = u.id && u.id.toLowerCase() === identifier;
-            return (emailMatch || usernameMatch || empIdMatch || idMatch) && u.password === password;
-        });
+        // 2. Client-side fallback for standalone static demo mode (e.g. GitHub Pages) or cold-starting server
+        if (!authenticatedUser) {
+            const fallbackUsers = (typeof SampleData !== 'undefined' && SampleData.users) ? SampleData.users : users;
+            const user = fallbackUsers.find(u => {
+                const emailMatch = u.email && u.email.toLowerCase() === identifier;
+                const usernameMatch = u.username && u.username.toLowerCase() === identifier;
+                const empIdMatch = u.employeeId && u.employeeId.toLowerCase() === identifier;
+                const idMatch = u.id && u.id.toLowerCase() === identifier;
+                const pwdMatch = u.password && u.password === password;
+                return (emailMatch || usernameMatch || empIdMatch || idMatch) && pwdMatch;
+            });
 
-        if (user) {
-            authenticatedUser = JSON.parse(JSON.stringify(user));
-            delete authenticatedUser.password;
-            authToken = 'demo-token-' + Date.now();
-            sessionStorage.setItem('medcore_auth_token', authToken);
+            if (user) {
+                authenticatedUser = JSON.parse(JSON.stringify(user));
+                delete authenticatedUser.password;
+                authToken = 'demo-token-' + Date.now();
+                sessionStorage.setItem('medcore_auth_token', authToken);
+            }
         }
-    }
 
-    if (!authenticatedUser) {
-        if (errorBox) {
-            errorBox.textContent = 'Invalid credentials. Please verify your staff email or password.';
-            errorBox.classList.remove('hidden');
+        if (!authenticatedUser) {
+            if (errorBox) {
+                errorBox.textContent = 'Invalid credentials. Please verify your staff email or password.';
+                errorBox.classList.remove('hidden');
+            }
+            return false;
         }
+
+        currentUser = authenticatedUser;
+        currentRole = authenticatedUser.role;
+
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+
+        document.getElementById('user-name-display').textContent = authenticatedUser.name;
+        document.getElementById('user-role-label').textContent = authenticatedUser.title || formatRole(authenticatedUser.role);
+
+        // Admin & Superadmin role switcher display
+        const switcherBox = document.getElementById('admin-switcher-container');
+        if (authenticatedUser.role === 'admin' || authenticatedUser.role === 'superadmin') {
+            switcherBox.style.display = 'block';
+            document.getElementById('role-view-switcher').value = authenticatedUser.role === 'superadmin' ? 'admin' : authenticatedUser.role;
+        } else {
+            switcherBox.style.display = 'none';
+        }
+
+        // Role-specific button visibility
+        applyRoleRestrictions(authenticatedUser.role);
+
+        buildNavigation(authenticatedUser.role);
+        startLiveClock();
+        updateAttendanceUI();
+
+        showToast(`Welcome ${authenticatedUser.name}! Logged in as ${formatRole(authenticatedUser.role)}.`, 'success');
         return false;
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In with ID &amp; Password';
+        }
     }
-
-    currentUser = authenticatedUser;
-    currentRole = authenticatedUser.role;
-
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('app').classList.remove('hidden');
-
-    document.getElementById('user-name-display').textContent = authenticatedUser.name;
-    document.getElementById('user-role-label').textContent = authenticatedUser.title || formatRole(authenticatedUser.role);
-
-    // Admin & Superadmin role switcher display
-    const switcherBox = document.getElementById('admin-switcher-container');
-    if (authenticatedUser.role === 'admin' || authenticatedUser.role === 'superadmin') {
-        switcherBox.style.display = 'block';
-        document.getElementById('role-view-switcher').value = authenticatedUser.role === 'superadmin' ? 'admin' : authenticatedUser.role;
-    } else {
-        switcherBox.style.display = 'none';
-    }
-
-    // Role-specific button visibility
-    applyRoleRestrictions(authenticatedUser.role);
-
-    buildNavigation(authenticatedUser.role);
-    startLiveClock();
-    updateAttendanceUI();
-
-    showToast(`Welcome ${authenticatedUser.name}! Logged in as ${formatRole(authenticatedUser.role)}.`, 'success');
-    return false;
 }
 
 function applyRoleRestrictions(role) {
@@ -3018,7 +3039,23 @@ async function bootstrapFromMongo() {
         const json = await res.json();
         if (json.success && json.data) {
             const d = json.data;
-            if (d.users && d.users.length) users = d.users;
+            if (d.users && d.users.length) {
+                // Merge remote users while retaining local passwords for fallback authentication
+                const pwdMap = new Map();
+                if (typeof SampleData !== 'undefined' && SampleData.users) {
+                    SampleData.users.forEach(u => {
+                        if (u.password) {
+                            if (u.id) pwdMap.set(u.id, u.password);
+                            if (u.email) pwdMap.set(u.email.toLowerCase(), u.password);
+                            if (u.username) pwdMap.set(u.username.toLowerCase(), u.password);
+                        }
+                    });
+                }
+                users = d.users.map(u => ({
+                    ...u,
+                    password: u.password || pwdMap.get(u.id) || pwdMap.get(u.email ? u.email.toLowerCase() : '') || pwdMap.get(u.username ? u.username.toLowerCase() : '') || ''
+                }));
+            }
             if (d.doctors && d.doctors.length) doctors = d.doctors;
             if (d.nurses && d.nurses.length) nurses = d.nurses;
             if (d.wardStaff && d.wardStaff.length) wardStaff = d.wardStaff;
