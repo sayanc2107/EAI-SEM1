@@ -1,0 +1,9 @@
+{
+  "mongo_uri": "mongodb://placeholder_user:placeholder_password@localhost:27017/medcore_db",
+  "db_name": "medcore_db",
+  "port": 8080,
+  "allowed_origins": [
+    "http://localhost:8080",
+    "http://127.0.0.1:8080"
+  ]
+}

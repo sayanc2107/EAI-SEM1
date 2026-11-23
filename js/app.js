@@ -147,7 +147,16 @@ function quickFillLogin(identifier, password) {
     handleLogin();
 }
 
-function handleLogin(e) {
+function getAuthHeaders() {
+    const headers = { 'Content-Type': 'application/json' };
+    const token = sessionStorage.getItem('medcore_auth_token');
+    if (token) {
+        headers['Authorization'] = 'Bearer ' + token;
+    }
+    return headers;
+}
+
+async function handleLogin(e) {
     if (e) e.preventDefault();
     const usernameInput = document.getElementById('login-username');
     const passwordInput = document.getElementById('login-password');
@@ -168,15 +177,52 @@ function handleLogin(e) {
         return false;
     }
 
-    const user = users.find(u => {
-        const emailMatch = u.email && u.email.toLowerCase() === identifier;
-        const usernameMatch = u.username && u.username.toLowerCase() === identifier;
-        const empIdMatch = u.employeeId && u.employeeId.toLowerCase() === identifier;
-        const idMatch = u.id && u.id.toLowerCase() === identifier;
-        return (emailMatch || usernameMatch || empIdMatch || idMatch) && u.password === password;
-    });
+    let authenticatedUser = null;
+    let authToken = null;
 
-    if (!user) {
+    // 1. Attempt secure backend authentication if server API is reachable
+    if (window.location.protocol !== 'file:') {
+        try {
+            const resp = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ identifier, password })
+            }).catch(() => null);
+
+            if (resp && resp.ok) {
+                const json = await resp.json();
+                if (json.success && json.user) {
+                    authenticatedUser = json.user;
+                    authToken = json.token;
+                    if (authToken) {
+                        sessionStorage.setItem('medcore_auth_token', authToken);
+                    }
+                }
+            }
+        } catch (err) {
+            console.warn('Backend login endpoint unavailable; running in demo simulation mode:', err);
+        }
+    }
+
+    // 2. Client-side fallback for standalone static demo mode (e.g. GitHub Pages)
+    if (!authenticatedUser) {
+        const user = users.find(u => {
+            const emailMatch = u.email && u.email.toLowerCase() === identifier;
+            const usernameMatch = u.username && u.username.toLowerCase() === identifier;
+            const empIdMatch = u.employeeId && u.employeeId.toLowerCase() === identifier;
+            const idMatch = u.id && u.id.toLowerCase() === identifier;
+            return (emailMatch || usernameMatch || empIdMatch || idMatch) && u.password === password;
+        });
+
+        if (user) {
+            authenticatedUser = JSON.parse(JSON.stringify(user));
+            delete authenticatedUser.password;
+            authToken = 'demo-token-' + Date.now();
+            sessionStorage.setItem('medcore_auth_token', authToken);
+        }
+    }
+
+    if (!authenticatedUser) {
         if (errorBox) {
             errorBox.textContent = 'Invalid credentials. Please verify your staff email or password.';
             errorBox.classList.remove('hidden');
@@ -184,32 +230,32 @@ function handleLogin(e) {
         return false;
     }
 
-    currentUser = user;
-    currentRole = user.role;
+    currentUser = authenticatedUser;
+    currentRole = authenticatedUser.role;
 
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
 
-    document.getElementById('user-name-display').textContent = user.name;
-    document.getElementById('user-role-label').textContent = user.title || formatRole(user.role);
+    document.getElementById('user-name-display').textContent = authenticatedUser.name;
+    document.getElementById('user-role-label').textContent = authenticatedUser.title || formatRole(authenticatedUser.role);
 
     // Admin & Superadmin role switcher display
     const switcherBox = document.getElementById('admin-switcher-container');
-    if (user.role === 'admin' || user.role === 'superadmin') {
+    if (authenticatedUser.role === 'admin' || authenticatedUser.role === 'superadmin') {
         switcherBox.style.display = 'block';
-        document.getElementById('role-view-switcher').value = user.role === 'superadmin' ? 'admin' : user.role;
+        document.getElementById('role-view-switcher').value = authenticatedUser.role === 'superadmin' ? 'admin' : authenticatedUser.role;
     } else {
         switcherBox.style.display = 'none';
     }
 
     // Role-specific button visibility
-    applyRoleRestrictions(user.role);
+    applyRoleRestrictions(authenticatedUser.role);
 
-    buildNavigation(user.role);
+    buildNavigation(authenticatedUser.role);
     startLiveClock();
     updateAttendanceUI();
 
-    showToast(`Welcome ${user.name}! Logged in as ${formatRole(user.role)}.`, 'success');
+    showToast(`Welcome ${authenticatedUser.name}! Logged in as ${formatRole(authenticatedUser.role)}.`, 'success');
     return false;
 }
 
@@ -235,6 +281,14 @@ function applyRoleRestrictions(role) {
 }
 
 function logout() {
+    const token = sessionStorage.getItem('medcore_auth_token');
+    if (token && window.location.protocol !== 'file:') {
+        fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: getAuthHeaders()
+        }).catch(() => null);
+    }
+    sessionStorage.removeItem('medcore_auth_token');
     currentUser = null;
     currentRole = null;
     currentSection = null;
@@ -242,6 +296,7 @@ function logout() {
     document.getElementById('login-screen').classList.remove('hidden');
     document.getElementById('login-form').reset();
     document.getElementById('login-error').classList.add('hidden');
+    showToast('Logged out securely.', 'info');
 }
 
 function switchAdminView(targetRole) {
@@ -311,7 +366,7 @@ function toggleStaffPunch() {
         attendanceLogs.unshift(punchLog);
         fetch('/api/attendance/punch', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify(punchLog)
         }).catch(err => console.warn('MongoDB sync:', err));
         showToast(`Clocked In successfully at ${timeStr}. Attendance logged!`, 'success');
@@ -676,7 +731,7 @@ function submitNewVitals(e) {
     // Sync vitals to MongoDB
     fetch('/api/patients/vitals', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ patientId: activeVitalsPatient.id, vitals: newLog })
     }).catch(err => console.warn('MongoDB sync:', err));
 
@@ -890,7 +945,7 @@ function submitAssignDuty(e) {
         // Sync to MongoDB
         fetch('/api/shifts/assign', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify(newShift)
         }).catch(err => console.warn('MongoDB sync:', err));
 
@@ -1123,7 +1178,7 @@ function submitAddNewStaff(e) {
     // Sync with MongoDB backend
     fetch('/api/staff/new', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ name, employeeId: id, role, department, email, password, salary, phone })
     }).catch(err => console.warn('MongoDB sync:', err));
 
@@ -1218,7 +1273,7 @@ function submitDisburseSalary(e) {
     // Sync with MongoDB backend
     fetch('/api/payroll/disburse', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
             payrollId: activeDisburseItem.id,
             mode: mode,
@@ -1332,7 +1387,7 @@ function submitEditPaymentDetails(e) {
     // Sync with MongoDB backend
     fetch('/api/payroll/payment-details', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ staffId, bankName, accountNo, ifsc, pan, baseSalary: base, hra, allowances: allow, deductions: ded })
     }).catch(err => console.warn('MongoDB sync:', err));
 
@@ -1406,7 +1461,7 @@ function submitSpecialPayment(e) {
     // Sync with MongoDB backend
     fetch('/api/payroll/special-payment', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ payeeName, category, accountNo, ifsc, amount, mode, approvedBy, remarks })
     }).catch(err => console.warn('MongoDB sync:', err));
 
@@ -1845,7 +1900,7 @@ function submitAddStockForm(e) {
         med.quantity += qty;
         fetch('/api/medicines/restock', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify({ id: medId, quantity: qty })
         }).catch(err => console.warn('MongoDB sync:', err));
 
@@ -1859,7 +1914,7 @@ function quickRestockMedicine(idx) {
     medicines[idx].quantity += 50;
     fetch('/api/medicines/restock', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ id: medicines[idx].id, quantity: 50 })
     }).catch(err => console.warn('MongoDB sync:', err));
 
@@ -2023,7 +2078,7 @@ function submitGenerateBill(e) {
     // Sync with MongoDB backend
     fetch('/api/pharmacy/bill', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
             totalAmount: total,
             patientName: patientText,
@@ -2262,7 +2317,7 @@ function submitSendInternalMail(e) {
     // Sync with MongoDB backend
     fetch('/api/mail/send', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(newMail)
     }).catch(err => console.warn('MongoDB sync:', err));
 
@@ -2329,7 +2384,7 @@ function submitRaiseIssue(e) {
     // Sync with MongoDB backend
     fetch('/api/issues/create', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(newIssue)
     }).catch(err => console.warn('MongoDB sync:', err));
 
@@ -2512,7 +2567,7 @@ function submitAdmitPatient(e) {
     // Sync to MongoDB
     fetch('/api/patients/admit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(newPatient)
     }).catch(err => console.warn('MongoDB sync:', err));
 
@@ -2603,7 +2658,7 @@ function submitDoctorPrescription(e) {
     // Sync to MongoDB
     fetch('/api/prescriptions/new', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(newRx)
     }).catch(err => console.warn('MongoDB sync:', err));
 
@@ -2941,7 +2996,7 @@ async function bootstrapFromMongo() {
             updateMongoStatusUI(false);
             return;
         }
-        const res = await fetch('api/bootstrap').catch(() => null);
+        const res = await fetch('/api/bootstrap', { headers: getAuthHeaders() }).catch(() => null);
         if (!res || !res.ok) {
             updateMongoStatusUI(false);
             return;
@@ -3035,7 +3090,7 @@ async function submitMongoUriConfig(e) {
     try {
         const res = await fetch('/api/config/mongo-uri', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify({ mongo_uri: uri, db_name: dbName })
         });
         const data = await res.json();
@@ -3332,7 +3387,7 @@ async function submitEmergencyAmbulanceRequest(e) {
     // Call server endpoint
     fetch('/api/ambulance/request', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(newReq)
     }).catch(err => console.warn('Offline request log:', err));
 
@@ -3385,7 +3440,7 @@ async function submitDispatchAmbulance(e) {
         // Post to backend
         fetch('/api/ambulance/dispatch', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify({
                 requestId: req.id,
                 ambulanceId: amb.id,
@@ -3445,7 +3500,7 @@ function advanceAmbulanceFlow(ambId) {
 
     fetch('/api/ambulance/status', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
             ambulanceId: amb.id,
             status: nextStatus,
@@ -3471,7 +3526,7 @@ function quickUpdateAmbulanceStatus(ambId, newStatus) {
 
     fetch('/api/ambulance/status', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ ambulanceId: amb.id, status: newStatus })
     }).catch(err => console.warn('Offline status:', err));
 
@@ -3731,7 +3786,7 @@ async function submitBookAppointment(e) {
 
     fetch('/api/appointments/create', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(newApt)
     }).catch(err => console.warn('Offline appointment creation:', err));
 
@@ -3791,7 +3846,7 @@ async function submitConsultationDetails(e) {
 
     fetch('/api/appointments/update', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(apt)
     }).catch(err => console.warn('Offline consultation update:', err));
 
@@ -3830,7 +3885,7 @@ function removeAppointment(aptId) {
 
         fetch('/api/appointments/delete', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(),
             body: JSON.stringify({ id: aptId })
         }).catch(err => console.warn('Offline appointment delete:', err));
 

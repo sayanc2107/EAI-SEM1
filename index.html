@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MedCore AI — Smart Hospital Operations Platform</title>
-    <link rel="stylesheet" href="css/styles.css?v=2.5.1">
+    <link rel="stylesheet" href="css/styles.css?v=2.5.2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -27,6 +27,13 @@
                 <p class="login-subtitle">Smart Hospital &amp; Emergency Operations Platform</p>
             </div>
             <div class="login-card">
+                <div class="demo-system-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <strong>Demonstration &amp; Academic Simulation:</strong>
+                        Pre-loaded with synthetic demo accounts and simulated clinical data. Do not submit Protected Health Information (PHI).
+                    </div>
+                </div>
                 <h2>Hospital Staff Sign In</h2>
                 <p class="login-hint">Sign in with your hospital Email ID &amp; Password. Your role,
                     shift permissions, and payroll profiles are fetched directly from the database.</p>
@@ -137,6 +144,11 @@
                     <span class="time-display" id="time-display"></span>
                 </div>
             </header>
+
+            <div class="simulation-banner">
+                <i class="fas fa-flask"></i>
+                <span><strong>ACADEMIC DEMO &amp; SIMULATION ONLY:</strong> All patient records, vital telemetry, triage scores, and GPS routes are synthetic demo models. Generated outputs are non-diagnostic and must not be used for medical advice or clinical decisions.</span>
+            </div>
 
             <div class="content-wrapper">
 
@@ -573,6 +585,14 @@
 
                 <!-- Doctor AI Chatbot & Clinical Decision Support -->
                 <section id="section-doctor-ai-assistant" class="section">
+                    <div class="clinical-disclaimer-card">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>Simulated Clinical Decision Support Notice:</strong>
+                            MedCore Clinical AI is an educational simulation interface querying pre-loaded clinical protocols and mock vitals. Generated responses are synthetic demonstrations and <strong>must not be used as clinical advice</strong> or diagnostic conclusions for real patients.
+                        </div>
+                    </div>
+
                     <div class="section-header">
                         <div>
                             <h2><i class="fas fa-robot" style="color:var(--accent)"></i> Doctor AI Clinical Copilot
@@ -2461,9 +2481,9 @@ Tab. Paracetamol 650mg (1 SOS Q6H for fever)"></textarea>
     <div id="toast-container"></div>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=2.5.1"></script>
-    <script src="js/recharts_chart.js?v=2.5.1"></script>
-    <script src="js/app.js?v=2.5.1"></script>
+    <script src="js/data.js?v=2.5.2"></script>
+    <script src="js/recharts_chart.js?v=2.5.2"></script>
+    <script src="js/app.js?v=2.5.2"></script>
 </body>
 
 </html>
