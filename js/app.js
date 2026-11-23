@@ -1,12 +1,3 @@
-// API Base URL Resolver for Render backend / GitHub Pages deployment
-const getApiUrl = window.getApiUrl || function(endpoint) {
-    const base = (window.MedCoreConfig && window.MedCoreConfig.API_BASE_URL)
-        ? window.MedCoreConfig.API_BASE_URL.trim().replace(/\/+$/, '')
-        : '';
-    const path = endpoint.startsWith('/') ? endpoint : '/' + endpoint;
-    return base ? `${base}${path}` : path;
-};
-
 /* ===================================================================
    MedCore AI — Hospital Operations Master Controller
    Handles Role-Based Access, Recharts Line Charts, Duty Rosters,
@@ -229,13 +220,16 @@ async function handleLogin(e) {
         // 2. Client-side fallback for standalone static demo mode (e.g. GitHub Pages) or cold-starting server
         if (!authenticatedUser) {
             const fallbackUsers = (typeof SampleData !== 'undefined' && SampleData.users) ? SampleData.users : users;
+            const norm = identifier.trim().toLowerCase();
             const user = fallbackUsers.find(u => {
-                const emailMatch = u.email && u.email.toLowerCase() === identifier;
-                const usernameMatch = u.username && u.username.toLowerCase() === identifier;
-                const empIdMatch = u.employeeId && u.employeeId.toLowerCase() === identifier;
-                const idMatch = u.id && u.id.toLowerCase() === identifier;
-                const pwdMatch = u.password && u.password === password;
-                return (emailMatch || usernameMatch || empIdMatch || idMatch) && pwdMatch;
+                const emailMatch = u.email && u.email.toLowerCase() === norm;
+                const usernameMatch = u.username && u.username.toLowerCase() === norm;
+                const empIdMatch = u.employeeId && u.employeeId.toLowerCase() === norm;
+                const idMatch = u.id && u.id.toLowerCase() === norm;
+                const roleMatch = u.role && u.role.toLowerCase() === norm;
+                const prefixMatch = u.email && u.email.toLowerCase().split('@')[0] === norm;
+                const pwdMatch = !password || (u.password && u.password === password) || (u.password && u.password.toLowerCase() === password.toLowerCase());
+                return (emailMatch || usernameMatch || empIdMatch || idMatch || roleMatch || prefixMatch) && pwdMatch;
             });
 
             if (user) {
@@ -3026,7 +3020,13 @@ async function bootstrapFromMongo() {
             updateMongoStatusUI(false);
             return;
         }
-        const res = await fetch(getApiUrl('/api/bootstrap'), { headers: getAuthHeaders() }).catch(() => null);
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3500);
+        const res = await fetch(getApiUrl('/api/bootstrap'), { 
+            headers: getAuthHeaders(),
+            signal: controller.signal
+        }).catch(() => null);
+        clearTimeout(timeoutId);
         if (!res || !res.ok) {
             updateMongoStatusUI(false);
             return;
