@@ -31,6 +31,13 @@ let payroll = JSON.parse(JSON.stringify(SampleData.payroll));
 let internalMails = JSON.parse(JSON.stringify(SampleData.internalMails));
 let supportIssues = JSON.parse(JSON.stringify(SampleData.supportIssues));
 let doctorLibrary = JSON.parse(JSON.stringify(SampleData.doctorLibrary));
+let ambulances = JSON.parse(JSON.stringify(SampleData.ambulances || []));
+let ambulanceRequests = JSON.parse(JSON.stringify(SampleData.ambulanceRequests || []));
+let doctorAppointments = JSON.parse(JSON.stringify(SampleData.doctorAppointments || []));
+
+// ── Active Filters ──
+let activeAmbulanceFilter = 'All';
+let activeAppointmentFilter = 'All';
 
 // ── Role Menus Master Configuration ──
 const roleMenus = {
@@ -38,6 +45,8 @@ const roleMenus = {
         label: 'Super Administrator Workspace',
         items: [
             { id: 'admin-overview', icon: 'fa-th-large', label: 'Command Overview' },
+            { id: 'ambulance-dispatch', icon: 'fa-ambulance', label: 'Ambulance Fleet & Dispatch' },
+            { id: 'doctor-appointments', icon: 'fa-calendar-check', label: 'Patient Appointments' },
             { id: 'triage-view', icon: 'fa-heartbeat', label: 'ER Triage & Vitals', badge: '3' },
             { id: 'ward-matrix', icon: 'fa-bed', label: 'Wards & Bed Matrix' },
             { id: 'admin-shifts', icon: 'fa-calendar-alt', label: 'Doctor Shifts & Duties' },
@@ -53,6 +62,8 @@ const roleMenus = {
         label: 'Hospital Admin Workspace',
         items: [
             { id: 'admin-overview', icon: 'fa-th-large', label: 'Command Overview' },
+            { id: 'ambulance-dispatch', icon: 'fa-ambulance', label: 'Ambulance Fleet & Dispatch' },
+            { id: 'doctor-appointments', icon: 'fa-calendar-check', label: 'Patient Appointments' },
             { id: 'triage-view', icon: 'fa-heartbeat', label: 'ER Triage & Vitals', badge: '3' },
             { id: 'ward-matrix', icon: 'fa-bed', label: 'Wards & Bed Matrix' },
             { id: 'admin-shifts', icon: 'fa-calendar-alt', label: 'Doctor Shifts & Duties' },
@@ -67,8 +78,10 @@ const roleMenus = {
     doctor: {
         label: 'Attending Physician Workspace',
         items: [
+            { id: 'doctor-appointments', icon: 'fa-calendar-check', label: 'Patient Appointments' },
             { id: 'doctor-shifts', icon: 'fa-calendar-week', label: '7-Day Shift Schedule' },
             { id: 'doctor-patients', icon: 'fa-user-injured', label: 'Allotted Patients & Vitals' },
+            { id: 'ambulance-dispatch', icon: 'fa-ambulance', label: 'Ambulance Fleet & Dispatch' },
             { id: 'doctor-ai-assistant', icon: 'fa-robot', label: 'AI Clinical Assistant' },
             { id: 'doctor-prescriptions', icon: 'fa-prescription', label: 'Prescriptions Desk' },
             { id: 'doctor-library', icon: 'fa-book-medical', label: 'Clinical Guidelines Library' },
@@ -81,6 +94,8 @@ const roleMenus = {
         label: 'Registered Nurse Workspace',
         items: [
             { id: 'nurse-workspace', icon: 'fa-user-nurse', label: 'Nurse Station & Calls' },
+            { id: 'ambulance-dispatch', icon: 'fa-ambulance', label: 'Ambulance Fleet & Dispatch' },
+            { id: 'doctor-appointments', icon: 'fa-calendar-check', label: 'Doctor Appointments' },
             { id: 'triage-view', icon: 'fa-heartbeat', label: 'Patient Vitals Telemetry' },
             { id: 'ward-matrix', icon: 'fa-bed', label: 'Ward Bed Matrix' },
             { id: 'internal-mail', icon: 'fa-envelope', label: 'Internal Mail' },
@@ -454,6 +469,12 @@ function refreshCurrentView() {
             break;
         case 'doctor-library':
             renderDoctorLibrary();
+            break;
+        case 'ambulance-dispatch':
+            renderAmbulanceDispatch();
+            break;
+        case 'doctor-appointments':
+            renderDoctorAppointments();
             break;
         case 'pharm-queue':
             renderPharmQueue();
@@ -2948,9 +2969,12 @@ async function bootstrapFromMongo() {
             if (d.internalMails && d.internalMails.length) internalMails = d.internalMails;
             if (d.supportIssues && d.supportIssues.length) supportIssues = d.supportIssues;
             if (d.doctorLibrary && d.doctorLibrary.length) doctorLibrary = d.doctorLibrary;
+            if (d.ambulances && d.ambulances.length) ambulances = d.ambulances;
+            if (d.ambulanceRequests && d.ambulanceRequests.length) ambulanceRequests = d.ambulanceRequests;
+            if (d.doctorAppointments && d.doctorAppointments.length) doctorAppointments = d.doctorAppointments;
 
             updateMongoStatusUI(json.source === 'mongodb');
-            console.log(`[MedCore Sync] Successfully bootstrapped 15 collections from ${json.source}!`);
+            console.log(`[MedCore Sync] Successfully bootstrapped collections from ${json.source}!`);
         }
     } catch (err) {
         console.warn('Backend API bootstrap failed; running on local data store:', err);
@@ -3025,5 +3049,792 @@ async function submitMongoUriConfig(e) {
         }
     } catch(err) {
         showToast('Connection error: ' + err.message, 'error');
+    }
+}
+
+// ===================================================================
+//  21. AMBULANCE FLEET & EMERGENCY DISPATCH SYSTEM
+// ===================================================================
+
+function renderAmbulanceDispatch() {
+    // 1. Update Metrics
+    const totalFleet = ambulances.length;
+    const enRouteCount = ambulances.filter(a => a.status === 'En Route to Patient' || a.status === 'En Route to Hospital' || a.status === 'At Scene').length;
+    const pendingCalls = ambulanceRequests.filter(r => r.status === 'Pending Dispatch').length;
+    const availableCount = ambulances.filter(a => a.status === 'Available').length;
+
+    const elTotal = document.getElementById('stat-amb-total');
+    const elEnroute = document.getElementById('stat-amb-enroute');
+    const elPending = document.getElementById('stat-amb-pending');
+    const elAvail = document.getElementById('stat-amb-available');
+
+    if (elTotal) elTotal.textContent = totalFleet;
+    if (elEnroute) elEnroute.textContent = enRouteCount;
+    if (elPending) elPending.textContent = pendingCalls;
+    if (elAvail) elAvail.textContent = availableCount;
+
+    // Filter Badges count
+    const cntAll = document.getElementById('amb-cnt-all');
+    const cntPending = document.getElementById('amb-cnt-pending');
+    const cntTransit = document.getElementById('amb-cnt-transit');
+    const cntComp = document.getElementById('amb-cnt-completed');
+
+    if (cntAll) cntAll.textContent = ambulanceRequests.length;
+    if (cntPending) cntPending.textContent = ambulanceRequests.filter(r => r.status === 'Pending Dispatch').length;
+    if (cntTransit) cntTransit.textContent = ambulanceRequests.filter(r => r.status === 'Dispatched' || r.status === 'At Scene' || r.status === 'En Route to Hospital' || r.status === 'En Route to Patient').length;
+    if (cntComp) cntComp.textContent = ambulanceRequests.filter(r => r.status === 'Completed').length;
+
+    renderAmbulanceRequestsTable();
+    renderAmbulanceFleetCards();
+}
+
+function filterAmbulanceRequests(filter) {
+    activeAmbulanceFilter = filter;
+    ['all', 'pending', 'transit', 'completed'].forEach(f => {
+        const btn = document.getElementById(`btn-amb-filter-${f}`);
+        if (btn) btn.classList.remove('active');
+    });
+
+    const activeKey = filter === 'All' ? 'all' : (filter === 'Pending Dispatch' ? 'pending' : (filter === 'In Transit' ? 'transit' : 'completed'));
+    const targetBtn = document.getElementById(`btn-amb-filter-${activeKey}`);
+    if (targetBtn) targetBtn.classList.add('active');
+
+    renderAmbulanceRequestsTable();
+}
+
+function renderAmbulanceRequestsTable() {
+    const tbody = document.getElementById('ambulance-requests-table-body');
+    if (!tbody) return;
+
+    let filtered = [...ambulanceRequests];
+    if (activeAmbulanceFilter === 'Pending Dispatch') {
+        filtered = filtered.filter(r => r.status === 'Pending Dispatch');
+    } else if (activeAmbulanceFilter === 'In Transit') {
+        filtered = filtered.filter(r => r.status === 'Dispatched' || r.status === 'At Scene' || r.status === 'En Route to Hospital' || r.status === 'En Route to Patient');
+    } else if (activeAmbulanceFilter === 'Completed') {
+        filtered = filtered.filter(r => r.status === 'Completed' || r.status === 'Cancelled');
+    }
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:24px; color:#94a3b8;"><i class="fas fa-check-circle" style="color:#10b981;"></i> No emergency requests matching filter "${activeAmbulanceFilter}".</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(r => {
+        let sevBadge = '';
+        if (r.severity === 'Critical') {
+            sevBadge = `<span class="badge" style="background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid rgba(239,68,68,0.4);"><i class="fas fa-heartbeat"></i> Critical (Red)</span>`;
+        } else if (r.severity === 'Urgent') {
+            sevBadge = `<span class="badge" style="background:rgba(245,158,11,0.2); color:#f59e0b; border:1px solid rgba(245,158,11,0.4);"><i class="fas fa-exclamation-triangle"></i> Urgent (Yellow)</span>`;
+        } else {
+            sevBadge = `<span class="badge" style="background:rgba(16,185,129,0.2); color:#10b981; border:1px solid rgba(16,185,129,0.4);"><i class="fas fa-info-circle"></i> Standard</span>`;
+        }
+
+        let stBadge = '';
+        if (r.status === 'Pending Dispatch') {
+            stBadge = `<span class="amb-badge" style="background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid rgba(239,68,68,0.4);"><span class="pulse-indicator"></span> Pending Dispatch</span>`;
+        } else if (r.status === 'Completed') {
+            stBadge = `<span class="amb-badge available"><i class="fas fa-check"></i> Completed</span>`;
+        } else if (r.status === 'Cancelled') {
+            stBadge = `<span class="amb-badge maintenance"><i class="fas fa-ban"></i> Cancelled</span>`;
+        } else {
+            stBadge = `<span class="amb-badge en-route"><span class="pulse-indicator"></span> ${r.status}</span>`;
+        }
+
+        const assignedAmb = r.assignedAmbulanceId ? ambulances.find(a => a.id === r.assignedAmbulanceId) : null;
+        const unitDisplay = assignedAmb 
+            ? `<div style="display:flex; align-items:center; gap:6px;">
+                <span style="font-weight:700; color:#38bdf8;">${assignedAmb.vehicleNo}</span>
+                <span style="font-size:11px; color:#94a3b8;">(${assignedAmb.type.split(' ')[0]})</span>
+               </div>`
+            : `<em style="color:#64748b;">None Assigned</em>`;
+
+        let actionBtns = '';
+        if (r.status === 'Pending Dispatch') {
+            actionBtns = `
+                <button class="btn btn-primary btn-sm" onclick="openDispatchModal('${r.id}')" style="background:#ef4444; border-color:#dc2626; padding:4px 10px;">
+                    <i class="fas fa-paper-plane"></i> Dispatch
+                </button>
+                <button class="btn btn-danger btn-sm" onclick="cancelAmbulanceRequest('${r.id}')" title="Cancel Request" style="padding:4px 8px;">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+        } else if (r.status !== 'Completed' && r.status !== 'Cancelled') {
+            actionBtns = `
+                <button class="btn btn-secondary btn-sm" onclick="advanceAmbulanceFlow('${r.assignedAmbulanceId}')" title="Update Transport Progress" style="padding:4px 10px;">
+                    <i class="fas fa-step-forward"></i> Progress
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="completeAmbulanceRequest('${r.id}')" title="Mark Patient Arrived & Completed" style="background:#10b981; border-color:#059669; padding:4px 8px;">
+                    <i class="fas fa-check"></i>
+                </button>
+            `;
+        } else {
+            actionBtns = `<span style="font-size:11.5px; color:#64748b;"><i class="fas fa-archive"></i> Archived</span>`;
+        }
+
+        return `
+            <tr>
+                <td>
+                    <strong style="color:#ffffff;">${r.id}</strong>
+                    <div style="font-size:11px; color:#94a3b8;">${r.timestamp}</div>
+                </td>
+                <td>
+                    <strong style="color:#ffffff;">${r.callerName}</strong>
+                    <div><a href="tel:${r.callerPhone}" style="color:#38bdf8; text-decoration:none; font-size:12px;"><i class="fas fa-phone-alt"></i> ${r.callerPhone}</a></div>
+                </td>
+                <td>
+                    <div style="font-weight:600; color:#e2e8f0;">${r.pickupLocation}</div>
+                    <div style="font-size:11.5px; color:#94a3b8;"><i class="fas fa-map-marker-alt" style="color:#ef4444; margin-right:4px;"></i>${r.landmark || 'Direct address'}</div>
+                </td>
+                <td>
+                    <div style="max-width:260px; font-size:12px; line-height:1.4; color:#cbd5e1;">${r.patientCondition}</div>
+                </td>
+                <td>${sevBadge}</td>
+                <td>${stBadge}</td>
+                <td>${unitDisplay}</td>
+                <td>
+                    <div style="display:flex; gap:6px; align-items:center;">
+                        ${actionBtns}
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function renderAmbulanceFleetCards() {
+    const container = document.getElementById('ambulance-fleet-container');
+    if (!container) return;
+
+    container.innerHTML = ambulances.map(amb => {
+        let cardClass = 'available';
+        let badgeHtml = '';
+
+        if (amb.status.includes('En Route')) {
+            cardClass = 'en-route';
+            badgeHtml = `<span class="amb-badge en-route"><span class="pulse-indicator"></span> ${amb.status}</span>`;
+        } else if (amb.status === 'At Scene') {
+            cardClass = 'at-scene';
+            badgeHtml = `<span class="amb-badge at-scene"><span class="pulse-indicator"></span> At Scene</span>`;
+        } else if (amb.status === 'Maintenance') {
+            cardClass = 'maintenance';
+            badgeHtml = `<span class="amb-badge maintenance"><i class="fas fa-tools"></i> Maintenance</span>`;
+        } else {
+            cardClass = 'available';
+            badgeHtml = `<span class="amb-badge available"><i class="fas fa-check-circle"></i> Available</span>`;
+        }
+
+        const fuelNum = parseInt(amb.fuel) || 50;
+        const fuelColor = fuelNum > 60 ? '#10b981' : (fuelNum > 25 ? '#f59e0b' : '#ef4444');
+
+        return `
+            <div class="ambulance-card ${cardClass}">
+                <div class="amb-header">
+                    <div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <strong style="color:#ffffff; font-size:15px;"><i class="fas fa-ambulance" style="color:#ef4444;"></i> ${amb.vehicleNo}</strong>
+                            <span style="font-size:11px; background:#1e293b; color:#cbd5e1; padding:2px 6px; border-radius:4px; font-family:monospace;">${amb.id}</span>
+                        </div>
+                        <div style="font-size:12px; color:#38bdf8; font-weight:600; margin-top:2px;">${amb.type}</div>
+                    </div>
+                    <div>${badgeHtml}</div>
+                </div>
+
+                <div class="amb-route-box">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                        <span style="color:#94a3b8;"><i class="fas fa-crosshairs"></i> Current:</span>
+                        <strong style="color:#ffffff;">${amb.currentLocation}</strong>
+                    </div>
+                    <div style="display:flex; justify-content:space-between;">
+                        <span style="color:#94a3b8;"><i class="fas fa-flag-checkered"></i> Destination:</span>
+                        <strong style="color:#38bdf8;">${amb.destination}</strong>
+                    </div>
+                </div>
+
+                <div class="amb-meta-grid">
+                    <div>
+                        <div style="font-size:11px; color:#94a3b8;">Driver on Duty</div>
+                        <strong style="color:#ffffff; font-size:12.5px;">${amb.driver}</strong>
+                        <div><a href="tel:${amb.driverPhone}" style="color:#38bdf8; text-decoration:none; font-size:11.5px;"><i class="fas fa-phone-alt"></i> ${amb.driverPhone}</a></div>
+                    </div>
+                    <div>
+                        <div style="font-size:11px; color:#94a3b8;">Paramedic / EMT</div>
+                        <strong style="color:#ffffff; font-size:12.5px;">${amb.paramedic}</strong>
+                        <div style="font-size:11px; color:#10b981;"><i class="fas fa-heartbeat"></i> Medical Link OK</div>
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; padding-top:6px; border-top:1px solid rgba(255,255,255,0.06);">
+                    <div style="font-size:11.5px; color:#cbd5e1;">
+                        <i class="fas fa-gas-pump" style="color:${fuelColor}; margin-right:4px;"></i> Fuel: <strong>${amb.fuel}</strong>
+                    </div>
+                    <div style="font-size:11.5px; color:#cbd5e1;">
+                        <i class="fas fa-stopwatch" style="color:#38bdf8; margin-right:4px;"></i> ETA: <strong>${amb.eta}</strong>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:8px; margin-top:4px;">
+                    <button class="btn btn-secondary btn-sm" onclick="advanceAmbulanceFlow('${amb.id}')" style="flex:1; padding:6px 8px; font-size:11.5px;">
+                        <i class="fas fa-exchange-alt"></i> Change Status
+                    </button>
+                    ${amb.status !== 'Maintenance' ? `
+                        <button class="btn btn-secondary btn-sm" onclick="quickUpdateAmbulanceStatus('${amb.id}', 'Maintenance')" title="Mark Out for Maintenance" style="padding:6px 10px;">
+                            <i class="fas fa-wrench"></i>
+                        </button>
+                    ` : `
+                        <button class="btn btn-primary btn-sm" onclick="quickUpdateAmbulanceStatus('${amb.id}', 'Available')" title="Return to Service" style="padding:6px 10px; background:#10b981; border-color:#059669;">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    `}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Ambulance Modals & Actions
+function openEmergencyAmbulanceModal() {
+    const form = document.getElementById('emergency-ambulance-form');
+    if (form) form.reset();
+    openModal('modal-emergency-ambulance');
+}
+
+async function submitEmergencyAmbulanceRequest(e) {
+    e.preventDefault();
+    const callerName = document.getElementById('amb-caller-name').value.trim();
+    const callerPhone = document.getElementById('amb-caller-phone').value.trim();
+    const pickupLocation = document.getElementById('amb-pickup-location').value.trim();
+    const landmark = document.getElementById('amb-landmark').value.trim();
+    const severity = document.getElementById('amb-severity').value;
+    const condition = document.getElementById('amb-patient-condition').value.trim();
+    const accessNotes = document.getElementById('amb-access-notes').value.trim();
+
+    const now = new Date();
+    const timeStr = now.toISOString().slice(0, 10) + ' ' + now.toTimeString().slice(0, 5);
+    const newReqId = 'REQ-' + (800 + ambulanceRequests.length + 1);
+
+    const newReq = {
+        id: newReqId,
+        callerName,
+        callerPhone,
+        pickupLocation,
+        landmark,
+        patientCondition: condition,
+        severity,
+        assignedAmbulanceId: null,
+        status: 'Pending Dispatch',
+        notes: accessNotes,
+        timestamp: timeStr
+    };
+
+    ambulanceRequests.unshift(newReq);
+
+    // Call server endpoint
+    fetch('/api/ambulance/request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newReq)
+    }).catch(err => console.warn('Offline request log:', err));
+
+    closeModal('modal-emergency-ambulance');
+    showToast(`Emergency Ambulance Call ${newReqId} registered! Dispatch a unit now.`, 'warning');
+    renderAmbulanceDispatch();
+}
+
+function openDispatchModal(requestId) {
+    const req = ambulanceRequests.find(r => r.id === requestId);
+    if (!req) return;
+
+    document.getElementById('dispatch-request-id').value = req.id;
+    document.getElementById('dispatch-request-summary').innerHTML = `
+        <span style="color:#ef4444; font-weight:700;">[${req.severity.toUpperCase()}]</span> Call ${req.id} — ${req.callerName} (${req.callerPhone})<br>
+        📍 <strong>${req.pickupLocation}</strong> (${req.landmark || 'Direct Address'})<br>
+        ⚠️ <em>${req.patientCondition}</em>
+    `;
+
+    // Populate available ambulances select
+    const select = document.getElementById('dispatch-ambulance-select');
+    select.innerHTML = ambulances.map(a => `
+        <option value="${a.id}" ${a.status === 'Available' ? 'selected' : ''}>
+            ${a.vehicleNo} — ${a.type} [Status: ${a.status}] (Driver: ${a.driver})
+        </option>
+    `).join('');
+
+    openModal('modal-dispatch-ambulance');
+}
+
+async function submitDispatchAmbulance(e) {
+    e.preventDefault();
+    const reqId = document.getElementById('dispatch-request-id').value;
+    const ambId = document.getElementById('dispatch-ambulance-select').value;
+    const dest = document.getElementById('dispatch-destination').value.trim();
+    const eta = document.getElementById('dispatch-eta').value.trim();
+
+    const req = ambulanceRequests.find(r => r.id === reqId);
+    const amb = ambulances.find(a => a.id === ambId);
+
+    if (req && amb) {
+        req.status = 'Dispatched';
+        req.assignedAmbulanceId = amb.id;
+
+        amb.status = 'En Route to Patient';
+        amb.assignedRequestId = req.id;
+        amb.destination = req.pickupLocation;
+        amb.eta = eta;
+
+        // Post to backend
+        fetch('/api/ambulance/dispatch', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                requestId: req.id,
+                ambulanceId: amb.id,
+                status: 'En Route to Patient',
+                destination: req.pickupLocation,
+                eta: eta
+            })
+        }).catch(err => console.warn('Offline dispatch update:', err));
+
+        closeModal('modal-dispatch-ambulance');
+        showToast(`Ambulance ${amb.vehicleNo} dispatched to ${req.pickupLocation}!`, 'success');
+        renderAmbulanceDispatch();
+    }
+}
+
+function advanceAmbulanceFlow(ambId) {
+    const amb = ambulances.find(a => a.id === ambId);
+    if (!amb) return;
+
+    let nextStatus = 'Available';
+    let msg = '';
+
+    if (amb.status === 'En Route to Patient') {
+        nextStatus = 'At Scene';
+        msg = `Unit ${amb.vehicleNo} arrived at scene! Paramedic attending patient.`;
+    } else if (amb.status === 'At Scene') {
+        nextStatus = 'En Route to Hospital';
+        amb.destination = 'MedCore Central Emergency Trauma Center';
+        amb.eta = '8 mins';
+        msg = `Unit ${amb.vehicleNo} patient on-board, rushing to MedCore ER!`;
+    } else if (amb.status === 'En Route to Hospital') {
+        nextStatus = 'Available';
+        amb.destination = 'Hospital Base Standby';
+        amb.eta = 'Immediate';
+        if (amb.assignedRequestId) {
+            const req = ambulanceRequests.find(r => r.id === amb.assignedRequestId);
+            if (req) req.status = 'Completed';
+            amb.assignedRequestId = null;
+        }
+        msg = `Unit ${amb.vehicleNo} arrived at ER! Patient handed over. Unit is now Available.`;
+    } else if (amb.status === 'Available') {
+        nextStatus = 'En Route to Patient';
+        msg = `Unit ${amb.vehicleNo} status set to En Route.`;
+    } else if (amb.status === 'Maintenance') {
+        nextStatus = 'Available';
+        msg = `Unit ${amb.vehicleNo} maintenance complete. Back in service!`;
+    }
+
+    amb.status = nextStatus;
+
+    if (amb.assignedRequestId) {
+        const req = ambulanceRequests.find(r => r.id === amb.assignedRequestId);
+        if (req && nextStatus !== 'Available') {
+            req.status = nextStatus;
+        }
+    }
+
+    fetch('/api/ambulance/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            ambulanceId: amb.id,
+            status: nextStatus,
+            destination: amb.destination,
+            eta: amb.eta
+        })
+    }).catch(err => console.warn('Offline status:', err));
+
+    showToast(msg, 'info');
+    renderAmbulanceDispatch();
+}
+
+function quickUpdateAmbulanceStatus(ambId, newStatus) {
+    const amb = ambulances.find(a => a.id === ambId);
+    if (!amb) return;
+
+    amb.status = newStatus;
+    if (newStatus === 'Available') {
+        amb.assignedRequestId = null;
+        amb.destination = 'Standby at Base';
+        amb.eta = 'Immediate';
+    }
+
+    fetch('/api/ambulance/status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ambulanceId: amb.id, status: newStatus })
+    }).catch(err => console.warn('Offline status:', err));
+
+    showToast(`Ambulance ${amb.vehicleNo} set to ${newStatus}.`, 'info');
+    renderAmbulanceDispatch();
+}
+
+function completeAmbulanceRequest(reqId) {
+    const req = ambulanceRequests.find(r => r.id === reqId);
+    if (!req) return;
+
+    req.status = 'Completed';
+    if (req.assignedAmbulanceId) {
+        const amb = ambulances.find(a => a.id === req.assignedAmbulanceId);
+        if (amb) {
+            amb.status = 'Available';
+            amb.assignedRequestId = null;
+            amb.destination = 'Standby at Base';
+            amb.eta = 'Immediate';
+        }
+    }
+
+    showToast(`Emergency Call ${req.id} marked Completed. Ambulance freed.`, 'success');
+    renderAmbulanceDispatch();
+}
+
+function cancelAmbulanceRequest(reqId) {
+    if (!confirm(`Are you sure you want to cancel ambulance request ${reqId}?`)) return;
+
+    const req = ambulanceRequests.find(r => r.id === reqId);
+    if (!req) return;
+
+    req.status = 'Cancelled';
+    if (req.assignedAmbulanceId) {
+        const amb = ambulances.find(a => a.id === req.assignedAmbulanceId);
+        if (amb) {
+            amb.status = 'Available';
+            amb.assignedRequestId = null;
+        }
+    }
+
+    showToast(`Ambulance Call ${reqId} has been cancelled.`, 'warning');
+    renderAmbulanceDispatch();
+}
+
+
+// ===================================================================
+//  22. DOCTOR APPOINTMENTS & CONSULTATION LOGS SYSTEM
+// ===================================================================
+
+function renderDoctorAppointments() {
+    const total = doctorAppointments.length;
+    const scheduled = doctorAppointments.filter(a => a.status === 'Scheduled').length;
+    const completed = doctorAppointments.filter(a => a.status === 'Completed').length;
+    const cancelled = doctorAppointments.filter(a => a.status === 'Cancelled').length;
+
+    const elTotal = document.getElementById('stat-apt-total');
+    const elToday = document.getElementById('stat-apt-today');
+    const elComp = document.getElementById('stat-apt-completed');
+    const elCanc = document.getElementById('stat-apt-cancelled');
+
+    if (elTotal) elTotal.textContent = total;
+    if (elToday) elToday.textContent = scheduled;
+    if (elComp) elComp.textContent = completed;
+    if (elCanc) elCanc.textContent = cancelled;
+
+    renderDoctorAppointmentsTable();
+}
+
+function filterDoctorAppointments(status) {
+    activeAppointmentFilter = status;
+    ['all', 'scheduled', 'completed', 'cancelled'].forEach(s => {
+        const btn = document.getElementById(`btn-apt-filter-${s}`);
+        if (btn) btn.classList.remove('active');
+    });
+
+    const target = document.getElementById(`btn-apt-filter-${status.toLowerCase()}`);
+    if (target) target.classList.add('active');
+
+    renderDoctorAppointmentsTable();
+}
+
+function renderDoctorAppointmentsTable() {
+    const tbody = document.getElementById('doctor-appointments-table-body');
+    if (!tbody) return;
+
+    const searchInput = document.getElementById('apt-search-input');
+    const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+    let list = [...doctorAppointments];
+
+    // Filter by status tab
+    if (activeAppointmentFilter !== 'All') {
+        list = list.filter(a => a.status === activeAppointmentFilter);
+    }
+
+    // Filter by search query
+    if (query) {
+        list = list.filter(a => 
+            (a.patientName && a.patientName.toLowerCase().includes(query)) ||
+            (a.id && a.id.toLowerCase().includes(query)) ||
+            (a.patientPhone && a.patientPhone.toLowerCase().includes(query)) ||
+            (a.symptoms && a.symptoms.toLowerCase().includes(query)) ||
+            (a.doctorName && a.doctorName.toLowerCase().includes(query)) ||
+            (a.department && a.department.toLowerCase().includes(query))
+        );
+    }
+
+    if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:24px; color:#94a3b8;"><i class="fas fa-calendar-times" style="color:#64748b;"></i> No appointments found matching current filter or search.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = list.map(apt => {
+        let stBadge = '';
+        if (apt.status === 'Completed') {
+            stBadge = `<span class="badge" style="background:rgba(16,185,129,0.2); color:#10b981; border:1px solid rgba(16,185,129,0.4);"><i class="fas fa-check-circle"></i> Completed</span>`;
+        } else if (apt.status === 'Cancelled') {
+            stBadge = `<span class="badge" style="background:rgba(239,68,68,0.2); color:#ef4444; border:1px solid rgba(239,68,68,0.4);"><i class="fas fa-times-circle"></i> Cancelled</span>`;
+        } else {
+            stBadge = `<span class="badge" style="background:rgba(56,189,248,0.2); color:#38bdf8; border:1px solid rgba(56,189,248,0.4);"><i class="fas fa-clock"></i> Scheduled</span>`;
+        }
+
+        return `
+            <tr>
+                <td>
+                    <strong style="color:#ffffff;">${apt.id}</strong>
+                    <div style="font-size:11px; color:#94a3b8;">${apt.type || 'Consultation'}</div>
+                </td>
+                <td>
+                    <strong style="color:#ffffff;">${apt.patientName}</strong>
+                    <span style="font-size:12px; color:#94a3b8;">(${apt.patientAge}y, ${apt.patientGender})</span>
+                    <div><a href="tel:${apt.patientPhone}" style="color:#38bdf8; text-decoration:none; font-size:12px;"><i class="fas fa-phone-alt"></i> ${apt.patientPhone}</a></div>
+                </td>
+                <td>
+                    <div style="font-weight:600; color:#e2e8f0;"><i class="far fa-calendar-alt" style="color:var(--primary); margin-right:4px;"></i>${apt.appointmentDate}</div>
+                    <div style="font-size:11.5px; color:#94a3b8;"><i class="far fa-clock" style="margin-right:4px;"></i>${apt.timeSlot}</div>
+                </td>
+                <td>
+                    <strong style="color:#ffffff;">${apt.doctorName}</strong>
+                    <div style="font-size:11.5px; color:#38bdf8;">${apt.department}</div>
+                </td>
+                <td>
+                    <div style="max-width:240px; font-size:12px; color:#cbd5e1; line-height:1.4;">
+                        ${apt.symptoms || 'General Health Consultation'}
+                    </div>
+                </td>
+                <td>${stBadge}</td>
+                <td>
+                    <div style="display:flex; gap:6px; align-items:center;">
+                        <button class="btn btn-primary btn-sm" onclick="openConsultationModal('${apt.id}')" title="Log Clinical Consultation, Vitals & Prescriptions" style="padding:4px 10px;">
+                            <i class="fas fa-stethoscope"></i> Consult
+                        </button>
+                        ${apt.prescription ? `
+                            <button class="btn btn-secondary btn-sm" onclick="viewAppointmentSummary('${apt.id}')" title="View Prescription & Summary" style="padding:4px 8px;">
+                                <i class="fas fa-file-prescription"></i>
+                            </button>
+                        ` : ''}
+                        <button class="btn btn-danger btn-sm" onclick="removeAppointment('${apt.id}')" title="Cancel & Remove Appointment" style="padding:4px 8px;">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Book Appointment Modal
+function openBookAppointmentModal() {
+    const docSelect = document.getElementById('book-doctor-select');
+    if (docSelect) {
+        docSelect.innerHTML = doctors.map(d => `
+            <option value="${d.id}" data-dept="${d.department || d.specialty || 'General Medicine'}">
+                ${d.name} (${d.department || d.specialty || 'General'})
+            </option>
+        `).join('');
+    }
+
+    onBookDoctorChanged();
+
+    // Default appointment date to tomorrow
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dateInput = document.getElementById('book-appointment-date');
+    if (dateInput) dateInput.value = tomorrow.toISOString().slice(0, 10);
+
+    const form = document.getElementById('book-appointment-form');
+    if (form) form.reset();
+
+    if (dateInput) dateInput.value = tomorrow.toISOString().slice(0, 10);
+    onBookDoctorChanged();
+
+    openModal('modal-book-appointment');
+}
+
+function onBookDoctorChanged() {
+    const docSelect = document.getElementById('book-doctor-select');
+    const deptInput = document.getElementById('book-department');
+    if (docSelect && deptInput) {
+        const selectedOpt = docSelect.options[docSelect.selectedIndex];
+        deptInput.value = selectedOpt ? (selectedOpt.getAttribute('data-dept') || 'General Medicine') : 'General Medicine';
+    }
+}
+
+async function submitBookAppointment(e) {
+    e.preventDefault();
+    const patientName = document.getElementById('book-patient-name').value.trim();
+    const patientPhone = document.getElementById('book-patient-phone').value.trim();
+    const patientAge = parseInt(document.getElementById('book-patient-age').value) || 30;
+    const patientGender = document.getElementById('book-patient-gender').value;
+    const patientEmail = document.getElementById('book-patient-email').value.trim();
+
+    const docSelect = document.getElementById('book-doctor-select');
+    const doctorId = docSelect ? docSelect.value : 'DOC-01';
+    const selectedOpt = docSelect ? docSelect.options[docSelect.selectedIndex] : null;
+    const doctorName = selectedOpt ? selectedOpt.text.split('(')[0].trim() : 'Dr. Attending Physician';
+    const department = document.getElementById('book-department').value || 'General Medicine';
+
+    const appointmentDate = document.getElementById('book-appointment-date').value;
+    const timeSlot = document.getElementById('book-time-slot').value;
+    const consultType = document.getElementById('book-consult-type').value;
+    const symptoms = document.getElementById('book-initial-symptoms').value.trim();
+
+    const newAptId = 'APT-' + (1000 + doctorAppointments.length + 1);
+
+    const newApt = {
+        id: newAptId,
+        doctorId,
+        doctorName,
+        department,
+        patientName,
+        patientAge,
+        patientGender,
+        patientPhone,
+        patientEmail,
+        appointmentDate,
+        timeSlot,
+        type: consultType,
+        symptoms,
+        vitals: {
+            bp: '120/80 mmHg',
+            hr: '76 bpm',
+            spo2: '98%',
+            temp: '98.6 °F',
+            weight: '65 kg'
+        },
+        diagnosis: '',
+        clinicalNotes: '',
+        prescription: '',
+        followUpDate: '',
+        status: 'Scheduled',
+        createdAt: new Date().toISOString().slice(0, 10)
+    };
+
+    doctorAppointments.unshift(newApt);
+
+    fetch('/api/appointments/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newApt)
+    }).catch(err => console.warn('Offline appointment creation:', err));
+
+    closeModal('modal-book-appointment');
+    showToast(`Appointment ${newAptId} booked successfully for ${patientName}!`, 'success');
+    renderDoctorAppointments();
+}
+
+// Consultation Modal
+function openConsultationModal(aptId) {
+    const apt = doctorAppointments.find(a => a.id === aptId);
+    if (!apt) return;
+
+    document.getElementById('consult-apt-id').value = apt.id;
+    document.getElementById('consult-patient-header').innerHTML = `
+        <strong>${apt.patientName}</strong> (${apt.patientAge}y, ${apt.patientGender}) • Phone: ${apt.patientPhone} • Attending: <strong>${apt.doctorName}</strong> (${apt.department}) • Slot: ${apt.appointmentDate} (${apt.timeSlot})
+    `;
+
+    document.getElementById('consult-symptoms').value = apt.symptoms || '';
+
+    // Fill vitals
+    const vitals = apt.vitals || {};
+    document.getElementById('consult-vital-bp').value = vitals.bp || '120/80';
+    document.getElementById('consult-vital-hr').value = vitals.hr || '76';
+    document.getElementById('consult-vital-spo2').value = vitals.spo2 || '98%';
+    document.getElementById('consult-vital-temp').value = vitals.temp || '98.6 °F';
+    document.getElementById('consult-vital-wt').value = vitals.weight || '65 kg';
+
+    document.getElementById('consult-diagnosis').value = apt.diagnosis || '';
+    document.getElementById('consult-notes').value = apt.clinicalNotes || '';
+    document.getElementById('consult-prescription').value = apt.prescription || '';
+    document.getElementById('consult-followup-date').value = apt.followUpDate || '';
+    document.getElementById('consult-status').value = apt.status || 'Completed';
+
+    openModal('modal-consultation-details');
+}
+
+async function submitConsultationDetails(e) {
+    e.preventDefault();
+    const aptId = document.getElementById('consult-apt-id').value;
+    const apt = doctorAppointments.find(a => a.id === aptId);
+    if (!apt) return;
+
+    apt.symptoms = document.getElementById('consult-symptoms').value.trim();
+    apt.vitals = {
+        bp: document.getElementById('consult-vital-bp').value.trim(),
+        hr: document.getElementById('consult-vital-hr').value.trim(),
+        spo2: document.getElementById('consult-vital-spo2').value.trim(),
+        temp: document.getElementById('consult-vital-temp').value.trim(),
+        weight: document.getElementById('consult-vital-wt').value.trim()
+    };
+    apt.diagnosis = document.getElementById('consult-diagnosis').value.trim();
+    apt.clinicalNotes = document.getElementById('consult-notes').value.trim();
+    apt.prescription = document.getElementById('consult-prescription').value.trim();
+    apt.followUpDate = document.getElementById('consult-followup-date').value;
+    apt.status = document.getElementById('consult-status').value;
+
+    fetch('/api/appointments/update', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(apt)
+    }).catch(err => console.warn('Offline consultation update:', err));
+
+    closeModal('modal-consultation-details');
+    showToast(`Consultation details & prescription updated for ${apt.patientName}!`, 'success');
+    renderDoctorAppointments();
+}
+
+function viewAppointmentSummary(aptId) {
+    const apt = doctorAppointments.find(a => a.id === aptId);
+    if (!apt) return;
+
+    alert(
+        `MEDCORE CLINICAL CONSULTATION SUMMARY\n` +
+        `-----------------------------------------\n` +
+        `Appointment ID: ${apt.id}\n` +
+        `Patient: ${apt.patientName} (${apt.patientAge}y, ${apt.patientGender})\n` +
+        `Doctor: ${apt.doctorName} - ${apt.department}\n` +
+        `Date: ${apt.appointmentDate} | Slot: ${apt.timeSlot}\n` +
+        `Status: ${apt.status}\n\n` +
+        `REPORTED SYMPTOMS:\n${apt.symptoms}\n\n` +
+        `VITALS:\nBP: ${apt.vitals ? apt.vitals.bp : 'N/A'}, HR: ${apt.vitals ? apt.vitals.hr : 'N/A'}, SpO2: ${apt.vitals ? apt.vitals.spo2 : 'N/A'}\n\n` +
+        `DIAGNOSIS:\n${apt.diagnosis || 'None entered'}\n\n` +
+        `PRESCRIPTION REGIMEN:\n${apt.prescription || 'No medicines prescribed'}\n\n` +
+        `CLINICAL ADVICE:\n${apt.clinicalNotes || 'None'}\n\n` +
+        `FOLLOW-UP REVIEW DATE: ${apt.followUpDate || 'SOS / As needed'}`
+    );
+}
+
+function removeAppointment(aptId) {
+    if (!confirm(`Are you sure you want to cancel and remove appointment ${aptId}?`)) return;
+
+    const idx = doctorAppointments.findIndex(a => a.id === aptId);
+    if (idx !== -1) {
+        doctorAppointments[idx].status = 'Cancelled';
+
+        fetch('/api/appointments/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: aptId })
+        }).catch(err => console.warn('Offline appointment delete:', err));
+
+        showToast(`Appointment ${aptId} cancelled.`, 'warning');
+        renderDoctorAppointments();
     }
 }

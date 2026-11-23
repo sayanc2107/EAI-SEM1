@@ -197,7 +197,8 @@ def get_bootstrap_data():
         data = {}
         for coll_name in ['users', 'doctors', 'nurses', 'wardStaff', 'shifts', 'attendanceLogs', 
                           'patients', 'beds', 'prescriptions', 'medicines', 'hospitalTransactions', 
-                          'payroll', 'internalMails', 'supportIssues', 'doctorLibrary']:
+                          'payroll', 'internalMails', 'supportIssues', 'doctorLibrary',
+                          'ambulances', 'ambulanceRequests', 'doctorAppointments']:
             docs = list(db[coll_name].find())
             data[coll_name] = clean_mongo_doc(docs)
         return jsonify({"success": True, "source": "mongodb", "data": data})
@@ -632,6 +633,124 @@ def punch_attendance():
     else:
         memory_store.setdefault('attendanceLogs', []).insert(0, att)
     return jsonify({"success": True, "attendance": clean_mongo_doc(att)})
+
+# ── Ambulance Management & Dispatch ──
+@app.route('/api/ambulance/request', methods=['POST'])
+def create_ambulance_request():
+    req_data = request.json or {}
+    if db_status['connected'] and db is not None:
+        db.ambulanceRequests.insert_one(req_data)
+    else:
+        memory_store.setdefault('ambulanceRequests', []).insert(0, req_data)
+    return jsonify({"success": True, "request": clean_mongo_doc(req_data)})
+
+@app.route('/api/ambulance/dispatch', methods=['POST'])
+def dispatch_ambulance():
+    data = request.json or {}
+    req_id = data.get('requestId')
+    amb_id = data.get('ambulanceId')
+    status = data.get('status', 'En Route to Patient')
+    current_location = data.get('currentLocation')
+    destination = data.get('destination')
+    eta = data.get('eta', '10 mins')
+
+    if db_status['connected'] and db is not None:
+        amb_update = {"$set": {"status": status, "assignedRequestId": req_id, "eta": eta}}
+        if current_location:
+            amb_update["$set"]["currentLocation"] = current_location
+        if destination:
+            amb_update["$set"]["destination"] = destination
+        db.ambulances.update_one({"id": amb_id}, amb_update)
+        db.ambulanceRequests.update_one({"id": req_id}, {"$set": {"status": "Dispatched", "assignedAmbulanceId": amb_id}})
+    else:
+        for a in memory_store.get('ambulances', []):
+            if a.get('id') == amb_id:
+                a['status'] = status
+                a['assignedRequestId'] = req_id
+                a['eta'] = eta
+                if destination: a['destination'] = destination
+                break
+        for r in memory_store.get('ambulanceRequests', []):
+            if r.get('id') == req_id:
+                r['status'] = 'Dispatched'
+                r['assignedAmbulanceId'] = amb_id
+                break
+
+    return jsonify({"success": True, "message": f"Ambulance {amb_id} dispatched to request {req_id}"})
+
+@app.route('/api/ambulance/status', methods=['POST'])
+def update_ambulance_status():
+    data = request.json or {}
+    amb_id = data.get('ambulanceId')
+    status = data.get('status')
+    location = data.get('currentLocation')
+    destination = data.get('destination')
+    eta = data.get('eta')
+
+    if db_status['connected'] and db is not None:
+        up = {"status": status}
+        if location: up["currentLocation"] = location
+        if destination: up["destination"] = destination
+        if eta: up["eta"] = eta
+        if status == 'Available':
+            up["assignedRequestId"] = None
+        db.ambulances.update_one({"id": amb_id}, {"$set": up})
+    else:
+        for a in memory_store.get('ambulances', []):
+            if a.get('id') == amb_id:
+                if status: a['status'] = status
+                if location: a['currentLocation'] = location
+                if destination: a['destination'] = destination
+                if eta: a['eta'] = eta
+                if status == 'Available': a['assignedRequestId'] = None
+                break
+
+    return jsonify({"success": True, "message": f"Ambulance {amb_id} status updated to {status}"})
+
+# ── Doctor Appointments ──
+@app.route('/api/appointments/create', methods=['POST'])
+def create_appointment():
+    apt = request.json or {}
+    if db_status['connected'] and db is not None:
+        db.doctorAppointments.insert_one(apt)
+    else:
+        memory_store.setdefault('doctorAppointments', []).insert(0, apt)
+    return jsonify({"success": True, "appointment": clean_mongo_doc(apt)})
+
+@app.route('/api/appointments/update', methods=['POST'])
+def update_appointment():
+    apt = request.json or {}
+    apt_id = apt.get('id')
+    if not apt_id:
+        return jsonify({"success": False, "error": "Missing appointment id"}), 400
+
+    if db_status['connected'] and db is not None:
+        clean = {k: v for k, v in apt.items() if k != '_id'}
+        db.doctorAppointments.update_one({"id": apt_id}, {"$set": clean}, upsert=True)
+    else:
+        store = memory_store.setdefault('doctorAppointments', [])
+        idx = next((i for i, item in enumerate(store) if item.get('id') == apt_id), -1)
+        if idx >= 0:
+            store[idx].update(apt)
+        else:
+            store.insert(0, apt)
+
+    return jsonify({"success": True, "appointment": clean_mongo_doc(apt)})
+
+@app.route('/api/appointments/delete', methods=['POST'])
+def delete_appointment():
+    data = request.json or {}
+    apt_id = data.get('id')
+    if not apt_id:
+        return jsonify({"success": False, "error": "Missing appointment id"}), 400
+
+    if db_status['connected'] and db is not None:
+        db.doctorAppointments.delete_one({"id": apt_id})
+    else:
+        store = memory_store.get('doctorAppointments', [])
+        memory_store['doctorAppointments'] = [a for a in store if a.get('id') != apt_id]
+
+    return jsonify({"success": True, "message": f"Appointment {apt_id} deleted successfully"})
 
 if __name__ == '__main__':
     cfg = load_config()
