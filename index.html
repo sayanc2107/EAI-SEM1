@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MedCore AI — Smart Hospital Operations Platform</title>
-    <link rel="stylesheet" href="css/styles.css?v=2.5.0">
+    <link rel="stylesheet" href="css/styles.css?v=2.5.1">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
@@ -56,7 +56,8 @@
             </div>
             <p class="login-disclaimer">⚠ Prototype uses fictional clinical data only. Not for real patient care.</p>
             <div class="page-footer login-footer">
-                Developed by <a href="https://www.linkedin.com/in/sayanchakraborty2107/" target="_blank" rel="noopener noreferrer">Sayan Chakraborty</a>
+                Developed by <a href="https://www.linkedin.com/in/sayanchakraborty2107/" target="_blank"
+                    rel="noopener noreferrer">Sayan Chakraborty</a>
             </div>
         </div>
     </div>
@@ -670,53 +671,78 @@
                 <section id="section-ambulance-dispatch" class="section">
                     <div class="section-header">
                         <div>
-                            <h2><i class="fas fa-ambulance" style="color:#ef4444; margin-right:8px;"></i> Ambulance Fleet &amp; Emergency Dispatch</h2>
+                            <h2><i class="fas fa-ambulance" style="color:#ef4444; margin-right:8px;"></i> Ambulance
+                                Fleet &amp; Emergency Dispatch</h2>
                             <p style="font-size:13px; color:var(--text-secondary); margin-top:2px;">
-                                Real-time fleet tracking, on-route emergency responses, telemetry, and rapid unit dispatch.
+                                Real-time fleet tracking, on-route emergency responses, telemetry, and rapid unit
+                                dispatch.
                             </p>
                         </div>
                         <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                            <button class="btn btn-secondary" onclick="renderAmbulanceDispatch()"><i class="fas fa-sync-alt"></i> Refresh Fleet</button>
-                            <button class="btn btn-primary" onclick="openEmergencyAmbulanceModal()"><i class="fas fa-phone-alt"></i> Request Emergency Ambulance</button>
+                            <button class="btn btn-secondary" onclick="renderAmbulanceDispatch()"><i
+                                    class="fas fa-sync-alt"></i> Refresh Fleet</button>
+                            <button class="btn btn-primary" onclick="openEmergencyAmbulanceModal()"><i
+                                    class="fas fa-phone-alt"></i> Request Emergency Ambulance</button>
                         </div>
                     </div>
 
                     <!-- Ambulance Fleet & Dispatch Stats -->
                     <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-label">Total Fleet Units</div>
-                            <div class="stat-value" id="stat-amb-total">0</div>
-                            <div class="stat-sub">ACLS, BLS, NICU &amp; PTU</div>
+                        <div class="stat-card stat-shifts">
+                            <div class="stat-info">
+                                <p>Total Fleet Units</p>
+                                <h3 id="stat-amb-total">0</h3>
+                                <span class="stat-info-badge" style="color:var(--accent);">ACLS, BLS, NICU &amp; PTU</span>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-ambulance"></i></div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-label">On The Way / En Route</div>
-                            <div class="stat-value" id="stat-amb-enroute" style="color:#f59e0b;">0</div>
-                            <div class="stat-sub"><span class="pulse-indicator"></span> Responding / Transporting</div>
+                        <div class="stat-card stat-pharmacy">
+                            <div class="stat-info">
+                                <p>On The Way / En Route</p>
+                                <h3 id="stat-amb-enroute" style="color:#f59e0b;">0</h3>
+                                <span class="stat-info-badge" style="color:#f59e0b;"><span class="pulse-indicator"></span> Responding / Transporting</span>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-route"></i></div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Pending Emergency Calls</div>
-                            <div class="stat-value" id="stat-amb-pending" style="color:#ef4444;">0</div>
-                            <div class="stat-sub">Awaiting Unit Assignment</div>
+                        <div class="stat-card stat-triage">
+                            <div class="stat-info">
+                                <p>Pending Emergency Calls</p>
+                                <h3 id="stat-amb-pending" style="color:#ef4444;">0</h3>
+                                <span class="stat-info-badge" style="color:var(--danger);">Awaiting Unit Assignment</span>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-phone-volume"></i></div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Available at Base</div>
-                            <div class="stat-value" id="stat-amb-available" style="color:#10b981;">0</div>
-                            <div class="stat-sub">Ready for Immediate Callout</div>
+                        <div class="stat-card stat-beds">
+                            <div class="stat-info">
+                                <p>Available at Base</p>
+                                <h3 id="stat-amb-available" style="color:#10b981;">0</h3>
+                                <span class="stat-info-badge" style="color:var(--success);">Ready for Immediate Callout</span>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
                         </div>
                     </div>
 
                     <!-- Active Emergency Requests Dispatch Queue -->
                     <div class="card" style="margin-top:20px;">
-                        <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                        <div class="card-header"
+                            style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                             <div style="display:flex; align-items:center; gap:8px;">
                                 <i class="fas fa-satellite-dish" style="color:#ef4444;"></i>
                                 <h3 style="margin:0;">Emergency Ambulance Pickup Requests</h3>
                             </div>
                             <div class="filter-tabs" id="amb-req-filters">
-                                <button class="filter-btn active" id="btn-amb-filter-all" onclick="filterAmbulanceRequests('All')">All (<span id="amb-cnt-all">0</span>)</button>
-                                <button class="filter-btn" id="btn-amb-filter-pending" onclick="filterAmbulanceRequests('Pending Dispatch')">Pending (<span id="amb-cnt-pending">0</span>)</button>
-                                <button class="filter-btn" id="btn-amb-filter-transit" onclick="filterAmbulanceRequests('In Transit')">In Transit (<span id="amb-cnt-transit">0</span>)</button>
-                                <button class="filter-btn" id="btn-amb-filter-completed" onclick="filterAmbulanceRequests('Completed')">Completed (<span id="amb-cnt-completed">0</span>)</button>
+                                <button class="filter-btn active" id="btn-amb-filter-all"
+                                    onclick="filterAmbulanceRequests('All')">All (<span
+                                        id="amb-cnt-all">0</span>)</button>
+                                <button class="filter-btn" id="btn-amb-filter-pending"
+                                    onclick="filterAmbulanceRequests('Pending Dispatch')">Pending (<span
+                                        id="amb-cnt-pending">0</span>)</button>
+                                <button class="filter-btn" id="btn-amb-filter-transit"
+                                    onclick="filterAmbulanceRequests('In Transit')">In Transit (<span
+                                        id="amb-cnt-transit">0</span>)</button>
+                                <button class="filter-btn" id="btn-amb-filter-completed"
+                                    onclick="filterAmbulanceRequests('Completed')">Completed (<span
+                                        id="amb-cnt-completed">0</span>)</button>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -742,13 +768,15 @@
 
                     <!-- Live Fleet Tracking & Status Cards -->
                     <div style="margin-top:24px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
                             <h3 style="margin:0; font-size:16px; color:#ffffff;">
                                 <i class="fas fa-map-marked-alt" style="color:#38bdf8; margin-right:8px;"></i>
                                 Live Ambulance Fleet Tracking &amp; Status
                             </h3>
                             <div>
-                                <span class="badge" style="background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3); font-size:11.5px; padding:4px 10px; border-radius:999px;">
+                                <span class="badge"
+                                    style="background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3); font-size:11.5px; padding:4px 10px; border-radius:999px;">
                                     <i class="fas fa-check-circle"></i> Telemetry &amp; GPS Online
                                 </span>
                             </div>
@@ -765,55 +793,74 @@
                 <section id="section-doctor-appointments" class="section">
                     <div class="section-header">
                         <div>
-                            <h2><i class="fas fa-calendar-check" style="color:#38bdf8; margin-right:8px;"></i> Doctor Appointments &amp; Consultations</h2>
+                            <h2><i class="fas fa-calendar-check" style="color:#38bdf8; margin-right:8px;"></i> Doctor
+                                Appointments &amp; Consultations</h2>
                             <p style="font-size:13px; color:var(--text-secondary); margin-top:2px;">
-                                Schedule outpatient appointments, log patient symptoms, vitals, prescriptions, and clinical diagnoses.
+                                Schedule outpatient appointments, log patient symptoms, vitals, prescriptions, and
+                                clinical diagnoses.
                             </p>
                         </div>
                         <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                            <button class="btn btn-secondary" onclick="renderDoctorAppointments()"><i class="fas fa-sync-alt"></i> Refresh</button>
-                            <button class="btn btn-primary" onclick="openBookAppointmentModal()"><i class="fas fa-calendar-plus"></i> Schedule Appointment</button>
+                            <button class="btn btn-secondary" onclick="renderDoctorAppointments()"><i
+                                    class="fas fa-sync-alt"></i> Refresh</button>
+                            <button class="btn btn-primary" onclick="openBookAppointmentModal()"><i
+                                    class="fas fa-calendar-plus"></i> Schedule Appointment</button>
                         </div>
                     </div>
 
                     <!-- Appointments Stats -->
                     <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-label">Total Appointments</div>
-                            <div class="stat-value" id="stat-apt-total">0</div>
-                            <div class="stat-sub">Across All Departments</div>
+                        <div class="stat-card stat-shifts">
+                            <div class="stat-info">
+                                <p>Total Appointments</p>
+                                <h3 id="stat-apt-total">0</h3>
+                                <span class="stat-info-badge" style="color:var(--text-secondary);">Across All Departments</span>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Today's Scheduled</div>
-                            <div class="stat-value" id="stat-apt-today" style="color:#38bdf8;">0</div>
-                            <div class="stat-sub">Pending / In-Queue Today</div>
+                        <div class="stat-card stat-shifts">
+                            <div class="stat-info">
+                                <p>Today's Scheduled</p>
+                                <h3 id="stat-apt-today" style="color:#38bdf8;">0</h3>
+                                <span class="stat-info-badge" style="color:#38bdf8;">Pending / In-Queue Today</span>
+                            </div>
+                            <div class="stat-icon" style="background:rgba(56,189,248,0.15); color:#38bdf8;"><i class="fas fa-clock"></i></div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Completed Consultations</div>
-                            <div class="stat-value" id="stat-apt-completed" style="color:#10b981;">0</div>
-                            <div class="stat-sub">Prescriptions &amp; Notes Logged</div>
+                        <div class="stat-card stat-beds">
+                            <div class="stat-info">
+                                <p>Completed Consultations</p>
+                                <h3 id="stat-apt-completed" style="color:#10b981;">0</h3>
+                                <span class="stat-info-badge" style="color:var(--success);">Prescriptions &amp; Notes Logged</span>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-user-check"></i></div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-label">Cancelled / Rescheduled</div>
-                            <div class="stat-value" id="stat-apt-cancelled" style="color:#94a3b8;">0</div>
-                            <div class="stat-sub">Archived Appointments</div>
+                        <div class="stat-card stat-financial">
+                            <div class="stat-info">
+                                <p>Cancelled / Rescheduled</p>
+                                <h3 id="stat-apt-cancelled" style="color:#94a3b8;">0</h3>
+                                <span class="stat-info-badge" style="color:var(--text-secondary);">Archived Appointments</span>
+                            </div>
+                            <div class="stat-icon" style="background:rgba(148,163,184,0.15); color:#94a3b8;"><i class="fas fa-calendar-times"></i></div>
                         </div>
                     </div>
 
                     <!-- Appointments Management Card -->
                     <div class="card" style="margin-top:20px;">
-                        <div class="card-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-                            <div style="display:flex; gap:10px; align-items:center; flex:1; min-width:240px;">
-                                <div class="search-box" style="flex:1;">
-                                    <i class="fas fa-search search-icon"></i>
-                                    <input type="text" id="apt-search-input" placeholder="Search patient name, phone, symptom, or ID..." oninput="renderDoctorAppointmentsTable()">
-                                </div>
+                        <div class="card-header"
+                            style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                            <div style="flex:1; min-width:280px; max-width:440px; position:relative;">
+                                <i class="fas fa-search" style="position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:13px; pointer-events:none;"></i>
+                                <input type="text" id="apt-search-input" placeholder="Search patient name, phone, symptom, or ID..." oninput="renderDoctorAppointmentsTable()" style="width:100%; box-sizing:border-box; padding:9px 14px 9px 38px; border-radius:8px; border:1px solid var(--border); background:#0f172a !important; color:#ffffff !important; font-size:13px; outline:none; transition:border-color 0.2s;">
                             </div>
                             <div class="filter-tabs" id="apt-status-filters">
-                                <button class="filter-btn active" id="btn-apt-filter-all" onclick="filterDoctorAppointments('All')">All</button>
-                                <button class="filter-btn" id="btn-apt-filter-scheduled" onclick="filterDoctorAppointments('Scheduled')">Scheduled</button>
-                                <button class="filter-btn" id="btn-apt-filter-completed" onclick="filterDoctorAppointments('Completed')">Completed</button>
-                                <button class="filter-btn" id="btn-apt-filter-cancelled" onclick="filterDoctorAppointments('Cancelled')">Cancelled</button>
+                                <button class="filter-btn active" id="btn-apt-filter-all"
+                                    onclick="filterDoctorAppointments('All')">All</button>
+                                <button class="filter-btn" id="btn-apt-filter-scheduled"
+                                    onclick="filterDoctorAppointments('Scheduled')">Scheduled</button>
+                                <button class="filter-btn" id="btn-apt-filter-completed"
+                                    onclick="filterDoctorAppointments('Completed')">Completed</button>
+                                <button class="filter-btn" id="btn-apt-filter-cancelled"
+                                    onclick="filterDoctorAppointments('Cancelled')">Cancelled</button>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -1141,7 +1188,8 @@
 
                 <!-- Page Footer -->
                 <footer class="page-footer app-footer">
-                    <p>Developed by <a href="https://www.linkedin.com/in/sayanchakraborty2107/" target="_blank" rel="noopener noreferrer">Sayan Chakraborty</a></p>
+                    <p>Developed by <a href="https://www.linkedin.com/in/sayanchakraborty2107/" target="_blank"
+                            rel="noopener noreferrer">Sayan Chakraborty</a></p>
                 </footer>
 
             </div><!-- /content-wrapper -->
@@ -2066,14 +2114,16 @@
         <div class="modal modal-lg">
             <div class="modal-header">
                 <h3><i class="fas fa-ambulance" style="color:#ef4444;"></i> Request Emergency Ambulance Dispatch</h3>
-                <button class="modal-close" onclick="closeModal('modal-emergency-ambulance')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('modal-emergency-ambulance')"><i
+                        class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="emergency-ambulance-form" onsubmit="submitEmergencyAmbulanceRequest(event)">
                     <div class="form-row">
                         <div class="form-group">
                             <label>Caller / Requester Name <span style="color:#ef4444;">*</span></label>
-                            <input type="text" id="amb-caller-name" required placeholder="e.g. Ramesh Sen or Officer Patil">
+                            <input type="text" id="amb-caller-name" required
+                                placeholder="e.g. Ramesh Sen or Officer Patil">
                         </div>
                         <div class="form-group">
                             <label>Contact Phone Number <span style="color:#ef4444;">*</span></label>
@@ -2084,11 +2134,13 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Pickup Location / Address <span style="color:#ef4444;">*</span></label>
-                            <input type="text" id="amb-pickup-location" required placeholder="Building name, flat/office no, street, sector">
+                            <input type="text" id="amb-pickup-location" required
+                                placeholder="Building name, flat/office no, street, sector">
                         </div>
                         <div class="form-group">
                             <label>Prominent Landmark</label>
-                            <input type="text" id="amb-landmark" placeholder="Near Metro station, market gate, highway mile">
+                            <input type="text" id="amb-landmark"
+                                placeholder="Near Metro station, market gate, highway mile">
                         </div>
                     </div>
 
@@ -2096,9 +2148,12 @@
                         <div class="form-group">
                             <label>Emergency Severity Level <span style="color:#ef4444;">*</span></label>
                             <select id="amb-severity" required>
-                                <option value="Critical" selected>🔴 Critical (Cardiac Arrest, Stroke, Severe Trauma, Respiratory Arrest)</option>
-                                <option value="Urgent">🟡 Urgent (Fractures, High Fever with altered sensorium, Burns)</option>
-                                <option value="Standard">🟢 Standard (Inter-hospital transfer, Scheduled Dialysis transfer)</option>
+                                <option value="Critical" selected>🔴 Critical (Cardiac Arrest, Stroke, Severe Trauma,
+                                    Respiratory Arrest)</option>
+                                <option value="Urgent">🟡 Urgent (Fractures, High Fever with altered sensorium, Burns)
+                                </option>
+                                <option value="Standard">🟢 Standard (Inter-hospital transfer, Scheduled Dialysis
+                                    transfer)</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -2114,18 +2169,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Patient Symptoms &amp; Clinical Emergency Condition <span style="color:#ef4444;">*</span></label>
-                        <textarea id="amb-patient-condition" rows="3" required placeholder="Describe symptoms: e.g. severe chest pain, unresponsive, profuse bleeding, difficulty breathing..."></textarea>
+                        <label>Patient Symptoms &amp; Clinical Emergency Condition <span
+                                style="color:#ef4444;">*</span></label>
+                        <textarea id="amb-patient-condition" rows="3" required
+                            placeholder="Describe symptoms: e.g. severe chest pain, unresponsive, profuse bleeding, difficulty breathing..."></textarea>
                     </div>
 
                     <div class="form-group">
                         <label>Special Instructions / Access Notes</label>
-                        <input type="text" id="amb-access-notes" placeholder="e.g. Security instructed to keep gate open, lift grounded at Floor 4, stretcher needed">
+                        <input type="text" id="amb-access-notes"
+                            placeholder="e.g. Security instructed to keep gate open, lift grounded at Floor 4, stretcher needed">
                     </div>
 
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-emergency-ambulance')">Cancel</button>
-                        <button type="submit" class="btn btn-primary" style="background:#ef4444; border-color:#dc2626;"><i class="fas fa-bullhorn"></i> Dispatch Alert &amp; Log Call</button>
+                        <button type="button" class="btn btn-secondary"
+                            onclick="closeModal('modal-emergency-ambulance')">Cancel</button>
+                        <button type="submit" class="btn btn-primary"
+                            style="background:#ef4444; border-color:#dc2626;"><i class="fas fa-bullhorn"></i> Dispatch
+                            Alert &amp; Log Call</button>
                     </div>
                 </form>
             </div>
@@ -2139,15 +2200,18 @@
         <div class="modal">
             <div class="modal-header">
                 <h3><i class="fas fa-paper-plane" style="color:#38bdf8;"></i> Assign &amp; Dispatch Ambulance</h3>
-                <button class="modal-close" onclick="closeModal('modal-dispatch-ambulance')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('modal-dispatch-ambulance')"><i
+                        class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="dispatch-ambulance-form" onsubmit="submitDispatchAmbulance(event)">
                     <input type="hidden" id="dispatch-request-id">
 
-                    <div style="background:#0b1120; border:1px solid #1e293b; border-radius:8px; padding:12px 14px; margin-bottom:16px;">
+                    <div
+                        style="background:#0b1120; border:1px solid #1e293b; border-radius:8px; padding:12px 14px; margin-bottom:16px;">
                         <div style="font-size:12px; color:#94a3b8; margin-bottom:4px;">Emergency Call Details:</div>
-                        <div id="dispatch-request-summary" style="font-size:13px; color:#ffffff; font-weight:600; line-height:1.4;"></div>
+                        <div id="dispatch-request-summary"
+                            style="font-size:13px; color:#ffffff; font-weight:600; line-height:1.4;"></div>
                     </div>
 
                     <div class="form-group">
@@ -2160,7 +2224,8 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Destination Hospital / Facility</label>
-                            <input type="text" id="dispatch-destination" value="MedCore Central Emergency Trauma Center" required>
+                            <input type="text" id="dispatch-destination" value="MedCore Central Emergency Trauma Center"
+                                required>
                         </div>
                         <div class="form-group">
                             <label>Estimated Arrival (ETA)</label>
@@ -2169,8 +2234,10 @@
                     </div>
 
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-dispatch-ambulance')">Cancel</button>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-bolt"></i> Confirm &amp; Dispatch Unit Now</button>
+                        <button type="button" class="btn btn-secondary"
+                            onclick="closeModal('modal-dispatch-ambulance')">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-bolt"></i> Confirm &amp; Dispatch
+                            Unit Now</button>
                     </div>
                 </form>
             </div>
@@ -2184,7 +2251,8 @@
         <div class="modal modal-lg">
             <div class="modal-header">
                 <h3><i class="fas fa-calendar-plus" style="color:#38bdf8;"></i> Schedule Patient Appointment</h3>
-                <button class="modal-close" onclick="closeModal('modal-book-appointment')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('modal-book-appointment')"><i
+                        class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="book-appointment-form" onsubmit="submitBookAppointment(event)">
@@ -2227,7 +2295,8 @@
                         </div>
                         <div class="form-group">
                             <label>Department</label>
-                            <input type="text" id="book-department" readonly style="background:#1e293b !important; color:#cbd5e1 !important;">
+                            <input type="text" id="book-department" readonly
+                                style="background:#1e293b !important; color:#cbd5e1 !important;">
                         </div>
                     </div>
 
@@ -2262,13 +2331,17 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Chief Complaints / Initial Reported Symptoms <span style="color:#ef4444;">*</span></label>
-                        <textarea id="book-initial-symptoms" rows="3" required placeholder="Describe complaints: e.g. headache, fever, chest pain, back stiffness..."></textarea>
+                        <label>Chief Complaints / Initial Reported Symptoms <span
+                                style="color:#ef4444;">*</span></label>
+                        <textarea id="book-initial-symptoms" rows="3" required
+                            placeholder="Describe complaints: e.g. headache, fever, chest pain, back stiffness..."></textarea>
                     </div>
 
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-book-appointment')">Cancel</button>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i> Confirm Booking</button>
+                        <button type="button" class="btn btn-secondary"
+                            onclick="closeModal('modal-book-appointment')">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check-circle"></i> Confirm
+                            Booking</button>
                     </div>
                 </form>
             </div>
@@ -2282,10 +2355,12 @@
         <div class="modal modal-xl">
             <div class="modal-header">
                 <div>
-                    <h3 style="margin:0;"><i class="fas fa-stethoscope" style="color:#38bdf8;"></i> Clinical Consultation &amp; Prescription Desk</h3>
+                    <h3 style="margin:0;"><i class="fas fa-stethoscope" style="color:#38bdf8;"></i> Clinical
+                        Consultation &amp; Prescription Desk</h3>
                     <div id="consult-patient-header" style="font-size:12.5px; color:#94a3b8; margin-top:3px;"></div>
                 </div>
-                <button class="modal-close" onclick="closeModal('modal-consultation-details')"><i class="fas fa-times"></i></button>
+                <button class="modal-close" onclick="closeModal('modal-consultation-details')"><i
+                        class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form id="consultation-details-form" onsubmit="submitConsultationDetails(event)">
@@ -2293,16 +2368,20 @@
 
                     <!-- Chief Complaints & Symptoms -->
                     <div class="form-group">
-                        <label><i class="fas fa-user-injured" style="color:#f59e0b; margin-right:4px;"></i> Patient Symptoms &amp; Chief Complaints <span style="color:#ef4444;">*</span></label>
-                        <textarea id="consult-symptoms" rows="2" required placeholder="Detailed clinical symptoms, onset, duration, severity..."></textarea>
+                        <label><i class="fas fa-user-injured" style="color:#f59e0b; margin-right:4px;"></i> Patient
+                            Symptoms &amp; Chief Complaints <span style="color:#ef4444;">*</span></label>
+                        <textarea id="consult-symptoms" rows="2" required
+                            placeholder="Detailed clinical symptoms, onset, duration, severity..."></textarea>
                     </div>
 
                     <!-- Clinical Vitals Entry Bar -->
-                    <div style="background:#0b1120; border:1px solid #1e293b; border-radius:8px; padding:14px; margin-bottom:16px;">
+                    <div
+                        style="background:#0b1120; border:1px solid #1e293b; border-radius:8px; padding:14px; margin-bottom:16px;">
                         <strong style="font-size:12.5px; color:#38bdf8; display:block; margin-bottom:10px;">
                             <i class="fas fa-heartbeat"></i> Patient Vitals on Consultation
                         </strong>
-                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:12px;">
+                        <div
+                            style="display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:12px;">
                             <div class="form-group" style="margin-bottom:0;">
                                 <label style="font-size:11.5px;">Blood Pressure</label>
                                 <input type="text" id="consult-vital-bp" placeholder="e.g. 120/80">
@@ -2329,18 +2408,23 @@
                     <!-- Diagnosis & Clinical Findings -->
                     <div class="form-row">
                         <div class="form-group">
-                            <label><i class="fas fa-diagnoses" style="color:#10b981; margin-right:4px;"></i> Working Diagnosis &amp; Clinical Findings <span style="color:#ef4444;">*</span></label>
-                            <textarea id="consult-diagnosis" rows="3" required placeholder="Diagnosis, ICD-10 notes, examination findings, differential diagnosis..."></textarea>
+                            <label><i class="fas fa-diagnoses" style="color:#10b981; margin-right:4px;"></i> Working
+                                Diagnosis &amp; Clinical Findings <span style="color:#ef4444;">*</span></label>
+                            <textarea id="consult-diagnosis" rows="3" required
+                                placeholder="Diagnosis, ICD-10 notes, examination findings, differential diagnosis..."></textarea>
                         </div>
                         <div class="form-group">
-                            <label><i class="fas fa-clipboard-list" style="color:#38bdf8; margin-right:4px;"></i> Diagnostic Tests &amp; Clinical Advice</label>
-                            <textarea id="consult-notes" rows="3" placeholder="Advised lab tests (e.g. CBC, ECG, MRI, Lipid panel), lifestyle, diet recommendations..."></textarea>
+                            <label><i class="fas fa-clipboard-list" style="color:#38bdf8; margin-right:4px;"></i>
+                                Diagnostic Tests &amp; Clinical Advice</label>
+                            <textarea id="consult-notes" rows="3"
+                                placeholder="Advised lab tests (e.g. CBC, ECG, MRI, Lipid panel), lifestyle, diet recommendations..."></textarea>
                         </div>
                     </div>
 
                     <!-- Prescription Box -->
                     <div class="form-group">
-                        <label><i class="fas fa-prescription" style="color:#8b5cf6; margin-right:4px;"></i> Prescribed Medicines &amp; Dosing Regimen <span style="color:#ef4444;">*</span></label>
+                        <label><i class="fas fa-prescription" style="color:#8b5cf6; margin-right:4px;"></i> Prescribed
+                            Medicines &amp; Dosing Regimen <span style="color:#ef4444;">*</span></label>
                         <textarea id="consult-prescription" rows="4" required placeholder="Format:
 Tab. MedicineName Dose (Timing, Duration)
 Tab. Metoprolol 25mg (1 OD Post-Breakfast x 14 Days)
@@ -2364,8 +2448,10 @@ Tab. Paracetamol 650mg (1 SOS Q6H for fever)"></textarea>
                     </div>
 
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal('modal-consultation-details')">Close</button>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Consultation Record</button>
+                        <button type="button" class="btn btn-secondary"
+                            onclick="closeModal('modal-consultation-details')">Close</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Consultation
+                            Record</button>
                     </div>
                 </form>
             </div>
@@ -2375,9 +2461,9 @@ Tab. Paracetamol 650mg (1 SOS Q6H for fever)"></textarea>
     <div id="toast-container"></div>
 
     <!-- Scripts -->
-    <script src="js/data.js?v=2.5.0"></script>
-    <script src="js/recharts_chart.js?v=2.5.0"></script>
-    <script src="js/app.js?v=2.5.0"></script>
+    <script src="js/data.js?v=2.5.1"></script>
+    <script src="js/recharts_chart.js?v=2.5.1"></script>
+    <script src="js/app.js?v=2.5.1"></script>
 </body>
 
 </html>

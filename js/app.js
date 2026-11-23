@@ -3622,15 +3622,15 @@ function renderDoctorAppointmentsTable() {
                 <td>${stBadge}</td>
                 <td>
                     <div style="display:flex; gap:6px; align-items:center;">
-                        <button class="btn btn-primary btn-sm" onclick="openConsultationModal('${apt.id}')" title="Log Clinical Consultation, Vitals & Prescriptions" style="padding:4px 10px;">
+                        <button class="btn btn-primary btn-sm" onclick="openConsultationModal('${apt.id}')" title="Log Clinical Consultation, Vitals & Prescriptions" style="padding:5px 12px; font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:5px;">
                             <i class="fas fa-stethoscope"></i> Consult
                         </button>
                         ${apt.prescription ? `
-                            <button class="btn btn-secondary btn-sm" onclick="viewAppointmentSummary('${apt.id}')" title="View Prescription & Summary" style="padding:4px 8px;">
-                                <i class="fas fa-file-prescription"></i>
+                            <button class="btn btn-secondary btn-sm" onclick="viewAppointmentSummary('${apt.id}')" title="View Prescription & Summary" style="padding:5px 10px; font-size:12px; background:#1e293b; border:1px solid #334155; color:#38bdf8; display:inline-flex; align-items:center; gap:4px;">
+                                <i class="fas fa-file-prescription"></i> Rx
                             </button>
                         ` : ''}
-                        <button class="btn btn-danger btn-sm" onclick="removeAppointment('${apt.id}')" title="Cancel & Remove Appointment" style="padding:4px 8px;">
+                        <button class="btn btn-danger btn-sm" onclick="removeAppointment('${apt.id}')" title="Cancel & Remove Appointment" style="padding:5px 10px; font-size:12px;">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
