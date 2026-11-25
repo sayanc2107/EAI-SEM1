@@ -883,7 +883,7 @@ function openAssignDutyModal() {
     document.getElementById('assign-duty-form').reset();
     document.getElementById('duty-edit-id').value = '';
     document.getElementById('duty-modal-title').innerHTML = '<i class="fas fa-calendar-plus" style="color:var(--primary)"></i> Assign Staff Duty / Shift';
-    document.getElementById('duty-date').value = '2026-11-22';
+    document.getElementById('duty-date').value = '2026-11-26';
     document.getElementById('duty-start').value = '08:00';
     document.getElementById('duty-end').value = '16:00';
     populateDutyStaffDropdown('Doctor');
@@ -963,7 +963,7 @@ function submitAssignDuty(e) {
             end: end,
             ward: ward,
             location: location,
-            status: date === '2026-11-22' ? 'Active' : 'Scheduled'
+            status: date === '2026-11-26' ? 'Active' : 'Scheduled'
         };
         shifts.unshift(newShift);
         // Sync to MongoDB
@@ -1688,13 +1688,13 @@ function renderDoctorShifts() {
 
     // Render 7-day calendar view
     const days = [
-        { name: 'Sun', date: 'Nov 22', iso: '2026-11-22' },
-        { name: 'Mon', date: 'Nov 23', iso: '2026-11-23' },
-        { name: 'Tue', date: 'Nov 24', iso: '2026-11-24' },
-        { name: 'Wed', date: 'Nov 25', iso: '2026-11-25' },
         { name: 'Thu', date: 'Nov 26', iso: '2026-11-26' },
         { name: 'Fri', date: 'Nov 27', iso: '2026-11-27' },
-        { name: 'Sat', date: 'Nov 28', iso: '2026-11-28' }
+        { name: 'Sat', date: 'Nov 28', iso: '2026-11-28' },
+        { name: 'Sun', date: 'Nov 29', iso: '2026-11-29' },
+        { name: 'Mon', date: 'Nov 30', iso: '2026-11-30' },
+        { name: 'Tue', date: 'Dec 01', iso: '2026-12-01' },
+        { name: 'Wed', date: 'Dec 02', iso: '2026-12-02' }
     ];
 
     const weeklyHtml = days.map(d => {
@@ -2430,7 +2430,7 @@ function resolveSupportIssue(idx) {
 // ===================================================================
 
 function openCallDoctorModal() {
-    const activeDocs = shifts.filter(s => s.staffType === 'Doctor' && s.date === '2026-11-22');
+    const activeDocs = shifts.filter(s => s.staffType === 'Doctor' && s.date === '2026-11-26');
     const container = document.getElementById('call-doctors-list-container');
 
     container.innerHTML = activeDocs.map(s => {
@@ -2482,7 +2482,7 @@ function renderNurseWorkspace() {
     `).join('');
     document.getElementById('nurse-patients-list').innerHTML = pList;
 
-    const activeDocs = shifts.filter(s => s.staffType === 'Doctor' && s.date === '2026-11-22');
+    const activeDocs = shifts.filter(s => s.staffType === 'Doctor' && s.date === '2026-11-26');
     const dList = activeDocs.map(s => `
         <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-size:13px;">
             <div>
@@ -2496,7 +2496,7 @@ function renderNurseWorkspace() {
 }
 
 function renderWardWorkspace() {
-    const activeDocs = shifts.filter(s => s.staffType === 'Doctor' && s.date === '2026-11-22');
+    const activeDocs = shifts.filter(s => s.staffType === 'Doctor' && s.date === '2026-11-26');
     const dList = activeDocs.map(s => `
         <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-size:13px;">
             <div>
@@ -2580,7 +2580,7 @@ function submitAdmitPatient(e) {
         ward: bedId.startsWith('ICU') ? 'ICU' : bedId.startsWith('ER') ? 'Emergency' : bedId.startsWith('CARD') ? 'Cardiology' : 'General',
         doctorId, doctorName,
         nurseId: 'NRS-01',
-        admittedAt: '2026-11-22 ' + nowStr,
+        admittedAt: '2026-11-26 ' + nowStr,
         status: 'Admitted',
         vitals: { hr: 96, spo2: 98, bp: '124/80', bpSys: 124, bpDia: 80, temp: 98.6 },
         vitalsHistory: [{ time: nowStr, heartRate: 96, bpSys: 124, bpDia: 80, spo2: 98, temp: 98.6 }]

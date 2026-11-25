@@ -166,51 +166,51 @@ const SampleData = {
 
     // ── NEXT 1 WEEK DOCTOR & STAFF SHIFTS SCHEDULE (Nov 22 - Nov 28) ──
     shifts: [
-        // Today Nov 22
-        { id: 'SH-01', staffType: 'Doctor', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-22', start: '06:00', end: '14:00', ward: 'Emergency', location: 'ER Bay 1', status: 'Active' },
-        { id: 'SH-02', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-22', start: '08:00', end: '16:00', ward: 'Cardiology', location: 'CARD-03', status: 'Active' },
-        { id: 'SH-03', staffType: 'Doctor', staffId: 'DOC-03', staffName: 'Dr. Elena Varga', date: '2026-11-22', start: '10:00', end: '18:00', ward: 'ICU', location: 'ICU-02', status: 'Active' },
-        { id: 'SH-04', staffType: 'Doctor', staffId: 'DOC-04', staffName: 'Dr. Kenji Tanaka', date: '2026-11-22', start: '07:00', end: '15:00', ward: 'Neurology', location: 'ER-01', status: 'Active' },
-        { id: 'SH-05', staffType: 'Nurse', staffId: 'NRS-01', staffName: 'Kavya Menon, RN', date: '2026-11-22', start: '08:00', end: '16:00', ward: 'ICU', location: 'ICU Station A', status: 'Active' },
-        { id: 'SH-06', staffType: 'Ward Staff', staffId: 'WRD-01', staffName: 'Ravi Kumar', date: '2026-11-22', start: '06:00', end: '14:00', ward: 'Emergency', location: 'ER Floor', status: 'Active' },
+        // Today Nov 26 (Today)
+        { id: 'SH-01', staffType: 'Doctor', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-26', start: '06:00', end: '14:00', ward: 'Emergency', location: 'ER Bay 1', status: 'Active' },
+        { id: 'SH-02', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-26', start: '08:00', end: '16:00', ward: 'Cardiology', location: 'CARD-03', status: 'Active' },
+        { id: 'SH-03', staffType: 'Doctor', staffId: 'DOC-03', staffName: 'Dr. Elena Varga', date: '2026-11-26', start: '10:00', end: '18:00', ward: 'ICU', location: 'ICU-02', status: 'Active' },
+        { id: 'SH-04', staffType: 'Doctor', staffId: 'DOC-04', staffName: 'Dr. Kenji Tanaka', date: '2026-11-26', start: '07:00', end: '15:00', ward: 'Neurology', location: 'ER-01', status: 'Active' },
+        { id: 'SH-05', staffType: 'Nurse', staffId: 'NRS-01', staffName: 'Kavya Menon, RN', date: '2026-11-26', start: '08:00', end: '16:00', ward: 'ICU', location: 'ICU Station A', status: 'Active' },
+        { id: 'SH-06', staffType: 'Ward Staff', staffId: 'WRD-01', staffName: 'Ravi Kumar', date: '2026-11-26', start: '06:00', end: '14:00', ward: 'Emergency', location: 'ER Floor', status: 'Active' },
         
-        // Day 2: Nov 23
-        { id: 'SH-07', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-23', start: '08:00', end: '16:00', ward: 'Cardiology', location: 'Cath Lab 1', status: 'Scheduled' },
-        { id: 'SH-08', staffType: 'Doctor', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-23', start: '14:00', end: '22:00', ward: 'Emergency', location: 'Trauma Bay', status: 'Scheduled' },
-        { id: 'SH-09', staffType: 'Doctor', staffId: 'DOC-05', staffName: 'Dr. Priya Deshmukh', date: '2026-11-23', start: '09:00', end: '17:00', ward: 'General', location: 'OPD Room 3', status: 'Scheduled' },
+        // Day 2: Nov 27
+        { id: 'SH-07', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-27', start: '08:00', end: '16:00', ward: 'Cardiology', location: 'Cath Lab 1', status: 'Scheduled' },
+        { id: 'SH-08', staffType: 'Doctor', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-27', start: '14:00', end: '22:00', ward: 'Emergency', location: 'Trauma Bay', status: 'Scheduled' },
+        { id: 'SH-09', staffType: 'Doctor', staffId: 'DOC-05', staffName: 'Dr. Priya Deshmukh', date: '2026-11-27', start: '09:00', end: '17:00', ward: 'General', location: 'OPD Room 3', status: 'Scheduled' },
         
-        // Day 3: Nov 24
-        { id: 'SH-10', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-24', start: '09:00', end: '17:00', ward: 'Cardiology', location: 'CARD-01', status: 'Scheduled' },
-        { id: 'SH-11', staffType: 'Doctor', staffId: 'DOC-03', staffName: 'Dr. Elena Varga', date: '2026-11-24', start: '08:00', end: '16:00', ward: 'ICU', location: 'ICU Bay 1', status: 'Scheduled' },
-        { id: 'SH-12', staffType: 'Doctor', staffId: 'DOC-06', staffName: 'Dr. Samuel Okafor', date: '2026-11-24', start: '08:00', end: '16:00', ward: 'Surgery', location: 'OT-1', status: 'Scheduled' },
+        // Day 3: Nov 28
+        { id: 'SH-10', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-28', start: '09:00', end: '17:00', ward: 'Cardiology', location: 'CARD-01', status: 'Scheduled' },
+        { id: 'SH-11', staffType: 'Doctor', staffId: 'DOC-03', staffName: 'Dr. Elena Varga', date: '2026-11-28', start: '08:00', end: '16:00', ward: 'ICU', location: 'ICU Bay 1', status: 'Scheduled' },
+        { id: 'SH-12', staffType: 'Doctor', staffId: 'DOC-06', staffName: 'Dr. Samuel Okafor', date: '2026-11-28', start: '08:00', end: '16:00', ward: 'Surgery', location: 'OT-1', status: 'Scheduled' },
         
-        // Day 4: Nov 25
-        { id: 'SH-13', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-25', start: '08:00', end: '14:00', ward: 'Cardiology', location: 'OPD-02', status: 'Scheduled' },
-        { id: 'SH-14', staffType: 'Doctor', staffId: 'DOC-04', staffName: 'Dr. Kenji Tanaka', date: '2026-11-25', start: '12:00', end: '20:00', ward: 'Neurology', location: 'Neuro Clinic', status: 'Scheduled' },
+        // Day 4: Nov 29
+        { id: 'SH-13', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-29', start: '08:00', end: '14:00', ward: 'Cardiology', location: 'OPD-02', status: 'Scheduled' },
+        { id: 'SH-14', staffType: 'Doctor', staffId: 'DOC-04', staffName: 'Dr. Kenji Tanaka', date: '2026-11-29', start: '12:00', end: '20:00', ward: 'Neurology', location: 'Neuro Clinic', status: 'Scheduled' },
         
-        // Day 5: Nov 26
-        { id: 'SH-15', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-26', start: '10:00', end: '18:00', ward: 'Cardiology', location: 'CARD-03', status: 'Scheduled' },
-        { id: 'SH-16', staffType: 'Doctor', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-26', start: '06:00', end: '14:00', ward: 'Emergency', location: 'ER Bay 2', status: 'Scheduled' },
+        // Day 5: Nov 30
+        { id: 'SH-15', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-30', start: '10:00', end: '18:00', ward: 'Cardiology', location: 'CARD-03', status: 'Scheduled' },
+        { id: 'SH-16', staffType: 'Doctor', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-30', start: '06:00', end: '14:00', ward: 'Emergency', location: 'ER Bay 2', status: 'Scheduled' },
         
-        // Day 6: Nov 27
-        { id: 'SH-17', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-27', start: '08:00', end: '16:00', ward: 'Cardiology', location: 'Inpatient Round', status: 'Scheduled' },
-        { id: 'SH-18', staffType: 'Doctor', staffId: 'DOC-03', staffName: 'Dr. Elena Varga', date: '2026-11-27', start: '14:00', end: '22:00', ward: 'ICU', location: 'ICU-03', status: 'Scheduled' },
+        // Day 6: Dec 01
+        { id: 'SH-17', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-12-01', start: '08:00', end: '16:00', ward: 'Cardiology', location: 'Inpatient Round', status: 'Scheduled' },
+        { id: 'SH-18', staffType: 'Doctor', staffId: 'DOC-03', staffName: 'Dr. Elena Varga', date: '2026-12-01', start: '14:00', end: '22:00', ward: 'ICU', location: 'ICU-03', status: 'Scheduled' },
         
-        // Day 7: Nov 28
-        { id: 'SH-19', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-28', start: '08:00', end: '12:00', ward: 'Cardiology', location: 'Executive Health Check', status: 'Scheduled' },
-        { id: 'SH-20', staffType: 'Doctor', staffId: 'DOC-06', staffName: 'Dr. Samuel Okafor', date: '2026-11-28', start: '09:00', end: '17:00', ward: 'Surgery', location: 'OT-2', status: 'Scheduled' }
+        // Day 7: Dec 02
+        { id: 'SH-19', staffType: 'Doctor', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-12-02', start: '08:00', end: '12:00', ward: 'Cardiology', location: 'Executive Health Check', status: 'Scheduled' },
+        { id: 'SH-20', staffType: 'Doctor', staffId: 'DOC-06', staffName: 'Dr. Samuel Okafor', date: '2026-12-02', start: '09:00', end: '17:00', ward: 'Surgery', location: 'OT-2', status: 'Scheduled' }
     ],
 
     // ── ATTENDANCE & PUNCH-IN RECORDS ──
     attendanceLogs: [
-        { id: 'ATT-101', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-22', clockIn: '07:55 AM', clockOut: 'Active', hours: 4.5, status: 'On Duty' },
-        { id: 'ATT-102', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-22', clockIn: '05:50 AM', clockOut: 'Active', hours: 6.5, status: 'On Duty' },
-        { id: 'ATT-103', staffId: 'NRS-01', staffName: 'Kavya Menon, RN', date: '2026-11-22', clockIn: '07:50 AM', clockOut: 'Active', hours: 4.6, status: 'On Duty' },
-        { id: 'ATT-104', staffId: 'WRD-01', staffName: 'Ravi Kumar', date: '2026-11-22', clockIn: '05:58 AM', clockOut: 'Active', hours: 6.4, status: 'On Duty' },
-        { id: 'ATT-105', staffId: 'PH-01', staffName: 'Maya Lin', date: '2026-11-22', clockIn: '08:00 AM', clockOut: 'Active', hours: 4.3, status: 'On Duty' },
-        { id: 'ATT-106', staffId: 'ACC-01', staffName: 'Sanjay Mehta', date: '2026-11-22', clockIn: '08:30 AM', clockOut: 'Active', hours: 3.8, status: 'On Duty' },
-        { id: 'ATT-107', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-21', clockIn: '08:00 AM', clockOut: '04:10 PM', hours: 8.2, status: 'Completed' },
-        { id: 'ATT-108', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-20', clockIn: '07:52 AM', clockOut: '04:05 PM', hours: 8.2, status: 'Completed' }
+        { id: 'ATT-101', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-26', clockIn: '07:55 AM', clockOut: 'Active', hours: 4.5, status: 'On Duty' },
+        { id: 'ATT-102', staffId: 'DOC-01', staffName: 'Dr. Meera Nair', date: '2026-11-26', clockIn: '05:50 AM', clockOut: 'Active', hours: 6.5, status: 'On Duty' },
+        { id: 'ATT-103', staffId: 'NRS-01', staffName: 'Kavya Menon, RN', date: '2026-11-26', clockIn: '07:50 AM', clockOut: 'Active', hours: 4.6, status: 'On Duty' },
+        { id: 'ATT-104', staffId: 'WRD-01', staffName: 'Ravi Kumar', date: '2026-11-26', clockIn: '05:58 AM', clockOut: 'Active', hours: 6.4, status: 'On Duty' },
+        { id: 'ATT-105', staffId: 'PH-01', staffName: 'Maya Lin', date: '2026-11-26', clockIn: '08:00 AM', clockOut: 'Active', hours: 4.3, status: 'On Duty' },
+        { id: 'ATT-106', staffId: 'ACC-01', staffName: 'Sanjay Mehta', date: '2026-11-26', clockIn: '08:30 AM', clockOut: 'Active', hours: 3.8, status: 'On Duty' },
+        { id: 'ATT-107', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-25', clockIn: '08:00 AM', clockOut: '04:10 PM', hours: 8.2, status: 'Completed' },
+        { id: 'ATT-108', staffId: 'DOC-02', staffName: 'Dr. Arjun Rao', date: '2026-11-24', clockIn: '07:52 AM', clockOut: '04:05 PM', hours: 8.2, status: 'Completed' }
     ],
 
     // ── PATIENTS WITH CLINICAL VITALS ──
@@ -228,7 +228,7 @@ const SampleData = {
             doctorId: 'DOC-02',
             doctorName: 'Dr. Arjun Rao',
             nurseId: 'NRS-01',
-            admittedAt: '2026-11-21 07:15',
+            admittedAt: '2026-11-25 07:15',
             status: 'Admitted',
             vitals: { hr: 118, spo2: 91, bp: '162/98', bpSys: 162, bpDia: 98, temp: 99.1 },
             vitalsHistory: [
@@ -252,7 +252,7 @@ const SampleData = {
             doctorId: 'DOC-03',
             doctorName: 'Dr. Elena Varga',
             nurseId: 'NRS-01',
-            admittedAt: '2026-11-21 07:45',
+            admittedAt: '2026-11-25 07:45',
             status: 'Admitted',
             vitals: { hr: 124, spo2: 89, bp: '128/82', bpSys: 128, bpDia: 82, temp: 102.6 },
             vitalsHistory: [
@@ -275,7 +275,7 @@ const SampleData = {
             doctorId: 'DOC-04',
             doctorName: 'Dr. Kenji Tanaka',
             nurseId: 'NRS-02',
-            admittedAt: '2026-11-21 08:48',
+            admittedAt: '2026-11-25 08:48',
             status: 'Admitted',
             vitals: { hr: 92, spo2: 96, bp: '178/104', bpSys: 178, bpDia: 104, temp: 98.4 },
             vitalsHistory: [
@@ -297,7 +297,7 @@ const SampleData = {
             doctorId: 'DOC-01',
             doctorName: 'Dr. Meera Nair',
             nurseId: 'NRS-02',
-            admittedAt: '2026-11-21 09:12',
+            admittedAt: '2026-11-25 09:12',
             status: 'Admitted',
             vitals: { hr: 104, spo2: 93, bp: '114/72', bpSys: 114, bpDia: 72, temp: 99.0 },
             vitalsHistory: [
@@ -319,7 +319,7 @@ const SampleData = {
             doctorId: 'DOC-01',
             doctorName: 'Dr. Meera Nair',
             nurseId: 'NRS-02',
-            admittedAt: '2026-11-21 09:18',
+            admittedAt: '2026-11-25 09:18',
             status: 'Admitted',
             vitals: { hr: 98, spo2: 98, bp: '122/78', bpSys: 122, bpDia: 78, temp: 100.8 },
             vitalsHistory: [
@@ -341,7 +341,7 @@ const SampleData = {
             doctorId: 'DOC-02',
             doctorName: 'Dr. Arjun Rao',
             nurseId: 'NRS-01',
-            admittedAt: '2026-11-21 09:30',
+            admittedAt: '2026-11-25 09:30',
             status: 'Admitted',
             vitals: { hr: 112, spo2: 97, bp: '136/84', bpSys: 136, bpDia: 84, temp: 98.2 },
             vitalsHistory: [
@@ -363,7 +363,7 @@ const SampleData = {
             doctorId: 'DOC-01',
             doctorName: 'Dr. Meera Nair',
             nurseId: 'NRS-02',
-            admittedAt: '2026-11-21 09:44',
+            admittedAt: '2026-11-25 09:44',
             status: 'Admitted',
             vitals: { hr: 84, spo2: 99, bp: '118/76', bpSys: 118, bpDia: 76, temp: 98.4 },
             vitalsHistory: [
@@ -384,7 +384,7 @@ const SampleData = {
             doctorId: 'DOC-02',
             doctorName: 'Dr. Arjun Rao',
             nurseId: 'NRS-01',
-            admittedAt: '2026-11-21 09:55',
+            admittedAt: '2026-11-25 09:55',
             status: 'Admitted',
             vitals: { hr: 86, spo2: 99, bp: '124/80', bpSys: 124, bpDia: 80, temp: 98.7 },
             vitalsHistory: [
@@ -405,7 +405,7 @@ const SampleData = {
             doctorId: 'DOC-02',
             doctorName: 'Dr. Arjun Rao',
             nurseId: 'NRS-01',
-            admittedAt: '2026-11-21 10:10',
+            admittedAt: '2026-11-25 10:10',
             status: 'Admitted',
             vitals: { hr: 78, spo2: 98, bp: '128/82', bpSys: 128, bpDia: 82, temp: 98.5 },
             vitalsHistory: [
@@ -426,7 +426,7 @@ const SampleData = {
             doctorId: 'DOC-03',
             doctorName: 'Dr. Elena Varga',
             nurseId: 'NRS-01',
-            admittedAt: '2026-11-21 10:22',
+            admittedAt: '2026-11-25 10:22',
             status: 'Admitted',
             vitals: { hr: 94, spo2: 99, bp: '116/74', bpSys: 116, bpDia: 74, temp: 98.6 },
             vitalsHistory: [
@@ -473,7 +473,7 @@ const SampleData = {
                 { name: 'Ondansetron 4mg IV Antiemetic Injection', detail: '4mg slow IV push STAT', qty: 2, price: 150 },
                 { name: 'Normal Saline 0.9% (500mL IV Bags)', detail: 'IV hydration over 2 hours', qty: 2, price: 170 }
             ],
-            timestamp: '2026-11-21 10:22'
+            timestamp: '2026-11-25 10:22'
         },
         {
             id: 'RX-504',
@@ -490,7 +490,7 @@ const SampleData = {
                 { name: 'Atorvastatin 20mg Cardiac Tablets', detail: '20mg once daily after dinner', qty: 3, price: 444 },
                 { name: 'Pantoprazole 40mg Gastro-Resistant Tabs', detail: '1 tab before breakfast', qty: 2, price: 190 }
             ],
-            timestamp: '2026-11-21 10:15'
+            timestamp: '2026-11-25 10:15'
         },
         {
             id: 'RX-503',
@@ -507,7 +507,7 @@ const SampleData = {
                 { name: 'Mannitol 20% 100mL Infusion', detail: 'Cerebral edema control', qty: 2, price: 540 },
                 { name: 'Aspirin 300mg Soluble', detail: 'Antiplatelet stat load', qty: 1, price: 1300 }
             ],
-            timestamp: '2026-11-21 09:05'
+            timestamp: '2026-11-25 09:05'
         }
     ],
 
@@ -527,14 +527,14 @@ const SampleData = {
 
     // ── HOSPITAL SALES TRANSACTIONS (Multi-Column By Location: ICU, Pharmacy, OPD, Staff Salary, ER, Surgery) ──
     hospitalTransactions: [
-        { id: 'TXN-8801', date: '2026-11-22 10:30', department: 'Pharmacy', patientId: 'PT-4099', service: 'Cardiac Pre-pack Discharge Meds', icuAmount: 0, pharmacyAmount: 634, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 634, paymentMode: 'Split: UPI (₹400) + Cash (₹234)', cashier: 'Maya Lin', status: 'Completed' },
-        { id: 'TXN-8802', date: '2026-11-22 10:15', department: 'ICU', patientId: 'PT-4091', service: 'Cardiac Critical Care Bed & Telemetry (Day 2)', icuAmount: 38500, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 38500, paymentMode: 'TPA Insurance', cashier: 'Sanjay Mehta', status: 'Completed' },
-        { id: 'TXN-8803', date: '2026-11-22 09:50', department: 'OPD', patientId: 'PT-4096', service: 'Cardiology Specialist Consultation & ECG', icuAmount: 0, pharmacyAmount: 0, opdAmount: 2200, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 2200, paymentMode: 'Split: Cash (₹1000) + Card (₹1200)', cashier: 'Front Desk', status: 'Completed' },
-        { id: 'TXN-8804', date: '2026-11-22 09:35', department: 'Emergency', patientId: 'PT-4094', service: 'Emergency Resuscitation & High Flow O2', icuAmount: 0, pharmacyAmount: 0, opdAmount: 0, erAmount: 4800, salaryAmount: 0, surgeryAmount: 0, totalAmount: 4800, paymentMode: 'Cash', cashier: 'ER Desk', status: 'Completed' },
-        { id: 'TXN-8805', date: '2026-11-22 09:10', department: 'Surgery', patientId: 'PT-4095', service: 'Emergency Chest Tube Insertion & Splinting', icuAmount: 0, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 28500, totalAmount: 28500, paymentMode: 'TPA Insurance', cashier: 'OT Desk', status: 'Completed' },
-        { id: 'TXN-8806', date: '2026-11-21 16:00', department: 'Staff Salary', patientId: 'DOC-02', service: 'Special Incentive Bonus Disbursal', icuAmount: 0, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 25000, surgeryAmount: 0, totalAmount: 25000, paymentMode: 'NEFT Bank Transfer', cashier: 'Sanjay Mehta (CFO)', status: 'Completed' },
-        { id: 'TXN-8807', date: '2026-11-21 14:20', department: 'Pharmacy', patientId: 'PT-4089', service: 'Antibiotic IV Course & Syringes', icuAmount: 0, pharmacyAmount: 2450, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 2450, paymentMode: 'UPI / Digital', cashier: 'Maya Lin', status: 'Completed' },
-        { id: 'TXN-8808', date: '2026-11-21 11:40', department: 'ICU', patientId: 'PT-4092', service: 'ICU Sepsis Resuscitation & Vasopressors', icuAmount: 42000, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 42000, paymentMode: 'TPA Insurance', cashier: 'Sanjay Mehta', status: 'Completed' }
+        { id: 'TXN-8801', date: '2026-11-26 10:30', department: 'Pharmacy', patientId: 'PT-4099', service: 'Cardiac Pre-pack Discharge Meds', icuAmount: 0, pharmacyAmount: 634, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 634, paymentMode: 'Split: UPI (₹400) + Cash (₹234)', cashier: 'Maya Lin', status: 'Completed' },
+        { id: 'TXN-8802', date: '2026-11-26 10:15', department: 'ICU', patientId: 'PT-4091', service: 'Cardiac Critical Care Bed & Telemetry (Day 2)', icuAmount: 38500, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 38500, paymentMode: 'TPA Insurance', cashier: 'Sanjay Mehta', status: 'Completed' },
+        { id: 'TXN-8803', date: '2026-11-26 09:50', department: 'OPD', patientId: 'PT-4096', service: 'Cardiology Specialist Consultation & ECG', icuAmount: 0, pharmacyAmount: 0, opdAmount: 2200, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 2200, paymentMode: 'Split: Cash (₹1000) + Card (₹1200)', cashier: 'Front Desk', status: 'Completed' },
+        { id: 'TXN-8804', date: '2026-11-26 09:35', department: 'Emergency', patientId: 'PT-4094', service: 'Emergency Resuscitation & High Flow O2', icuAmount: 0, pharmacyAmount: 0, opdAmount: 0, erAmount: 4800, salaryAmount: 0, surgeryAmount: 0, totalAmount: 4800, paymentMode: 'Cash', cashier: 'ER Desk', status: 'Completed' },
+        { id: 'TXN-8805', date: '2026-11-26 09:10', department: 'Surgery', patientId: 'PT-4095', service: 'Emergency Chest Tube Insertion & Splinting', icuAmount: 0, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 28500, totalAmount: 28500, paymentMode: 'TPA Insurance', cashier: 'OT Desk', status: 'Completed' },
+        { id: 'TXN-8806', date: '2026-11-25 16:00', department: 'Staff Salary', patientId: 'DOC-02', service: 'Special Incentive Bonus Disbursal', icuAmount: 0, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 25000, surgeryAmount: 0, totalAmount: 25000, paymentMode: 'NEFT Bank Transfer', cashier: 'Sanjay Mehta (CFO)', status: 'Completed' },
+        { id: 'TXN-8807', date: '2026-11-25 14:20', department: 'Pharmacy', patientId: 'PT-4089', service: 'Antibiotic IV Course & Syringes', icuAmount: 0, pharmacyAmount: 2450, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 2450, paymentMode: 'UPI / Digital', cashier: 'Maya Lin', status: 'Completed' },
+        { id: 'TXN-8808', date: '2026-11-25 11:40', department: 'ICU', patientId: 'PT-4092', service: 'ICU Sepsis Resuscitation & Vasopressors', icuAmount: 42000, pharmacyAmount: 0, opdAmount: 0, erAmount: 0, salaryAmount: 0, surgeryAmount: 0, totalAmount: 42000, paymentMode: 'TPA Insurance', cashier: 'Sanjay Mehta', status: 'Completed' }
     ],
 
     // ── FULL PAYROLL SYSTEM WITH MULTI-MONTH HISTORY (Payslips download in PDF) ──
@@ -553,7 +553,7 @@ const SampleData = {
             deductions: 32000,
             netSalary: 323000,
             status: 'Paid',
-            paymentDate: '2026-11-21',
+            paymentDate: '2026-11-25',
             bankAccount: 'HDFC Bank (•••• 4921)',
             taxPan: 'AAAAA1234F',
             daysWorked: 26
@@ -629,7 +629,7 @@ const SampleData = {
             deductions: 30000,
             netSalary: 307000,
             status: 'Paid',
-            paymentDate: '2026-11-20',
+            paymentDate: '2026-11-26',
             bankAccount: 'Axis Bank (•••• 7721)',
             taxPan: 'CCCCC9012H',
             daysWorked: 25
@@ -764,7 +764,7 @@ const SampleData = {
             toRole: 'Senior Cardiologist',
             subject: 'Urgent Cardiology Consult: Rohan Kulkarni (Bed ICU-01)',
             body: 'Dear Dr. Rao,\n\nPatient Rohan Kulkarni (PT-4091) presented with acute STEMI and ongoing cardiogenic hypotension (BP 162/98 on admission, SpO2 91%). Please review the latest cardiac telemetry curve in ER Triage and advise if emergency cardiac catheterisation should be scheduled before noon.\n\nBest regards,\nDr. Meera Nair',
-            timestamp: '2026-11-22 09:15',
+            timestamp: '2026-11-26 09:15',
             read: false,
             priority: 'Urgent'
         },
@@ -780,7 +780,7 @@ const SampleData = {
             toRole: 'CFO & Accountant',
             subject: 'Emergency Purchase Order Approval: Epinephrine & Medical O2',
             body: 'Hello Sanjay,\n\nStock levels for Epinephrine 1mg/mL Auto-Ampoules have dropped to 14 units (Safety threshold: 30) and Medical Oxygen cylinders to 9. We need an immediate financial approval for purchase order #PO-9921 for ₹84,500 to replenish both supplies before tonight\'s intake.\n\nThanks,\nMaya Lin',
-            timestamp: '2026-11-22 08:45',
+            timestamp: '2026-11-26 08:45',
             read: true,
             priority: 'High'
         },
@@ -796,7 +796,7 @@ const SampleData = {
             toRole: 'Clinical & Ops Staff',
             subject: 'Hospital Accreditation Audit Schedule: Nov 25-27',
             body: 'Dear MedCore Team,\n\nThe Joint Commission hospital inspection begins this Wednesday. Please ensure all ER Triage telemetry curves, prescription records, and shift punch-in attendance logs are current.\n\nWarm regards,\nHospital Administration',
-            timestamp: '2026-11-21 16:30',
+            timestamp: '2026-11-25 16:30',
             read: true,
             priority: 'Normal'
         }
@@ -814,7 +814,7 @@ const SampleData = {
             subject: 'Telemetry Monitor lead disconnection in Bed ICU-02',
             description: 'Channel 2 ECG leads on monitor M-02 are intermittently dropping cardiac rhythm tracing for patient Ananya Chatterjee. Requires urgent calibration.',
             status: 'Open',
-            createdAt: '2026-11-22 08:30',
+            createdAt: '2026-11-26 08:30',
             resolutionNotes: 'Assigned to Biomedical Engineering team. Tech dispatched.'
         },
         {
@@ -827,7 +827,7 @@ const SampleData = {
             subject: 'Hydraulic lift lever stuck on Bed CARD-02',
             description: 'The height adjustment pedal on Bed CARD-02 is jammed during sanitation. Needs maintenance check before new patient transfer.',
             status: 'In Progress',
-            createdAt: '2026-11-22 09:10',
+            createdAt: '2026-11-26 09:10',
             resolutionNotes: 'Maintenance staff on site.'
         },
         {
@@ -840,7 +840,7 @@ const SampleData = {
             subject: 'Vendor delay on Sterile Normal Saline 500mL batch',
             description: 'Supplier MedPharma flagged a 24-hour dispatch delay for our saline consignment. Need admin to coordinate secondary supplier backup.',
             status: 'Open',
-            createdAt: '2026-11-21 18:00',
+            createdAt: '2026-11-25 18:00',
             resolutionNotes: 'Admin reaching out to alternate vendor.'
         }
     ],
@@ -986,7 +986,7 @@ const SampleData = {
             assignedAmbulanceId: null,
             status: 'Pending Dispatch',
             notes: 'Security advised to keep gate open and lift grounded.',
-            timestamp: '2026-11-23 21:28'
+            timestamp: '2026-11-26 21:28'
         },
         {
             id: 'REQ-802',
@@ -999,7 +999,7 @@ const SampleData = {
             assignedAmbulanceId: 'AMB-101',
             status: 'En Route to Hospital',
             notes: 'ACLS AMB-101 dispatched with IV resuscitation started on board.',
-            timestamp: '2026-11-23 20:55'
+            timestamp: '2026-11-26 20:55'
         },
         {
             id: 'REQ-803',
@@ -1012,7 +1012,7 @@ const SampleData = {
             assignedAmbulanceId: 'AMB-103',
             status: 'At Scene',
             notes: 'NICU transport team stabilizing infant in transport incubator.',
-            timestamp: '2026-11-23 21:10'
+            timestamp: '2026-11-26 21:10'
         },
         {
             id: 'REQ-804',
@@ -1025,7 +1025,7 @@ const SampleData = {
             assignedAmbulanceId: 'AMB-104',
             status: 'En Route to Patient',
             notes: 'Trauma team en route with cervical collar and spinal board.',
-            timestamp: '2026-11-23 21:35'
+            timestamp: '2026-11-26 21:35'
         },
         {
             id: 'REQ-805',
@@ -1038,7 +1038,7 @@ const SampleData = {
             assignedAmbulanceId: null,
             status: 'Pending Dispatch',
             notes: 'Scheduled transfer, patient requires wheelchair assistance.',
-            timestamp: '2026-11-23 21:40'
+            timestamp: '2026-11-26 21:40'
         }
     ],
 
@@ -1054,7 +1054,7 @@ const SampleData = {
             patientGender: 'Female',
             patientPhone: '+91 99887 66554',
             patientEmail: 'pooja.verma@example.com',
-            appointmentDate: '2026-11-24',
+            appointmentDate: '2026-11-26',
             timeSlot: '10:00 AM - 10:30 AM',
             type: 'In-Person Consultation',
             symptoms: 'Recurring exertional chest tightness, shortness of breath on climbing stairs, mild dizziness.',
@@ -1070,7 +1070,7 @@ const SampleData = {
             prescription: 'Tab. Telmisartan 40mg (1 OD Morning)\nTab. Metoprolol Succinate 25mg (1 OD Post-Breakfast)\nTab. Sorbitrate 5mg (SOS Sublingual for acute chest pain)\nTab. Atorvastatin 20mg (1 HS Bedtime)',
             followUpDate: '2026-12-08',
             status: 'Completed',
-            createdAt: '2026-11-22'
+            createdAt: '2026-11-26'
         },
         {
             id: 'APT-1002',
@@ -1082,7 +1082,7 @@ const SampleData = {
             patientGender: 'Male',
             patientPhone: '+91 98112 44332',
             patientEmail: 'k.singhania@example.com',
-            appointmentDate: '2026-11-24',
+            appointmentDate: '2026-11-26',
             timeSlot: '11:15 AM - 11:45 AM',
             type: 'Follow-up Consultation',
             symptoms: 'Post-angioplasty 6-month routine review, occasional fatigue, palpitations after brisk walking.',
@@ -1098,7 +1098,7 @@ const SampleData = {
             prescription: 'Tab. Aspirin 75mg (1 OD Lunch)\nTab. Ticagrelor 90mg (1 BD)\nTab. Rosuvastatin 20mg + Ezetimibe 10mg (1 HS)\nTab. Bisoprolol 5mg (1 OD Morning)',
             followUpDate: '2026-12-24',
             status: 'Scheduled',
-            createdAt: '2026-11-23'
+            createdAt: '2026-11-25'
         },
         {
             id: 'APT-1003',
@@ -1110,7 +1110,7 @@ const SampleData = {
             patientGender: 'Male',
             patientPhone: '+91 98223 99887',
             patientEmail: 'rohan.mehra@example.com',
-            appointmentDate: '2026-11-24',
+            appointmentDate: '2026-11-26',
             timeSlot: '02:00 PM - 02:30 PM',
             type: 'New Consultation',
             symptoms: 'Persistent high fever (102°F) for 4 days, severe body ache, retro-orbital headache, chills.',
@@ -1126,7 +1126,7 @@ const SampleData = {
             prescription: 'Tab. Paracetamol 650mg (1 SOS Q6H for fever > 100°F)\nSyp. ORS Electral (2-3 Litres daily oral hydration)\nTab. Pantoprazole 40mg (1 OD 30 min before breakfast)\nAvoid NSAIDs (Ibuprofen / Diclofenac)',
             followUpDate: '2026-11-27',
             status: 'Scheduled',
-            createdAt: '2026-11-23'
+            createdAt: '2026-11-25'
         },
         {
             id: 'APT-1004',
@@ -1138,7 +1138,7 @@ const SampleData = {
             patientGender: 'Female',
             patientPhone: '+91 99110 55443',
             patientEmail: 'ananya.roy@example.com',
-            appointmentDate: '2026-11-24',
+            appointmentDate: '2026-11-26',
             timeSlot: '03:30 PM - 04:00 PM',
             type: 'In-Person Consultation',
             symptoms: 'Sharp right knee joint pain following badminton match, swelling and inability to bear full weight.',
@@ -1154,7 +1154,7 @@ const SampleData = {
             prescription: 'Tab. Etoricoxib 90mg (1 OD Post-Dinner x 5 days)\nCap. Rabeprazole 20mg (1 OD Morning)\nIce compression 15 min TID\nStrict non-weight bearing with crutches',
             followUpDate: '2026-11-29',
             status: 'Scheduled',
-            createdAt: '2026-11-23'
+            createdAt: '2026-11-25'
         },
         {
             id: 'APT-1005',
@@ -1166,7 +1166,7 @@ const SampleData = {
             patientGender: 'Male',
             patientPhone: '+91 98334 11223',
             patientEmail: 'sunil.nair@example.com',
-            appointmentDate: '2026-11-23',
+            appointmentDate: '2026-11-25',
             timeSlot: '09:00 AM - 09:30 AM',
             type: 'In-Person Consultation',
             symptoms: 'Chronic ankle swelling, orthopnea when lying flat, early morning coughing.',
@@ -1182,7 +1182,7 @@ const SampleData = {
             prescription: 'Tab. Torsemide 20mg (1 OD Morning)\nTab. Sacubitril/Valsartan 50mg (1 BD)\nTab. Spironolactone 25mg (1 OD)\nTab. Empagliflozin 10mg (1 OD Morning)',
             followUpDate: '2026-11-30',
             status: 'Completed',
-            createdAt: '2026-11-21'
+            createdAt: '2026-11-25'
         }
     ]
 };

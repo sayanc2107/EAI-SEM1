@@ -250,7 +250,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-01",
       "staffName": "Dr. Meera Nair",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "start": "06:00",
       "end": "14:00",
       "ward": "Emergency",
@@ -262,7 +262,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-02",
       "staffName": "Dr. Arjun Rao",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "start": "08:00",
       "end": "16:00",
       "ward": "Cardiology",
@@ -274,7 +274,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-03",
       "staffName": "Dr. Elena Varga",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "start": "10:00",
       "end": "18:00",
       "ward": "ICU",
@@ -286,7 +286,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-04",
       "staffName": "Dr. Kenji Tanaka",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "start": "07:00",
       "end": "15:00",
       "ward": "Neurology",
@@ -298,7 +298,7 @@
       "staffType": "Nurse",
       "staffId": "NRS-01",
       "staffName": "Kavya Menon, RN",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "start": "08:00",
       "end": "16:00",
       "ward": "ICU",
@@ -310,7 +310,7 @@
       "staffType": "Ward Staff",
       "staffId": "WRD-01",
       "staffName": "Ravi Kumar",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "start": "06:00",
       "end": "14:00",
       "ward": "Emergency",
@@ -322,7 +322,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-02",
       "staffName": "Dr. Arjun Rao",
-      "date": "2026-11-23",
+      "date": "2026-11-27",
       "start": "08:00",
       "end": "16:00",
       "ward": "Cardiology",
@@ -334,7 +334,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-01",
       "staffName": "Dr. Meera Nair",
-      "date": "2026-11-23",
+      "date": "2026-11-27",
       "start": "14:00",
       "end": "22:00",
       "ward": "Emergency",
@@ -346,7 +346,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-05",
       "staffName": "Dr. Priya Deshmukh",
-      "date": "2026-11-23",
+      "date": "2026-11-27",
       "start": "09:00",
       "end": "17:00",
       "ward": "General",
@@ -358,7 +358,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-02",
       "staffName": "Dr. Arjun Rao",
-      "date": "2026-11-24",
+      "date": "2026-11-28",
       "start": "09:00",
       "end": "17:00",
       "ward": "Cardiology",
@@ -370,7 +370,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-03",
       "staffName": "Dr. Elena Varga",
-      "date": "2026-11-24",
+      "date": "2026-11-28",
       "start": "08:00",
       "end": "16:00",
       "ward": "ICU",
@@ -382,7 +382,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-06",
       "staffName": "Dr. Samuel Okafor",
-      "date": "2026-11-24",
+      "date": "2026-11-28",
       "start": "08:00",
       "end": "16:00",
       "ward": "Surgery",
@@ -394,7 +394,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-02",
       "staffName": "Dr. Arjun Rao",
-      "date": "2026-11-25",
+      "date": "2026-11-29",
       "start": "08:00",
       "end": "14:00",
       "ward": "Cardiology",
@@ -406,7 +406,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-04",
       "staffName": "Dr. Kenji Tanaka",
-      "date": "2026-11-25",
+      "date": "2026-11-29",
       "start": "12:00",
       "end": "20:00",
       "ward": "Neurology",
@@ -418,7 +418,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-02",
       "staffName": "Dr. Arjun Rao",
-      "date": "2026-11-26",
+      "date": "2026-11-30",
       "start": "10:00",
       "end": "18:00",
       "ward": "Cardiology",
@@ -430,7 +430,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-01",
       "staffName": "Dr. Meera Nair",
-      "date": "2026-11-26",
+      "date": "2026-11-30",
       "start": "06:00",
       "end": "14:00",
       "ward": "Emergency",
@@ -442,7 +442,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-02",
       "staffName": "Dr. Arjun Rao",
-      "date": "2026-11-27",
+      "date": "2026-12-01",
       "start": "08:00",
       "end": "16:00",
       "ward": "Cardiology",
@@ -454,7 +454,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-03",
       "staffName": "Dr. Elena Varga",
-      "date": "2026-11-27",
+      "date": "2026-12-01",
       "start": "14:00",
       "end": "22:00",
       "ward": "ICU",
@@ -466,7 +466,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-02",
       "staffName": "Dr. Arjun Rao",
-      "date": "2026-11-28",
+      "date": "2026-12-02",
       "start": "08:00",
       "end": "12:00",
       "ward": "Cardiology",
@@ -478,7 +478,7 @@
       "staffType": "Doctor",
       "staffId": "DOC-06",
       "staffName": "Dr. Samuel Okafor",
-      "date": "2026-11-28",
+      "date": "2026-12-02",
       "start": "09:00",
       "end": "17:00",
       "ward": "Surgery",
@@ -491,7 +491,7 @@
       "id": "ATT-101",
       "staffId": "DOC-02",
       "staffName": "Dr. Arjun Rao",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "clockIn": "07:55 AM",
       "clockOut": "Active",
       "hours": 4.5,
@@ -501,7 +501,7 @@
       "id": "ATT-102",
       "staffId": "DOC-01",
       "staffName": "Dr. Meera Nair",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "clockIn": "05:50 AM",
       "clockOut": "Active",
       "hours": 6.5,
@@ -511,7 +511,7 @@
       "id": "ATT-103",
       "staffId": "NRS-01",
       "staffName": "Kavya Menon, RN",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "clockIn": "07:50 AM",
       "clockOut": "Active",
       "hours": 4.6,
@@ -521,7 +521,7 @@
       "id": "ATT-104",
       "staffId": "WRD-01",
       "staffName": "Ravi Kumar",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "clockIn": "05:58 AM",
       "clockOut": "Active",
       "hours": 6.4,
@@ -531,7 +531,7 @@
       "id": "ATT-105",
       "staffId": "PH-01",
       "staffName": "Maya Lin",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "clockIn": "08:00 AM",
       "clockOut": "Active",
       "hours": 4.3,
@@ -541,7 +541,7 @@
       "id": "ATT-106",
       "staffId": "ACC-01",
       "staffName": "Sanjay Mehta",
-      "date": "2026-11-22",
+      "date": "2026-11-26",
       "clockIn": "08:30 AM",
       "clockOut": "Active",
       "hours": 3.8,
@@ -551,7 +551,7 @@
       "id": "ATT-107",
       "staffId": "DOC-02",
       "staffName": "Dr. Arjun Rao",
-      "date": "2026-11-21",
+      "date": "2026-11-25",
       "clockIn": "08:00 AM",
       "clockOut": "04:10 PM",
       "hours": 8.2,
@@ -561,7 +561,7 @@
       "id": "ATT-108",
       "staffId": "DOC-02",
       "staffName": "Dr. Arjun Rao",
-      "date": "2026-11-20",
+      "date": "2026-11-24",
       "clockIn": "07:52 AM",
       "clockOut": "04:05 PM",
       "hours": 8.2,
@@ -582,7 +582,7 @@
       "doctorId": "DOC-02",
       "doctorName": "Dr. Arjun Rao",
       "nurseId": "NRS-01",
-      "admittedAt": "2026-11-21 07:15",
+      "admittedAt": "2026-11-25 07:15",
       "status": "Admitted",
       "vitals": {
         "hr": 118,
@@ -648,7 +648,7 @@
       "doctorId": "DOC-03",
       "doctorName": "Dr. Elena Varga",
       "nurseId": "NRS-01",
-      "admittedAt": "2026-11-21 07:45",
+      "admittedAt": "2026-11-25 07:45",
       "status": "Admitted",
       "vitals": {
         "hr": 124,
@@ -706,7 +706,7 @@
       "doctorId": "DOC-04",
       "doctorName": "Dr. Kenji Tanaka",
       "nurseId": "NRS-02",
-      "admittedAt": "2026-11-21 08:48",
+      "admittedAt": "2026-11-25 08:48",
       "status": "Admitted",
       "vitals": {
         "hr": 92,
@@ -756,7 +756,7 @@
       "doctorId": "DOC-01",
       "doctorName": "Dr. Meera Nair",
       "nurseId": "NRS-02",
-      "admittedAt": "2026-11-21 09:12",
+      "admittedAt": "2026-11-25 09:12",
       "status": "Admitted",
       "vitals": {
         "hr": 104,
@@ -806,7 +806,7 @@
       "doctorId": "DOC-01",
       "doctorName": "Dr. Meera Nair",
       "nurseId": "NRS-02",
-      "admittedAt": "2026-11-21 09:18",
+      "admittedAt": "2026-11-25 09:18",
       "status": "Admitted",
       "vitals": {
         "hr": 98,
@@ -856,7 +856,7 @@
       "doctorId": "DOC-02",
       "doctorName": "Dr. Arjun Rao",
       "nurseId": "NRS-01",
-      "admittedAt": "2026-11-21 09:30",
+      "admittedAt": "2026-11-25 09:30",
       "status": "Admitted",
       "vitals": {
         "hr": 112,
@@ -906,7 +906,7 @@
       "doctorId": "DOC-01",
       "doctorName": "Dr. Meera Nair",
       "nurseId": "NRS-02",
-      "admittedAt": "2026-11-21 09:44",
+      "admittedAt": "2026-11-25 09:44",
       "status": "Admitted",
       "vitals": {
         "hr": 84,
@@ -948,7 +948,7 @@
       "doctorId": "DOC-02",
       "doctorName": "Dr. Arjun Rao",
       "nurseId": "NRS-01",
-      "admittedAt": "2026-11-21 09:55",
+      "admittedAt": "2026-11-25 09:55",
       "status": "Admitted",
       "vitals": {
         "hr": 86,
@@ -990,7 +990,7 @@
       "doctorId": "DOC-02",
       "doctorName": "Dr. Arjun Rao",
       "nurseId": "NRS-01",
-      "admittedAt": "2026-11-21 10:10",
+      "admittedAt": "2026-11-25 10:10",
       "status": "Admitted",
       "vitals": {
         "hr": 78,
@@ -1032,7 +1032,7 @@
       "doctorId": "DOC-03",
       "doctorName": "Dr. Elena Varga",
       "nurseId": "NRS-01",
-      "admittedAt": "2026-11-21 10:22",
+      "admittedAt": "2026-11-25 10:22",
       "status": "Admitted",
       "vitals": {
         "hr": 94,
@@ -1218,7 +1218,7 @@
           "price": 170
         }
       ],
-      "timestamp": "2026-11-21 10:22"
+      "timestamp": "2026-11-25 10:22"
     },
     {
       "id": "RX-504",
@@ -1245,7 +1245,7 @@
           "price": 190
         }
       ],
-      "timestamp": "2026-11-21 10:15"
+      "timestamp": "2026-11-25 10:15"
     },
     {
       "id": "RX-503",
@@ -1272,7 +1272,7 @@
           "price": 1300
         }
       ],
-      "timestamp": "2026-11-21 09:05"
+      "timestamp": "2026-11-25 09:05"
     }
   ],
   "medicines": [
@@ -1360,7 +1360,7 @@
   "hospitalTransactions": [
     {
       "id": "TXN-8801",
-      "date": "2026-11-22 10:30",
+      "date": "2026-11-26 10:30",
       "department": "Pharmacy",
       "patientId": "PT-4099",
       "service": "Cardiac Pre-pack Discharge Meds",
@@ -1377,7 +1377,7 @@
     },
     {
       "id": "TXN-8802",
-      "date": "2026-11-22 10:15",
+      "date": "2026-11-26 10:15",
       "department": "ICU",
       "patientId": "PT-4091",
       "service": "Cardiac Critical Care Bed & Telemetry (Day 2)",
@@ -1394,7 +1394,7 @@
     },
     {
       "id": "TXN-8803",
-      "date": "2026-11-22 09:50",
+      "date": "2026-11-26 09:50",
       "department": "OPD",
       "patientId": "PT-4096",
       "service": "Cardiology Specialist Consultation & ECG",
@@ -1411,7 +1411,7 @@
     },
     {
       "id": "TXN-8804",
-      "date": "2026-11-22 09:35",
+      "date": "2026-11-26 09:35",
       "department": "Emergency",
       "patientId": "PT-4094",
       "service": "Emergency Resuscitation & High Flow O2",
@@ -1428,7 +1428,7 @@
     },
     {
       "id": "TXN-8805",
-      "date": "2026-11-22 09:10",
+      "date": "2026-11-26 09:10",
       "department": "Surgery",
       "patientId": "PT-4095",
       "service": "Emergency Chest Tube Insertion & Splinting",
@@ -1445,7 +1445,7 @@
     },
     {
       "id": "TXN-8806",
-      "date": "2026-11-21 16:00",
+      "date": "2026-11-25 16:00",
       "department": "Staff Salary",
       "patientId": "DOC-02",
       "service": "Special Incentive Bonus Disbursal",
@@ -1462,7 +1462,7 @@
     },
     {
       "id": "TXN-8807",
-      "date": "2026-11-21 14:20",
+      "date": "2026-11-25 14:20",
       "department": "Pharmacy",
       "patientId": "PT-4089",
       "service": "Antibiotic IV Course & Syringes",
@@ -1479,7 +1479,7 @@
     },
     {
       "id": "TXN-8808",
-      "date": "2026-11-21 11:40",
+      "date": "2026-11-25 11:40",
       "department": "ICU",
       "patientId": "PT-4092",
       "service": "ICU Sepsis Resuscitation & Vasopressors",
@@ -1510,7 +1510,7 @@
       "deductions": 32000,
       "netSalary": 323000,
       "status": "Paid",
-      "paymentDate": "2026-11-21",
+      "paymentDate": "2026-11-25",
       "bankAccount": "HDFC Bank (\u2022\u2022\u2022\u2022 4921)",
       "taxPan": "AAAAA1234F",
       "daysWorked": 26
@@ -1586,7 +1586,7 @@
       "deductions": 30000,
       "netSalary": 307000,
       "status": "Paid",
-      "paymentDate": "2026-11-20",
+      "paymentDate": "2026-11-26",
       "bankAccount": "Axis Bank (\u2022\u2022\u2022\u2022 7721)",
       "taxPan": "CCCCC9012H",
       "daysWorked": 25
@@ -1719,7 +1719,7 @@
       "toRole": "Senior Cardiologist",
       "subject": "Urgent Cardiology Consult: Rohan Kulkarni (Bed ICU-01)",
       "body": "Dear Dr. Rao,\n\nPatient Rohan Kulkarni (PT-4091) presented with acute STEMI and ongoing cardiogenic hypotension (BP 162/98 on admission, SpO2 91%). Please review the latest cardiac telemetry curve in ER Triage and advise if emergency cardiac catheterisation should be scheduled before noon.\n\nBest regards,\nDr. Meera Nair",
-      "timestamp": "2026-11-22 09:15",
+      "timestamp": "2026-11-26 09:15",
       "read": false,
       "priority": "Urgent"
     },
@@ -1735,7 +1735,7 @@
       "toRole": "CFO & Accountant",
       "subject": "Emergency Purchase Order Approval: Epinephrine & Medical O2",
       "body": "Hello Sanjay,\n\nStock levels for Epinephrine 1mg/mL Auto-Ampoules have dropped to 14 units (Safety threshold: 30) and Medical Oxygen cylinders to 9. We need an immediate financial approval for purchase order #PO-9921 for \u20b984,500 to replenish both supplies before tonight's intake.\n\nThanks,\nMaya Lin",
-      "timestamp": "2026-11-22 08:45",
+      "timestamp": "2026-11-26 08:45",
       "read": true,
       "priority": "High"
     },
@@ -1751,7 +1751,7 @@
       "toRole": "Clinical & Ops Staff",
       "subject": "Hospital Accreditation Audit Schedule: Nov 25-27",
       "body": "Dear MedCore Team,\n\nThe Joint Commission hospital inspection begins this Wednesday. Please ensure all ER Triage telemetry curves, prescription records, and shift punch-in attendance logs are current.\n\nWarm regards,\nHospital Administration",
-      "timestamp": "2026-11-21 16:30",
+      "timestamp": "2026-11-25 16:30",
       "read": true,
       "priority": "Normal"
     }
@@ -1767,7 +1767,7 @@
       "subject": "Telemetry Monitor lead disconnection in Bed ICU-02",
       "description": "Channel 2 ECG leads on monitor M-02 are intermittently dropping cardiac rhythm tracing for patient Ananya Chatterjee. Requires urgent calibration.",
       "status": "Open",
-      "createdAt": "2026-11-22 08:30",
+      "createdAt": "2026-11-26 08:30",
       "resolutionNotes": "Assigned to Biomedical Engineering team. Tech dispatched."
     },
     {
@@ -1780,7 +1780,7 @@
       "subject": "Hydraulic lift lever stuck on Bed CARD-02",
       "description": "The height adjustment pedal on Bed CARD-02 is jammed during sanitation. Needs maintenance check before new patient transfer.",
       "status": "In Progress",
-      "createdAt": "2026-11-22 09:10",
+      "createdAt": "2026-11-26 09:10",
       "resolutionNotes": "Maintenance staff on site."
     },
     {
@@ -1793,7 +1793,7 @@
       "subject": "Vendor delay on Sterile Normal Saline 500mL batch",
       "description": "Supplier MedPharma flagged a 24-hour dispatch delay for our saline consignment. Need admin to coordinate secondary supplier backup.",
       "status": "Open",
-      "createdAt": "2026-11-21 18:00",
+      "createdAt": "2026-11-25 18:00",
       "resolutionNotes": "Admin reaching out to alternate vendor."
     }
   ],
@@ -1958,7 +1958,7 @@
       "assignedAmbulanceId": null,
       "status": "Pending Dispatch",
       "notes": "Security advised to keep gate open and lift grounded.",
-      "timestamp": "2026-11-23 21:28"
+      "timestamp": "2026-11-26 21:28"
     },
     {
       "id": "REQ-802",
@@ -1971,7 +1971,7 @@
       "assignedAmbulanceId": "AMB-101",
       "status": "En Route to Hospital",
       "notes": "ACLS AMB-101 dispatched with IV resuscitation started on board.",
-      "timestamp": "2026-11-23 20:55"
+      "timestamp": "2026-11-26 20:55"
     },
     {
       "id": "REQ-803",
@@ -1984,7 +1984,7 @@
       "assignedAmbulanceId": "AMB-103",
       "status": "At Scene",
       "notes": "NICU transport team stabilizing infant in transport incubator.",
-      "timestamp": "2026-11-23 21:10"
+      "timestamp": "2026-11-26 21:10"
     },
     {
       "id": "REQ-804",
@@ -1997,7 +1997,7 @@
       "assignedAmbulanceId": "AMB-104",
       "status": "En Route to Patient",
       "notes": "Trauma team en route with cervical collar and spinal board.",
-      "timestamp": "2026-11-23 21:35"
+      "timestamp": "2026-11-26 21:35"
     },
     {
       "id": "REQ-805",
@@ -2010,7 +2010,7 @@
       "assignedAmbulanceId": null,
       "status": "Pending Dispatch",
       "notes": "Scheduled transfer, patient requires wheelchair assistance.",
-      "timestamp": "2026-11-23 21:40"
+      "timestamp": "2026-11-26 21:40"
     }
   ],
   "doctorAppointments": [
@@ -2024,7 +2024,7 @@
       "patientGender": "Female",
       "patientPhone": "+91 99887 66554",
       "patientEmail": "pooja.verma@example.com",
-      "appointmentDate": "2026-11-24",
+      "appointmentDate": "2026-11-26",
       "timeSlot": "10:00 AM - 10:30 AM",
       "type": "In-Person Consultation",
       "symptoms": "Recurring exertional chest tightness, shortness of breath on climbing stairs, mild dizziness.",
@@ -2040,7 +2040,7 @@
       "prescription": "Tab. Telmisartan 40mg (1 OD Morning)\nTab. Metoprolol Succinate 25mg (1 OD Post-Breakfast)\nTab. Sorbitrate 5mg (SOS Sublingual for acute chest pain)\nTab. Atorvastatin 20mg (1 HS Bedtime)",
       "followUpDate": "2026-12-08",
       "status": "Completed",
-      "createdAt": "2026-11-22"
+      "createdAt": "2026-11-26"
     },
     {
       "id": "APT-1002",
@@ -2052,7 +2052,7 @@
       "patientGender": "Male",
       "patientPhone": "+91 98112 44332",
       "patientEmail": "k.singhania@example.com",
-      "appointmentDate": "2026-11-24",
+      "appointmentDate": "2026-11-26",
       "timeSlot": "11:15 AM - 11:45 AM",
       "type": "Follow-up Consultation",
       "symptoms": "Post-angioplasty 6-month routine review, occasional fatigue, palpitations after brisk walking.",
@@ -2068,7 +2068,7 @@
       "prescription": "Tab. Aspirin 75mg (1 OD Lunch)\nTab. Ticagrelor 90mg (1 BD)\nTab. Rosuvastatin 20mg + Ezetimibe 10mg (1 HS)\nTab. Bisoprolol 5mg (1 OD Morning)",
       "followUpDate": "2026-12-24",
       "status": "Scheduled",
-      "createdAt": "2026-11-23"
+      "createdAt": "2026-11-25"
     },
     {
       "id": "APT-1003",
@@ -2080,7 +2080,7 @@
       "patientGender": "Male",
       "patientPhone": "+91 98223 99887",
       "patientEmail": "rohan.mehra@example.com",
-      "appointmentDate": "2026-11-24",
+      "appointmentDate": "2026-11-26",
       "timeSlot": "02:00 PM - 02:30 PM",
       "type": "New Consultation",
       "symptoms": "Persistent high fever (102°F) for 4 days, severe body ache, retro-orbital headache, chills.",
@@ -2096,7 +2096,7 @@
       "prescription": "Tab. Paracetamol 650mg (1 SOS Q6H for fever > 100°F)\nSyp. ORS Electral (2-3 Litres daily oral hydration)\nTab. Pantoprazole 40mg (1 OD 30 min before breakfast)\nAvoid NSAIDs (Ibuprofen / Diclofenac)",
       "followUpDate": "2026-11-27",
       "status": "Scheduled",
-      "createdAt": "2026-11-23"
+      "createdAt": "2026-11-25"
     },
     {
       "id": "APT-1004",
@@ -2108,7 +2108,7 @@
       "patientGender": "Female",
       "patientPhone": "+91 99110 55443",
       "patientEmail": "ananya.roy@example.com",
-      "appointmentDate": "2026-11-24",
+      "appointmentDate": "2026-11-26",
       "timeSlot": "03:30 PM - 04:00 PM",
       "type": "In-Person Consultation",
       "symptoms": "Sharp right knee joint pain following badminton match, swelling and inability to bear full weight.",
@@ -2124,7 +2124,7 @@
       "prescription": "Tab. Etoricoxib 90mg (1 OD Post-Dinner x 5 days)\nCap. Rabeprazole 20mg (1 OD Morning)\nIce compression 15 min TID\nStrict non-weight bearing with crutches",
       "followUpDate": "2026-11-29",
       "status": "Scheduled",
-      "createdAt": "2026-11-23"
+      "createdAt": "2026-11-25"
     },
     {
       "id": "APT-1005",
@@ -2136,7 +2136,7 @@
       "patientGender": "Male",
       "patientPhone": "+91 98334 11223",
       "patientEmail": "sunil.nair@example.com",
-      "appointmentDate": "2026-11-23",
+      "appointmentDate": "2026-11-25",
       "timeSlot": "09:00 AM - 09:30 AM",
       "type": "In-Person Consultation",
       "symptoms": "Chronic ankle swelling, orthopnea when lying flat, early morning coughing.",
@@ -2152,7 +2152,7 @@
       "prescription": "Tab. Torsemide 20mg (1 OD Morning)\nTab. Sacubitril/Valsartan 50mg (1 BD)\nTab. Spironolactone 25mg (1 OD)\nTab. Empagliflozin 10mg (1 OD Morning)",
       "followUpDate": "2026-11-30",
       "status": "Completed",
-      "createdAt": "2026-11-21"
+      "createdAt": "2026-11-25"
     }
   ]
 }
